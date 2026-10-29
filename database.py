@@ -372,8 +372,8 @@ def create_user(
     # ACCOUNT APPROVAL
     # ----------------------------------------------
 
-    if role == "student":
-        approval_status = "PENDING"
+    if role == "hod":
+        approval_status = "approved"
     else:
         approval_status = "PENDING"
 
