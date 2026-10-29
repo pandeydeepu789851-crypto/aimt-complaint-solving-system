@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .notifications-page {
+        max-width: 1000px;
+        margin: 25px auto;
+        padding: 20px;
+        color: #ffffff;
+    }
+
+    .notifications-page h1 {
+        color: #ffffff;
+        font-size: 30px;
+        text-shadow: 0 2px 8px #000000;
+    }
+
+    .notifications-intro {
+        color: #f0f4ff;
+        line-height: 1.7;
+    }
+
+    .notification-card {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(7, 18, 40, 0.95);
+        border: 1px solid #607da8;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px #00000055;
+    }
+
+    .notification-item {
+        padding: 16px;
+        margin-bottom: 14px;
+        background: #172b49;
+        border-left: 5px solid #64a5ff;
+        border-radius: 9px;
+    }
+
+    .notification-item p {
+        margin: 0;
+        color: #ffffff;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    .notification-date {
+        display: block;
+        margin-top: 8px;
+        color: #c4d5f0;
+        font-size: 13px;
+    }
+
+    .empty-notifications {
+        padding: 30px 15px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 18px;
+        background: #1764c0;
+        border: 1px solid #a8ceff;
+        border-radius: 9px;
+        color: #ffffff !important;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back-button:hover {
+        background: #0d4b96;
+    }
+
+    @media (max-width: 600px) {
+        .notifications-page {
+            padding: 12px;
+        }
+
+        .notifications-page h1 {
+            font-size: 24px;
+        }
+
+        .notification-card {
+            padding: 12px;
+        }
+    }
+</style>
+
+<div class="notifications-page">
+    <h1>🔔 Notifications</h1>
+
+
+<p class="notifications-intro">
+    Here you can view updates about your complaints.
+</p>
+
+<div class="notification-card">
+    {% if notifications %}
+        {% for notification in notifications %}
+            <div class="notification-item">
+                <p>{{ notification.message }}</p>
+
+                {% if notification.created_at is defined %}
+                    <span class="notification-date">
+                        {{ notification.created_at }}
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-notifications">
+            <h3>📭 No notifications yet.</h3>
+            <p>New notifications will appear here when available.</p>
+        </div>
+    {% endif %}
+</div>
+
+<a class="back-button" href="{{ url_for('student_dashboard') }}">
+    ← Back to Dashboard
+</a>
+
+</div>
+{% endblock %}

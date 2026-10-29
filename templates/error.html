@@ -1,0 +1,59 @@
+
+{% extends "base.html" %}
+
+{% block title %}Error | AIMT Problem Solving System{% endblock %}
+
+{% block content %}
+<div style="
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 35px 20px;
+    background: white;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+">
+
+    <h1 style="color: #dc2626; font-size: 42px; margin-bottom: 15px;">
+        {{ error_code|default('Error') }}
+    </h1>
+
+    <h2 style="color: #0f172a; margin-bottom: 15px;">
+        Something went wrong!
+    </h2>
+
+    <p style="color: #475569; line-height: 1.7; margin-bottom: 25px;">
+        {{ error_message|default("Your request couldn't be completed. Please try again.") }}
+    </p>
+
+    <a href="{{ url_for('home') }}"
+       style="
+           display: inline-block;
+           padding: 12px 22px;
+           background: #0f172a;
+           color: white;
+           text-decoration: none;
+           border-radius: 8px;
+           font-weight: bold;
+       ">
+        Home Go over
+    </a>
+
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('profile') }}"
+       style="
+           display: inline-block;
+           padding: 12px 22px;
+           margin-left: 8px;
+           background: #0891b2;
+           color: white;
+           text-decoration: none;
+           border-radius: 8px;
+           font-weight: bold;
+       ">
+        My Profile
+    </a>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details | AIMT Problem Solving System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5fb;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #142b55, #2563eb);
+            color: white;
+            padding: 22px 6%;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            color: #dbeafe;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 22px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+            animation: slideIn 0.5s ease;
+        }
+
+        h2 {
+            color: #173b75;
+            margin-bottom: 20px;
+        }
+
+        .detail {
+            margin-bottom: 17px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .label {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.7;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 16px 0 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font: inherit;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .blue {
+            background: #2563eb;
+            color: white;
+        }
+
+        .orange {
+            background: #f59e0b;
+            color: #111827;
+        }
+
+        .green {
+            background: #16a34a;
+            color: white;
+        }
+
+        .gray {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .flash {
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 9px;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .flash.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 20px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>AIMT Problem Solving System</h1>
+    <p>Staff Panel — Complaint Details</p>
+</header>
+
+<main class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash {{ 'error' if category == 'error' else '' }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="card">
+        <h2>Complaint Information</h2>
+
+        <div class="detail">
+            <span class="label">Complaint ID</span>
+            <span class="value">#{{ complaint.id }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Student Name</span>
+            <span class="value">{{ complaint.student_name }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Course / Year</span>
+            <span class="value">{{ complaint.course }} / {{ complaint.year }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Branch</span>
+            <span class="value">{{ complaint.branch }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Department</span>
+            <span class="value">{{ complaint.department }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Complaint Title</span>
+            <span class="value">{{ complaint.title }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Complaint Description</span>
+            <div class="description">{{ complaint.description }}</div>
+        </div>
+
+        <div class="detail">
+            <span class="label">Current Status</span>
+            <span class="status">{{ complaint.status.replace('_', ' ') }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Submitted On</span>
+            <span class="value">{{ complaint.created_at }}</span>
+        </div>
+
+        {% if complaint.attachment %}
+        <div class="detail">
+            <span class="label">Attachment</span>
+            <a href="{{ url_for('uploaded_complaint_file', filename=complaint.attachment) }}"
+               target="_blank" rel="noopener noreferrer">
+                View Attachment
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <h2>Take Action</h2>
+
+        {% if complaint.status in ['SUBMITTED', 'IN_PROGRESS'] %}
+        <form method="POST"
+              action="{{ url_for('staff_complaint_action', complaint_id=complaint.id) }}">
+
+            <label for="solution">Solution / Remarks</label>
+            <textarea id="solution" name="solution"
+                      placeholder="Write the solution or explain why this complaint needs HOD assistance..."></textarea>
+
+            <div class="actions">
+                <button class="btn blue" type="submit" name="action"
+                        value="progress">
+                    Mark In Progress
+                </button>
+
+                <button class="btn green" type="submit" name="action"
+                        value="solve">
+                    Submit Solution
+                </button>
+
+                <button class="btn orange" type="submit" name="action"
+                        value="forward">
+                    Forward to HOD
+                </button>
+            </div>
+        </form>
+        {% else %}
+            <p>This complaint is currently <strong>{{ complaint.status.replace('_', ' ') }}</strong>.</p>
+            <p>Actions are unavailable for this status.</p>
+        {% endif %}
+
+        <div class="actions">
+            <a class="btn gray" href="{{ url_for('staff_dashboard') }}">
+                Back to Dashboard
+            </a>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

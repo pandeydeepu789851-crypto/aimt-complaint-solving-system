@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AIMT Problem Solving System{% endblock %}</title>
+
+    <meta name="theme-color" content="#101827">
+    <meta name="description"
+          content="AIMT Problem Solving System - Student Complaint Management Portal">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Global AIMT Poster Background -->
+    <style>
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #172033;
+
+            /* POSTER BACKGROUND */
+            background-color: #101827;
+            background-image:
+                linear-gradient(
+                    rgba(8, 15, 35, 0.38),
+                    rgba(8, 15, 35, 0.50)
+                ),
+                url("{{ url_for('static', filename='images/aimt-poster.png') }}");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* HEADER */
+        .site-header {
+            position: relative;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .header-container {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
+            min-height: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 12px 0;
+        }
+
+        .site-logo {
+            color: #173b78;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: 900;
+            line-height: 1.4;
+        }
+
+        .site-logo span {
+            display: block;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* NAVIGATION */
+        .main-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .main-nav a {
+            color: #173b78;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 12px;
+            border-radius: 9px;
+            transition: background 0.25s, color 0.25s,
+                        transform 0.25s;
+        }
+
+        .main-nav a:hover {
+            color: #fff;
+            background: #173b78;
+            transform: translateY(-2px);
+        }
+
+        /* FLASH MESSAGES */
+        .flash-container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 15px auto 0;
+        }
+
+        .alert {
+            padding: 13px 16px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .alert-success {
+            color: #166534;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+        }
+
+        .alert-danger,
+        .alert-error {
+            color: #991b1b;
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-warning {
+            color: #92400e;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+        }
+
+        .alert-info,
+        .alert-message {
+            color: #1e40af;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+        }
+
+        /* MAIN CONTENT */
+        main.page-content {
+            min-height: calc(100vh - 180px);
+            background: transparent;
+            padding: 1px 0 30px;
+        }
+
+        /* FOOTER */
+        .site-footer {
+            position: relative;
+            margin-top: 25px;
+            padding: 22px 15px;
+            text-align: center;
+            color: #fff;
+            background: rgba(8, 15, 35, 0.82);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .site-footer p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            body {
+                background-attachment: scroll;
+                background-position: center center;
+            }
+
+            .header-container {
+                width: 94%;
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .site-logo {
+                text-align: center;
+                font-size: 21px;
+            }
+
+            .main-nav {
+                width: 100%;
+                gap: 5px;
+            }
+
+            .main-nav a {
+                font-size: 12px;
+                padding: 9px 10px;
+            }
+
+            main.page-content {
+                min-height: 70vh;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="header-container">
+
+            <a href="{{ url_for('home') }}" class="site-logo">
+                AIMT
+                <span>Problem Solving System</span>
+            </a>
+
+            <nav class="main-nav">
+
+                <a href="{{ url_for('home') }}">Home</a>
+
+                {% if session.get('user_id') %}
+
+                    {% set current_role = session.get('role', '')|lower %}
+
+                    {% if current_role == 'student' %}
+                        <a href="{{ url_for('student_dashboard') }}">
+                            Dashboard
+                        </a>
+                        <a href="{{ url_for('new_complaint') }}">
+                            New Complaint
+                        </a>
+                        <a href="{{ url_for('my_complaints') }}">
+                            My Complaints
+                        </a>
+
+                    {% elif current_role == 'staff' %}
+                        <a href="{{ url_for('staff_dashboard') }}">
+                            Dashboard
+                        </a>
+
+                    {% elif current_role == 'hod' %}
+                        <a href="{{ url_for('hod_dashboard') }}">
+                            Dashboard
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('notifications') }}">
+                        Notifications
+                    </a>
+
+                    <a href="{{ url_for('profile') }}">
+                        Profile
+                    </a>
+
+                    <a href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+
+                {% endif %}
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- FLASH MESSAGES -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <main class="page-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <p>
+            &copy; {{ now().year if now is defined else 2026 }}
+            AIMT Problem Solving System.
+            All rights reserved.
+        </p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

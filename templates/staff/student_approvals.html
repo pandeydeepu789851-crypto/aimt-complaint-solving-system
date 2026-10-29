@@ -1,0 +1,245 @@
+
+{% extends "base.html" %}
+
+{% block title %}Student Approvals | AIMT{% endblock %}
+
+{% block content %}
+
+<style>
+.approval-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.approval-header {
+    padding: 25px;
+    color: white;
+    background: linear-gradient(135deg, #123c69, #2563a6);
+    border-radius: 14px;
+    margin-bottom: 25px;
+}
+
+.approval-header h1 {
+    margin-top: 0;
+}
+
+.approval-count {
+    background: #eff6ff;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    color: #123c69;
+}
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.student-card {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px #00000015;
+    border-top: 4px solid #2563eb;
+    overflow-wrap: anywhere;
+}
+
+.student-card h3 {
+    color: #123c69;
+    margin-top: 0;
+}
+
+.student-card p {
+    color: #475569;
+    line-height: 1.5;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.actions form {
+    flex: 1;
+}
+
+.actions button {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.approve-btn {
+    background: #16a34a;
+}
+
+.reject-btn {
+    background: #dc2626;
+}
+
+.back-btn {
+    display: inline-block;
+    background: white;
+    color: #123c69;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.empty-state {
+    background: white;
+    text-align: center;
+    padding: 35px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #00000010;
+}
+
+@media (max-width: 700px) {
+    .student-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .approval-container {
+        padding: 12px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="approval-container">
+
+    <div class="approval-header">
+        <h1>Student Approval Management</h1>
+        <p>Review student registration requests for your department.</p>
+
+        <a href="{{ url_for('staff_dashboard') }}"
+           class="back-btn">
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="approval-count">
+        <strong>Pending Students: {{ students|length }}</strong>
+    </div>
+
+    {% if students %}
+
+        <div class="student-grid">
+
+            {% for student in students %}
+
+                <div class="student-card">
+
+                    <h3>{{ student['full_name'] }}</h3>
+
+                    <p>
+                        <strong>Email:</strong>
+                        {{ student['email'] }}
+                    </p>
+
+                    <p>
+                        <strong>Mobile:</strong>
+                        {{ student['mobile'] or 'Not provided' }}
+                    </p>
+
+                    <p>
+                        <strong>Course:</strong>
+                        {{ student['course'] }}
+                    </p>
+
+                    <p>
+                        <strong>Year:</strong>
+                        {{ student['year'] or 'Not specified' }}
+                    </p>
+
+                    <p>
+                        <strong>Department:</strong>
+                        {{ student['department'] or student['branch'] or 'Not specified' }}
+                    </p>
+
+                    <p>
+                        <strong>Section:</strong>
+                        {{ student['section'] or 'Not specified' }}
+                    </p>
+
+                    <p>
+                        <strong>Roll Number:</strong>
+                        {{ student['roll_number'] or 'Not provided' }}
+                    </p>
+
+                    <span class="status">
+                        {{ student['approval_status'] }}
+                    </span>
+
+                    <div class="actions">
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'approve_student',
+                                user_id=student['id'],
+                                action='approve'
+                            ) }}"
+                            onsubmit="return confirm('Approve this student?');">
+
+                            <button type="submit" class="approve-btn">
+                                Approve
+                            </button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'approve_student',
+                                user_id=student['id'],
+                                action='reject'
+                            ) }}"
+                            onsubmit="return confirm('Reject this student?');">
+
+                            <button type="submit" class="reject-btn">
+                                Reject
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h2>No Pending Students</h2>
+            <p>There are no student registration requests awaiting approval.</p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

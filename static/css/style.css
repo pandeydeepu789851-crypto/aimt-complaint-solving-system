@@ -1,0 +1,931 @@
+
+/* ==========================================
+   AIMT PROBLEM SOLVING SYSTEM
+   Complete Responsive CSS
+========================================== */
+
+/* ROOT VARIABLES */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --secondary: #06b6d4;
+    --background: #101827;
+    --surface: rgba(255, 255, 255, 0.12);
+    --text: #ffffff;
+    --muted: #dbeafe;
+    --border: rgba(255, 255, 255, 0.22);
+    --success: #16a34a;
+    --warning: #d97706;
+    --danger: #dc2626;
+    --radius: 16px;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    background-color: var(--background);
+}
+
+/* ==========================================
+   GLOBAL POSTER BACKGROUND
+========================================== */
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+
+    background-color: var(--background);
+
+    background-image:
+        linear-gradient(
+            rgba(8, 15, 35, 0.40),
+            rgba(8, 15, 35, 0.58)
+        ),
+        url("/static/images/aimt-poster.png");
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-blend-mode: normal;
+}
+
+/* LINKS */
+a {
+    color: #93c5fd;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button,
+a,
+input[type="submit"] {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+header,
+.navbar,
+.topbar,
+.site-header {
+    position: relative;
+    z-index: 2;
+
+    color: #ffffff;
+    padding: 18px 5%;
+
+    background: linear-gradient(
+        135deg,
+        rgba(23, 37, 84, 0.94),
+        rgba(37, 99, 235, 0.88),
+        rgba(8, 145, 178, 0.88)
+    );
+
+    box-shadow: var(--shadow);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.header-inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.brand {
+    min-width: 0;
+}
+
+.brand-title {
+    display: inline-block;
+    color: #ffffff;
+    font-size: clamp(20px, 3vw, 29px);
+    font-weight: 800;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.brand p,
+header p,
+.navbar p,
+.topbar p {
+    margin-top: 5px;
+    color: #e0f2fe;
+}
+
+header h1,
+.navbar h1,
+.topbar h1 {
+    font-size: clamp(20px, 3vw, 29px);
+    line-height: 1.4;
+    color: #ffffff;
+}
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+nav,
+.nav-links,
+.nav-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+nav a,
+.nav-links a,
+.nav-actions a,
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    padding: 10px 15px;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav a:hover,
+.nav-links a:hover,
+.nav-actions a:hover,
+.nav-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.logout-link {
+    background: rgba(220, 38, 38, 0.75) !important;
+}
+
+/* ==========================================
+   MAIN CONTENT
+========================================== */
+
+.container,
+.dashboard-container,
+.page-container,
+.content-wrapper {
+    width: min(1200px, 94%);
+    margin: 24px auto;
+}
+
+main,
+.page-content {
+    width: min(1200px, 94%);
+    margin: 24px auto;
+
+    background: transparent !important;
+}
+
+section {
+    margin-bottom: 24px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    color: #ffffff;
+}
+
+h2 {
+    margin-bottom: 16px;
+    font-size: clamp(21px, 3vw, 28px);
+}
+
+h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+p {
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   GLASS CARDS
+========================================== */
+
+.card,
+.stat-card,
+.dashboard-card,
+.panel,
+.glass-card,
+.content-card,
+.complaint-card,
+.profile-card,
+.notification-card {
+    min-width: 0;
+    padding: 22px;
+
+    background: rgba(255, 255, 255, 0.13);
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: var(--radius);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: var(--shadow);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.card:hover,
+.stat-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.19);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ==========================================
+   DASHBOARD STATISTICS
+========================================== */
+
+.stats,
+.stats-grid,
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin: 22px 0;
+}
+
+.stat-card h3 {
+    color: #dbeafe;
+    font-size: 15px;
+}
+
+.stat-card p,
+.stat-card .value {
+    margin-top: 8px;
+    color: #7dd3fc;
+    font-size: clamp(24px, 3vw, 35px);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   DASHBOARD ACTION CARDS
+========================================== */
+
+.dashboard-grid,
+.card-grid,
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 22px 0;
+}
+
+.dashboard-card h3 {
+    color: #bfdbfe;
+}
+
+.dashboard-card p {
+    margin: 10px 0 16px;
+    color: #e2e8f0;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+button,
+.btn,
+.button,
+input[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 44px;
+    max-width: 100%;
+    padding: 11px 18px;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+
+    background: var(--primary);
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 650;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.16s ease,
+        background 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+button:hover,
+.btn:hover,
+.button:hover,
+input[type="submit"]:hover {
+    background: var(--primary-dark);
+    color: #ffffff;
+    box-shadow: 0 5px 14px rgba(37, 99, 235, 0.30);
+}
+
+button:active,
+.btn:active,
+.button:active,
+input[type="submit"]:active {
+    transform: scale(0.97);
+}
+
+.btn-secondary {
+    background: #475569;
+}
+
+.btn-success {
+    background: var(--success);
+}
+
+.btn-danger {
+    background: var(--danger);
+}
+
+/* ==========================================
+   FORMS
+========================================== */
+
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 650;
+}
+
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 13px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    outline: none;
+    background: rgba(255, 255, 255, 0.96);
+    color: #1e293b;
+
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+input[type="file"] {
+    padding: 9px;
+    font-size: 14px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    display: inline-block;
+    width: auto;
+    min-height: auto;
+}
+
+/* ==========================================
+   TABLES
+========================================== */
+
+.table-container,
+.table-responsive {
+    width: 100%;
+    margin: 20px 0;
+    overflow-x: auto;
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow);
+
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    min-width: 680px;
+    border-collapse: collapse;
+    color: #1e293b;
+}
+
+th,
+td {
+    padding: 13px 15px;
+    border-bottom: 1px solid #e2e8f0;
+
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+}
+
+th {
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+td {
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+td a {
+    color: #1d4ed8;
+    font-weight: 650;
+}
+
+/* ==========================================
+   COMPLAINT STATUS
+========================================== */
+
+.status,
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+
+    background: #dbeafe;
+    color: #1d4ed8;
+
+    font-size: 12px;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.status-resolved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ==========================================
+   NOTIFICATIONS
+========================================== */
+
+.notification {
+    margin-bottom: 14px;
+    padding: 17px;
+
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-left: 4px solid #60a5fa;
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.13);
+    color: #ffffff;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    overflow-wrap: anywhere;
+}
+
+.notification.unread {
+    background: rgba(37, 99, 235, 0.28);
+}
+
+.notification p {
+    margin: 6px 0;
+}
+
+.notification small {
+    color: #dbeafe;
+}
+
+/* ==========================================
+   ALERTS AND FLASH MESSAGES
+========================================== */
+
+.alert,
+.flash-message {
+    margin: 15px 0;
+    padding: 13px 16px;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.alert-error,
+.alert-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alert-info,
+.alert-message,
+.alert-warning {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* ==========================================
+   PROFILE
+========================================== */
+
+.profile-photo {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+
+    border: 3px solid #bfdbfe;
+    border-radius: 50%;
+}
+
+.profile-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.profile-item {
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   PAGE TRANSITION
+========================================== */
+
+.page-content,
+main {
+    animation: pageEnter 0.35s ease both;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   LOADING SPINNER
+========================================== */
+
+.loading-spinner {
+    width: 25px;
+    height: 25px;
+
+    border: 3px solid #dbeafe;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+footer,
+.site-footer {
+    position: relative;
+    z-index: 1;
+
+    padding: 22px 12px;
+    color: #dbeafe;
+    text-align: center;
+    font-size: 13px;
+
+    background: rgba(10, 15, 30, 0.60);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.site-footer p {
+    margin: 4px 0;
+}
+
+/* ==========================================
+   TABLET RESPONSIVENESS
+========================================== */
+
+@media (max-width: 900px) {
+    .stats,
+    .stats-grid,
+    .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-grid,
+    .card-grid,
+    .action-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .container,
+    .dashboard-container,
+    .page-container,
+    .content-wrapper,
+    main,
+    .page-content {
+        width: 94%;
+    }
+
+    .header-inner {
+        align-items: flex-start;
+    }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+        background-attachment: scroll;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    header,
+    .navbar,
+    .topbar,
+    .site-header {
+        padding: 15px 4%;
+    }
+
+    header h1,
+    .navbar h1,
+    .topbar h1 {
+        font-size: 21px;
+    }
+
+    .container,
+    .dashboard-container,
+    .page-container,
+    .content-wrapper,
+    main,
+    .page-content {
+        width: 92%;
+        margin: 16px auto;
+    }
+
+    .stats,
+    .stats-grid,
+    .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .dashboard-grid,
+    .card-grid,
+    .action-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .card,
+    .stat-card,
+    .dashboard-card,
+    .panel,
+    .glass-card,
+    .content-card,
+    .complaint-card,
+    .profile-card,
+    .notification-card {
+        padding: 16px;
+        border-radius: 13px;
+    }
+
+    .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    nav,
+    .nav-links,
+    .nav-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    nav a,
+    .nav-links a,
+    .nav-actions a,
+    .nav-btn {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 8px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    button,
+    .btn,
+    .button,
+    input[type="submit"] {
+        min-height: 44px;
+    }
+
+    .table-container,
+    .table-responsive {
+        border-radius: 10px;
+    }
+
+    th,
+    td {
+        padding: 11px;
+    }
+
+    .profile-details {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .profile-photo {
+        width: 82px;
+        height: 82px;
+    }
+
+    .notification {
+        padding: 13px;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITY
+========================================== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #38bdf8;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   GLOBAL AIMT POSTER BACKGROUND
+   All pages: Profile, Notifications,
+   New Complaint, Dashboards, etc.
+======================================== */
+
+html {
+    min-height: 100%;
+    background-color: #06111f;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+
+    background-color: #06111f !important;
+
+    background-image:
+        linear-gradient(
+            rgba(5, 15, 35, 0.45),
+            rgba(5, 15, 35, 0.55)
+        ),
+        url("/static/images/aimt-poster.png") !important;
+
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+}
+
+/* Main content should not hide the poster */
+main,
+.page-content {
+    background-color: transparent;
+}
+
+/* Mobile support */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll !important;
+        background-position: center center !important;
+    }
+}

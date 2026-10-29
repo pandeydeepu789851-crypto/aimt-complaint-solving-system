@@ -1,0 +1,45 @@
+html {
+    min-height: 100%;
+    background-color: #06111f !important;
+}
+
+body {
+    min-height: 100vh !important;
+    background: #06111f url("/static/images/aimt-poster.png")
+        center center / cover no-repeat fixed !important;
+}
+
+/* पुरानी background layers हटाएँ */
+body::before,
+body::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* पेज के मुख्य हिस्से को पारदर्शी रखें */
+main {
+    background-color: transparent !important;
+}
+
+/* पारदर्शी Header और Footer */
+.site-header,
+.site-footer {
+    background-color: rgba(11, 23, 41, 0.78) !important;
+}
+
+/* Navigation */
+.navbar {
+    background-color: rgba(2, 6, 23, 0.78) !important;
+}
+
+/* Cards */
+.card {
+    background-color: rgba(14, 32, 52, 0.78) !important;
+}
+
+@media (max-width: 600px) {
+    body {
+        background-attachment: scroll !important;
+        background-size: cover !important;
+    }
+}

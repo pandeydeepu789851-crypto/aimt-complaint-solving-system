@@ -1,0 +1,326 @@
+
+{% extends "base.html" %}
+
+{% block title %}Staff Approvals | AIMT{% endblock %}
+
+{% block content %}
+
+<style>
+.approval-page {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.approval-header {
+    background: linear-gradient(135deg, #123c69, #2563a6);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px #00000015;
+}
+
+.approval-header h1 {
+    margin: 0 0 10px;
+}
+
+.approval-header p {
+    margin: 0;
+    color: #e5efff;
+}
+
+.approval-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.approval-btn {
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.approval-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.btn-back {
+    background: white;
+    color: #174678;
+}
+
+.btn-approve {
+    background: #16a34a;
+    color: white;
+}
+
+.btn-reject {
+    background: #dc2626;
+    color: white;
+}
+
+.approval-summary {
+    background: #eff6ff;
+    border-left: 5px solid #2563eb;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+
+.approval-summary strong {
+    font-size: 25px;
+    color: #174678;
+}
+
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.staff-card {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 5px 18px #00000012;
+    border-top: 4px solid #2563eb;
+    overflow-wrap: anywhere;
+    animation: appear 0.4s ease;
+}
+
+.staff-card h3 {
+    margin-top: 0;
+    color: #17365d;
+    font-size: 21px;
+}
+
+.staff-info {
+    margin: 10px 0;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.staff-info strong {
+    color: #1e293b;
+}
+
+.pending-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.card-actions form {
+    flex: 1;
+}
+
+.card-actions button {
+    width: 100%;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px #00000010;
+}
+
+.empty-state h2 {
+    color: #174678;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 700px) {
+    .approval-page {
+        padding: 12px;
+        margin: 10px auto;
+    }
+
+    .approval-header {
+        padding: 20px;
+    }
+
+    .approval-header h1 {
+        font-size: 24px;
+    }
+
+    .staff-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .staff-card {
+        padding: 18px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="approval-page">
+
+    <header class="approval-header">
+        <h1>Staff Approval Management</h1>
+
+        <p>
+            Review and manage staff registration requests
+            for your department.
+        </p>
+
+        <div class="approval-actions">
+            <a href="{{ url_for('hod_dashboard') }}"
+               class="approval-btn btn-back">
+                Back to Dashboard
+            </a>
+
+            <a href="{{ url_for('notifications') }}"
+               class="approval-btn btn-back">
+                Notifications
+            </a>
+        </div>
+    </header>
+
+    <div class="approval-summary">
+        <div>Pending Staff Requests</div>
+        <strong>{{ staff_members|length }}</strong>
+    </div>
+
+    {% if staff_members %}
+
+        <div class="staff-grid">
+
+            {% for staff in staff_members %}
+
+                <article class="staff-card">
+
+                    <h3>{{ staff['full_name'] }}</h3>
+
+                    <p class="staff-info">
+                        <strong>Email:</strong>
+                        {{ staff['email'] }}
+                    </p>
+
+                    <p class="staff-info">
+                        <strong>Mobile:</strong>
+                        {{ staff['mobile'] }}
+                    </p>
+
+                    <p class="staff-info">
+                        <strong>Course:</strong>
+                        {{ staff['course'] }}
+                    </p>
+
+                    <p class="staff-info">
+                        <strong>Year:</strong>
+                        {{ staff['year'] or 'Not specified' }}
+                    </p>
+
+                    <p class="staff-info">
+                        <strong>Department:</strong>
+                        {{ staff['department'] or staff['branch'] or 'Not specified' }}
+                    </p>
+
+                    <p class="staff-info">
+                        <strong>Section:</strong>
+                        {{ staff['section'] or 'Not specified' }}
+                    </p>
+
+                    <p>
+                        <span class="pending-badge">
+                            {{ staff['approval_status'] }}
+                        </span>
+                    </p>
+
+                    <div class="card-actions">
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'approve_staff',
+                                user_id=staff['id'],
+                                action='approve'
+                            ) }}"
+                            onsubmit="return confirm('Approve this staff account?');"
+                        >
+                            <button
+                                type="submit"
+                                class="approval-btn btn-approve"
+                            >
+                                Approve Staff
+                            </button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'approve_staff',
+                                user_id=staff['id'],
+                                action='reject'
+                            ) }}"
+                            onsubmit="return confirm('Reject this staff registration?');"
+                        >
+                            <button
+                                type="submit"
+                                class="approval-btn btn-reject"
+                            >
+                                Reject Staff
+                            </button>
+                        </form>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty-state">
+            <h2>No Pending Staff Requests</h2>
+            <p>
+                There are currently no staff registration requests
+                awaiting your approval.
+            </p>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

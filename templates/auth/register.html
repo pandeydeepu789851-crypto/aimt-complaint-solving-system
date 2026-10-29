@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | AIMT Problem Solving System</title>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    html {
+        min-height: 100%;
+        background: #06111f;
+    }
+
+    body {
+        min-height: 100vh;
+        padding: 30px 15px;
+        color: #182944;
+        background:
+            linear-gradient(rgba(4,15,35,.4), rgba(4,15,35,.6)),
+            url("/static/images/aimt-poster.png") center/cover fixed;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 650px;
+        margin: auto;
+        padding: 30px;
+        background: rgba(255,255,255,.96);
+        border-radius: 18px;
+        box-shadow: 0 20px 55px rgba(0,0,0,.35);
+        animation: appear .5s ease;
+    }
+
+    @keyframes appear {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+        display: block;
+        width: 105px;
+        height: 105px;
+        object-fit: contain;
+        margin: 0 auto 12px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #0b3472;
+        font-size: 27px;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #66758b;
+        margin-bottom: 25px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .flash {
+        background: #fff0f0;
+        color: #b42318;
+        border: 1px solid #ffcaca;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 7px;
+        color: #243954;
+        font-size: 14px;
+    }
+
+    input, select {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccd7e5;
+        border-radius: 8px;
+        font-size: 15px;
+        background: white;
+        color: #182944;
+        outline: none;
+    }
+
+    input:focus, select:focus {
+        border-color: #1265dc;
+        box-shadow: 0 0 0 3px rgba(18,101,220,.12);
+    }
+
+    .hint {
+        display: block;
+        color: #6c7b90;
+        font-size: 12px;
+        margin-top: 5px;
+        line-height: 1.5;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .submit-btn {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 9px;
+        background: linear-gradient(135deg,#1265dc,#087fa8);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg,#084eaf,#075d7c);
+        transform: translateY(-2px);
+    }
+
+    .bottom-text {
+        text-align: center;
+        margin-top: 20px;
+        color: #66758b;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .bottom-text a, .home-link {
+        color: #1265dc;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .home-link {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        font-size: 14px;
+    }
+
+    @media(max-width:650px) {
+        body {
+            padding: 18px 12px;
+            background-attachment: scroll;
+        }
+
+        .container {
+            padding: 25px 20px;
+        }
+    }
+
+    @media(max-width:400px) {
+        .container {
+            padding: 22px 16px;
+        }
+
+        h1 {
+            font-size: 23px;
+        }
+
+        .logo {
+            width: 85px;
+            height: 85px;
+        }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+        *, *::before, *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+<div class="container">
+
+
+<img
+    src="{{ url_for('static', filename='images/aimt-logo.png') }}"
+    alt="AIMT Logo"
+    class="logo"
+    onerror="this.style.display='none'"
+>
+
+<h1>Create Your Account</h1>
+<p class="subtitle">AIMT Problem Solving System</p>
+
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('register') }}">
+
+    <div class="form-group">
+        <label for="full_name">Full Name *</label>
+        <input type="text" id="full_name" name="full_name"
+               placeholder="Enter your full name"
+               autocomplete="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email"
+               placeholder="Enter your email"
+               autocomplete="email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="mobile">Mobile Number *</label>
+        <input type="tel" id="mobile" name="mobile"
+               placeholder="Enter 10-digit mobile number"
+               inputmode="numeric" pattern="[0-9]{10}"
+               maxlength="10" autocomplete="tel-national" required>
+    </div>
+
+    <div class="form-group">
+        <label for="role">Account Type *</label>
+        <select id="role" name="role" required>
+            <option value="">Select Account Type</option>
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+            <option value="hod">HOD</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="course">Course *</label>
+        <select id="course" name="course" required>
+            <option value="">Select Course</option>
+            <option value="BTech">B.Tech</option>
+            <option value="MBA">MBA</option>
+            <option value="MTech">M.Tech</option>
+            <option value="BCA">BCA</option>
+        </select>
+    </div>
+
+    <!-- STUDENT FIELDS -->
+    <div id="student-fields" class="hidden">
+
+        <div class="form-group">
+            <label for="roll_number">Roll Number *</label>
+            <input type="text" id="roll_number" name="roll_number"
+                   placeholder="Enter your college roll number"
+                   autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="year">Academic Year *</label>
+            <select id="year" name="year">
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="section">Section *</label>
+            <select id="section" name="section">
+                <option value="">Select Section</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+                <option value="E">Section E</option>
+                <option value="F">Section F</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="branch">Branch *</label>
+            <select id="branch" name="branch">
+                <option value="">Select Branch</option>
+                <option value="CSE">Computer Science (CSE)</option>
+                <option value="DS">Data Science (DS)</option>
+                <option value="AIML">AI &amp; Machine Learning (AIML)</option>
+                <option value="Mechanical">Mechanical Engineering</option>
+                <option value="MBA">MBA</option>
+                <option value="MTech">M.Tech</option>
+                <option value="BCA">BCA</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- STAFF FIELDS -->
+    <div id="staff-fields" class="hidden">
+
+        <div class="form-group">
+            <label for="staff-year">Academic Year *</label>
+            <select id="staff-year" name="year">
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="staff-section">Section *</label>
+            <select id="staff-section" name="section">
+                <option value="">Select Section</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+                <option value="E">Section E</option>
+                <option value="F">Section F</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="staff-department">Department *</label>
+            <select id="staff-department" name="department">
+                <option value="">Select Department</option>
+                <option value="CSE">Computer Science (CSE)</option>
+                <option value="DS">Data Science (DS)</option>
+                <option value="AIML">AI &amp; Machine Learning (AIML)</option>
+                <option value="Mechanical">Mechanical Engineering</option>
+                <option value="MBA">MBA</option>
+                <option value="MTech">M.Tech</option>
+                <option value="BCA">BCA</option>
+            </select>
+        </div>
+
+        <small class="hint">
+            Staff accounts remain pending until an authorized person approves them.
+        </small>
+    </div>
+
+    <!-- HOD FIELDS -->
+    <div id="hod-fields" class="hidden">
+
+        <div class="form-group">
+            <label for="hod-year">Academic Year *</label>
+            <select id="hod-year" name="year">
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="hod-department">Department *</label>
+            <select id="hod-department" name="department">
+                <option value="">Select Department</option>
+                <option value="CSE">Computer Science (CSE)</option>
+                <option value="DS">Data Science (DS)</option>
+                <option value="AIML">AI &amp; Machine Learning (AIML)</option>
+                <option value="Mechanical">Mechanical Engineering</option>
+                <option value="MBA">MBA</option>
+                <option value="MTech">M.Tech</option>
+                <option value="BCA">BCA</option>
+            </select>
+        </div>
+
+        <small class="hint">
+            HOD accounts remain pending until an authorized person approves them.
+        </small>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password *</label>
+        <input type="password" id="password" name="password"
+               placeholder="Create a password" minlength="8"
+               autocomplete="new-password" required>
+        <small class="hint">Password must contain at least 8 characters.</small>
+    </div>
+
+    <div class="form-group">
+        <label for="confirm_password">Confirm Password *</label>
+        <input type="password" id="confirm_password" name="confirm_password"
+               placeholder="Enter password again" minlength="8"
+               autocomplete="new-password" required>
+    </div>
+
+    <button type="submit" class="submit-btn">Create Account</button>
+</form>
+
+<p class="bottom-text">
+    Already have an account?
+    <a href="{{ url_for('login') }}">Login Here</a>
+</p>
+
+<a class="home-link" href="{{ url_for('home') }}">&larr; Back to Home</a>
+
+
+</div>
+
+<script>
+    const roleSelect = document.getElementById("role");
+
+    const studentFields = document.getElementById("student-fields");
+    const staffFields = document.getElementById("staff-fields");
+    const hodFields = document.getElementById("hod-fields");
+
+    const allConditionalFields = [
+        "roll_number", "year", "section", "branch",
+        "staff-year", "staff-section", "staff-department",
+        "hod-year", "hod-department"
+    ];
+
+    function updateRegistrationFields() {
+        const role = roleSelect.value;
+
+        studentFields.classList.toggle("hidden", role !== "student");
+        staffFields.classList.toggle("hidden", role !== "staff");
+        hodFields.classList.toggle("hidden", role !== "hod");
+
+        const studentIds = ["roll_number", "year", "section", "branch"];
+        const staffIds = ["staff-year", "staff-section", "staff-department"];
+        const hodIds = ["hod-year", "hod-department"];
+
+        function setRequired(ids, required) {
+            ids.forEach(id => {
+                const field = document.getElementById(id);
+                field.required = required;
+                field.disabled = !required;
+
+                if (!required) {
+                    field.value = "";
+                }
+            });
+        }
+
+        setRequired(studentIds, role === "student");
+        setRequired(staffIds, role === "staff");
+        setRequired(hodIds, role === "hod");
+    }
+
+    roleSelect.addEventListener("change", updateRegistrationFields);
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm_password").value;
+
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            alert("Passwords do not match.");
+        }
+    });
+
+    updateRegistrationFields();
+</script>
+
+</body>
+</html>

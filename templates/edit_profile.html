@@ -1,0 +1,114 @@
+
+{% extends "base.html" %}
+
+{% block title %}Edit Profile | AIMT Complaint Solving System{% endblock %}
+
+{% block content %}
+
+<style>
+.profile-container {
+    max-width: 650px;
+    margin: 35px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.profile-container h2 {
+    text-align: center;
+    color: #174678;
+    margin-bottom: 25px;
+}
+
+.profile-container label {
+    display: block;
+    margin: 15px 0 7px;
+    font-weight: bold;
+    color: #334155;
+}
+
+.profile-container input,
+.profile-container select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+.profile-container input:focus,
+.profile-container select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.profile-container button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 22px;
+    background: #174678;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-container button:hover {
+    background: #2563a6;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: #174678;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        margin: 15px;
+        padding: 18px;
+    }
+}
+</style>
+
+<div class="profile-container">
+
+    <h2>Edit My Profile</h2>
+
+    <form method="POST">
+
+        <label for="full_name">Full Name</label>
+        <input
+            type="text"
+            id="full_name"
+            name="full_name"
+            value="{{ user['full_name'] if user['full_name'] is defined else user['name'] }}"
+            required
+        >
+
+        <label for="email">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ user['email'] }}"
+            required
+        >
+
+        <button type="submit">Save Changes</button>
+
+    </form>
+
+    <a href="javascript:history.back()" class="back-link">
+        Back to Dashboard
+    </a>
+
+</div>
+
+{% endblock %}

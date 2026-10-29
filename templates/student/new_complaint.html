@@ -1,0 +1,229 @@
+
+{% extends "base.html" %}
+
+{% block title %}Student Notifications | AIMT{% endblock %}
+
+{% block head %}
+<style>
+.student-notifications {
+    max-width: 950px;
+    margin: 30px auto;
+    padding: 0 15px;
+    color: #172033;
+}
+
+.student-notifications .page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.student-notifications h1 {
+    color: white;
+    font-size: 27px;
+    text-shadow: 0 2px 8px #000;
+}
+
+.student-notifications .back-btn {
+    padding: 11px 16px;
+    background: #173b78;
+    color: white;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: 700;
+}
+
+.student-notifications .notification-card {
+    padding: 25px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    animation: notificationAppear 0.45s ease;
+}
+
+.student-notifications .subtitle {
+    margin-bottom: 20px;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.student-notifications .notification-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 18px;
+    margin-bottom: 14px;
+    background: #f8fafc;
+    border: 1px solid #dbe4f0;
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+    transition: 0.25s;
+}
+
+.student-notifications .notification-item:hover {
+    background: #eff6ff;
+    transform: translateY(-2px);
+}
+
+.student-notifications .notification-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #dbeafe;
+    font-size: 21px;
+}
+
+.student-notifications .notification-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.student-notifications .notification-body h3 {
+    margin: 0 0 8px;
+    color: #173b78;
+    font-size: 16px;
+}
+
+.student-notifications .notification-body p {
+    margin: 0 0 10px;
+    color: #334155;
+    line-height: 1.6;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+.student-notifications .notification-time {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.student-notifications .empty-state {
+    text-align: center;
+    padding: 40px 15px;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.student-notifications .empty-state .empty-icon {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.student-notifications .empty-state h3 {
+    color: #173b78;
+    margin-bottom: 8px;
+}
+
+@keyframes notificationAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .student-notifications {
+        margin: 18px auto;
+        padding: 0 10px;
+    }
+
+    .student-notifications h1 {
+        font-size: 22px;
+    }
+
+    .student-notifications .notification-card {
+        padding: 16px;
+    }
+
+    .student-notifications .notification-item {
+        padding: 13px;
+        gap: 10px;
+    }
+
+    .student-notifications .notification-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="student-notifications">
+
+    <div class="page-heading">
+        <h1>🔔 My Notifications</h1>
+
+        <a class="back-btn"
+           href="{{ url_for('student_dashboard') }}">
+            ← Dashboard
+        </a>
+    </div>
+
+    <section class="notification-card">
+
+        <h2>Notification Center</h2>
+
+        <p class="subtitle">
+            Your complaint updates will be shown here.
+        </p>
+
+        {% if notifications %}
+            {% for notification in notifications %}
+
+                <article class="notification-item">
+
+                    <div class="notification-icon">🔔</div>
+
+                    <div class="notification-body">
+
+                        <h3>
+                            {{ notification.title or 'Complaint Update' }}
+                        </h3>
+
+                        <p>{{ notification.message }}</p>
+
+                        {% if notification.created_at %}
+                            <span class="notification-time">
+                                {{ notification.created_at }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+
+                <h3>No Notifications Yet</h3>
+
+                <p>
+                    There are no notifications right now. Any updates on your complaint will appear here.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+{% endblock %}

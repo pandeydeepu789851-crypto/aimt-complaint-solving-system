@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .hod-notifications-page {
+        max-width: 1000px;
+        margin: 25px auto;
+        padding: 20px;
+        color: #ffffff;
+    }
+
+    .hod-notifications-page h1 {
+        color: #ffffff;
+        font-size: 30px;
+        text-shadow: 0 2px 8px #000000;
+    }
+
+    .hod-notifications-intro {
+        color: #f0f4ff;
+        line-height: 1.7;
+    }
+
+    .hod-notification-card {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(7, 18, 40, 0.95);
+        border: 1px solid #607da8;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px #00000055;
+    }
+
+    .hod-notification-item {
+        padding: 16px;
+        margin-bottom: 14px;
+        background: #172b49;
+        border-left: 5px solid #64a5ff;
+        border-radius: 9px;
+    }
+
+    .hod-notification-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .hod-notification-item p {
+        margin: 0;
+        color: #ffffff;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    .hod-notification-date {
+        display: block;
+        margin-top: 8px;
+        color: #c4d5f0;
+        font-size: 13px;
+    }
+
+    .hod-empty-notifications {
+        padding: 30px 15px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .hod-back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 18px;
+        background: #1764c0;
+        border: 1px solid #a8ceff;
+        border-radius: 9px;
+        color: #ffffff !important;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .hod-back-button:hover {
+        background: #0d4b96;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+        .hod-notifications-page {
+            padding: 12px;
+        }
+
+        .hod-notifications-page h1 {
+            font-size: 24px;
+        }
+
+        .hod-notification-card {
+            padding: 12px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hod-back-button {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="hod-notifications-page">
+    <h1>🔔 HOD Notifications</h1>
+
+
+<p class="hod-notifications-intro">
+    View complaint updates, department activities, and other important notifications here.
+</p>
+
+<div class="hod-notification-card">
+    {% if notifications %}
+        {% for notification in notifications %}
+            <div class="hod-notification-item">
+                <p>{{ notification.message }}</p>
+
+                {% if notification.created_at is defined %}
+                    <span class="hod-notification-date">
+                        {{ notification.created_at }}
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="hod-empty-notifications">
+            <h3>📭 No Notifications Yet</h3>
+            <p>New notifications will appear here when available.</p>
+        </div>
+    {% endif %}
+</div>
+
+<a class="hod-back-button" href="{{ url_for('hod_dashboard') }}">
+    ← Back to Dashboard
+</a>
+
+</div>
+{% endblock %}

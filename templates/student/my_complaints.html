@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    .complaints-page {
+        max-width: 1150px;
+        margin: 25px auto;
+        padding: 24px;
+        color: #ffffff;
+    }
+
+    .complaints-heading {
+        color: #ffffff;
+        font-size: 30px;
+        font-weight: 800;
+        text-shadow: 0 2px 8px #000000;
+        margin-bottom: 10px;
+    }
+
+    .complaints-intro {
+        color: #f0f4ff;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .complaints-card {
+        margin-top: 24px;
+        padding: 20px;
+        background: rgba(7, 18, 40, 0.95);
+        border: 1px solid rgba(180, 205, 255, 0.4);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        overflow-x: auto;
+    }
+
+    .complaints-table {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+        color: #ffffff;
+    }
+
+    .complaints-table th {
+        background: #234779;
+        color: #ffffff;
+        padding: 15px 12px;
+        text-align: left;
+        border-bottom: 2px solid #8ebaff;
+        white-space: nowrap;
+    }
+
+    .complaints-table td {
+        padding: 14px 12px;
+        color: #f3f6ff;
+        border-bottom: 1px solid #40516e;
+        overflow-wrap: anywhere;
+    }
+
+    .complaints-table tbody tr:nth-child(even) {
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .complaints-table tbody tr:hover {
+        background: rgba(83, 145, 235, 0.2);
+    }
+
+    .status {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .submitted {
+        background: #fff0bd;
+        color: #674800;
+    }
+
+    .in-progress {
+        background: #d5e8ff;
+        color: #123e80;
+    }
+
+    .forwarded {
+        background: #ead8ff;
+        color: #542080;
+    }
+
+    .resolved {
+        background: #d1f5df;
+        color: #145c32;
+    }
+
+    .rejected {
+        background: #ffdddd;
+        color: #921f1f;
+    }
+
+    .empty-message {
+        padding: 35px 15px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .empty-message h3 {
+        color: #ffffff;
+        font-size: 22px;
+    }
+
+    .empty-message p {
+        color: #e1eaff;
+        line-height: 1.7;
+    }
+
+    .new-complaint-button {
+        display: inline-block;
+        margin-top: 22px;
+        padding: 13px 20px;
+        border-radius: 10px;
+        background: #1764c0;
+        color: #ffffff !important;
+        font-weight: 800;
+        text-decoration: none;
+        border: 1px solid #a8ceff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, background 0.2s;
+    }
+
+    .new-complaint-button:hover {
+        background: #0d4b96;
+        transform: translateY(-3px);
+    }
+
+    .complaint-flash {
+        padding: 12px 15px;
+        margin: 12px 0;
+        background: #123c2a;
+        color: #e0ffeb;
+        border: 1px solid #4ac985;
+        border-radius: 9px;
+    }
+
+    @media (max-width: 600px) {
+        .complaints-page {
+            padding: 14px;
+            margin: 12px auto;
+        }
+
+        .complaints-heading {
+            font-size: 24px;
+        }
+
+        .complaints-card {
+            padding: 12px;
+        }
+
+        .new-complaint-button {
+            display: block;
+            text-align: center;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .new-complaint-button {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="complaints-page">
+    <h1 class="complaints-heading">📋 My Complaints</h1>
+
+
+<p class="complaints-intro">
+    View the status and submission date of all your complaints here.
+</p>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="complaint-flash">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<div class="complaints-card">
+    {% if complaints %}
+        <table class="complaints-table">
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Title</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Submitted On</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for complaint in complaints %}
+                    <tr>
+                        <td>#{{ complaint.id }}</td>
+                        <td>{{ complaint.title }}</td>
+                        <td>{{ complaint.department }}</td>
+                        <td>
+                            {% set status = complaint.status %}
+
+                            {% if status == 'RESOLVED' %}
+                                <span class="status resolved">Resolved</span>
+                            {% elif status == 'REJECTED' %}
+                                <span class="status rejected">Rejected</span>
+                            {% elif status == 'IN_PROGRESS' %}
+                                <span class="status in-progress">In Progress</span>
+                            {% elif status == 'FORWARDED_TO_HOD' %}
+                                <span class="status forwarded">Forwarded to HOD</span>
+                            {% elif status == 'SOLUTION_SENT_TO_STAFF' %}
+                                <span class="status forwarded">Solution Sent to Staff</span>
+                            {% else %}
+                                <span class="status submitted">Submitted</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ complaint.created_at }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-message">
+            <h3>No Complaints Yet</h3>
+            <p>Click the button below to submit a new complaint.</p>
+        </div>
+    {% endif %}
+</div>
+
+<a class="new-complaint-button" href="{{ url_for('new_complaint') }}">
+    + Submit New Complaint
+</a>
+
+</div>
+{% endblock %}

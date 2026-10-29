@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | AIMT Problem Solving System</title>
+
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background:
+            linear-gradient(
+                rgba(4, 15, 35, 0.70),
+                rgba(4, 15, 35, 0.82)
+            ),
+            url("/static/images/aimt-poster.png") center center / cover fixed no-repeat !important;
+        color: #eaf6ff;
+        min-height: 100vh;
+        animation: pageFade 0.7s ease;
+    }
+
+    @keyframes pageFade {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    header {
+        background: rgba(5, 20, 39, 0.90);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(56, 217, 255, 0.4);
+        padding: 18px 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+    }
+
+    .college-logo {
+        width: 65px;
+        height: 65px;
+        object-fit: contain;
+        background: white;
+        border-radius: 10px;
+        padding: 4px;
+        flex-shrink: 0;
+    }
+
+    .brand-text {
+        min-width: 0;
+    }
+
+    header h1 {
+        color: #38d9ff;
+        font-size: 22px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    header p {
+        color: #b8ccdd;
+        margin-top: 5px;
+        font-size: 13px;
+    }
+
+    .header-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 11px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn:active {
+        transform: scale(0.96);
+    }
+
+    .btn-primary {
+        background: #19c9ed;
+        color: #06111d;
+    }
+
+    .btn-primary:hover {
+        background: #72e8ff;
+    }
+
+    .btn-secondary {
+        background: rgba(23, 55, 80, 0.92);
+        color: white;
+        border-color: #37617d;
+    }
+
+    .btn-secondary:hover {
+        background: #245271;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 35px auto;
+    }
+
+    .welcome {
+        margin-bottom: 25px;
+        padding: 27px;
+        border: 1px solid rgba(56, 217, 255, 0.35);
+        border-radius: 16px;
+        background: rgba(5, 20, 39, 0.78);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
+    }
+
+    .welcome h2 {
+        color: #38d9ff;
+        margin-bottom: 10px;
+        font-size: 28px;
+    }
+
+    .welcome p {
+        color: #d0e0ed;
+        line-height: 1.8;
+    }
+
+    .flash {
+        padding: 13px 15px;
+        background: rgba(23, 55, 80, 0.95);
+        border: 1px solid #38d9ff;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        line-height: 1.6;
+        animation: pageFade 0.4s ease;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 16px;
+        margin-bottom: 38px;
+    }
+
+    .stat-card {
+        background: rgba(5, 20, 39, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(56, 217, 255, 0.25);
+        padding: 23px;
+        border-radius: 14px;
+        transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        animation: cardAppear 0.55s ease both;
+    }
+
+    .stat-card:nth-child(2) {
+        animation-delay: 0.08s;
+    }
+
+    .stat-card:nth-child(3) {
+        animation-delay: 0.16s;
+    }
+
+    .stat-card:nth-child(4) {
+        animation-delay: 0.24s;
+    }
+
+    @keyframes cardAppear {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: #38d9ff;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .stat-card h3 {
+        color: #c3d7e7;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+    }
+
+    .stat-card p {
+        color: #38d9ff;
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .section-title {
+        color: #38d9ff;
+        margin-bottom: 18px;
+        font-size: 23px;
+    }
+
+    .complaints {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 20px;
+    }
+
+    .complaint-card {
+        background: rgba(5, 20, 39, 0.88);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(56, 217, 255, 0.27);
+        border-radius: 14px;
+        padding: 23px;
+        transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        animation: cardAppear 0.5s ease both;
+    }
+
+    .complaint-card:hover {
+        transform: translateY(-4px);
+        border-color: #38d9ff;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .complaint-card h3 {
+        color: white;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .detail {
+        color: #d0deeb;
+        margin: 12px 0;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .status {
+        display: inline-block;
+        background: rgba(23, 55, 80, 0.95);
+        color: #55e3ff;
+        border: 1px solid #39718e;
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 12px;
+        margin: 8px 0 15px;
+        font-weight: bold;
+    }
+
+    .response-box {
+        background: rgba(16, 40, 58, 0.95);
+        border-left: 3px solid #38d9ff;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 15px;
+    }
+
+    .response-box h4 {
+        color: #38d9ff;
+        margin-bottom: 9px;
+    }
+
+    .response-box p {
+        color: #eaf6ff;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    .empty {
+        background: rgba(5, 20, 39, 0.88);
+        border: 1px dashed #39718e;
+        border-radius: 14px;
+        padding: 38px 20px;
+        text-align: center;
+        color: #d0deeb;
+        grid-column: 1 / -1;
+        backdrop-filter: blur(10px);
+    }
+
+    .empty h3 {
+        color: #eaf6ff;
+        line-height: 1.6;
+    }
+
+    .empty p {
+        line-height: 1.8;
+    }
+
+    footer {
+        text-align: center;
+        padding: 25px 15px;
+        color: #b0c3d3;
+        background: rgba(5, 20, 39, 0.88);
+        border-top: 1px solid rgba(56, 217, 255, 0.25);
+        margin-top: 45px;
+        line-height: 1.8;
+    }
+
+    @media (max-width: 700px) {
+        header {
+            padding: 15px 4%;
+            align-items: flex-start;
+        }
+
+        .brand {
+            width: 100%;
+        }
+
+        .college-logo {
+            width: 55px;
+            height: 55px;
+        }
+
+        header h1 {
+            font-size: 18px;
+        }
+
+        .header-links {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .btn {
+            padding: 11px 8px;
+            font-size: 13px;
+        }
+
+        .container {
+            width: 92%;
+            margin: 23px auto;
+        }
+
+        .welcome {
+            padding: 20px;
+        }
+
+        .welcome h2 {
+            font-size: 22px;
+        }
+
+        .stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .stat-card {
+            padding: 17px;
+        }
+
+        .stat-card p {
+            font-size: 26px;
+        }
+
+        .complaints {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .brand {
+            gap: 9px;
+        }
+
+        header h1 {
+            font-size: 16px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+</style>
+
+
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <img
+            src="{{ url_for('static', filename='images/aimt-logo.png') }}"
+            alt="AIMT Logo"
+            class="college-logo"
+        >
+
+
+    <div class="brand-text">
+        <h1>AIMT Problem Solving System</h1>
+        <p>Student Dashboard</p>
+    </div>
+</div>
+
+<nav class="header-links">
+    <a class="btn btn-secondary" href="{{ url_for('profile') }}">
+        My Profile
+    </a>
+
+    <a class="btn btn-primary" href="{{ url_for('new_complaint') }}">
+        + New Complaint
+    </a>
+
+    <a class="btn btn-secondary" href="{{ url_for('notifications') }}">
+        Notifications
+    </a>
+
+    <a class="btn btn-secondary" href="{{ url_for('logout') }}">
+        Logout
+    </a>
+</nav>
+
+
+</header>
+
+<main class="container">
+
+
+<section class="welcome">
+    <h2>Welcome, {{ session.get('name', 'Student') }}!</h2>
+
+    <p>
+        Submit complaints, track their progress, and view
+        the final solution when your complaint is resolved.
+    </p>
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="flash">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<section class="stats">
+    <div class="stat-card">
+        <h3>Total Complaints</h3>
+        <p>{{ total_complaints }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>In Progress</h3>
+        <p>{{ in_progress }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Forwarded to HOD</h3>
+        <p>{{ forwarded }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Resolved</h3>
+        <p>{{ resolved }}</p>
+    </div>
+</section>
+
+<h2 class="section-title">My Complaints</h2>
+
+<section class="complaints">
+    {% for complaint in complaints %}
+        <article class="complaint-card">
+
+            <h3>
+                Complaint #{{ complaint['id'] }}
+                {% if complaint['title'] is defined and complaint['title'] %}
+                    — {{ complaint['title'] }}
+                {% endif %}
+            </h3>
+
+            {% if complaint['category'] is defined %}
+                <p class="detail">
+                    <strong>Category:</strong>
+                    {{ complaint['category'] }}
+                </p>
+            {% endif %}
+
+            {% if complaint['description'] is defined %}
+                <p class="detail">
+                    <strong>Description:</strong><br>
+                    {{ complaint['description'] }}
+                </p>
+            {% endif %}
+
+            {% if complaint['created_at'] is defined %}
+                <p class="detail">
+                    <strong>Submitted:</strong>
+                    {{ complaint['created_at'] }}
+                </p>
+            {% endif %}
+
+            {% if complaint['updated_at'] is defined %}
+                <p class="detail">
+                    <strong>Last Updated:</strong>
+                    {{ complaint['updated_at'] or complaint['created_at'] }}
+                </p>
+            {% endif %}
+
+            <span class="status">
+                {{ (complaint['status'] or 'SUBMITTED').replace('_', ' ') }}
+            </span>
+
+            {% if complaint['staff_response'] is defined and complaint['staff_response'] %}
+                <div class="response-box">
+                    <h4>Staff Note</h4>
+                    <p>{{ complaint['staff_response'] }}</p>
+                </div>
+            {% endif %}
+
+            {% if complaint['hod_response'] is defined and complaint['hod_response'] %}
+                <div class="response-box">
+                    <h4>HOD Response</h4>
+                    <p>{{ complaint['hod_response'] }}</p>
+                </div>
+            {% endif %}
+
+            {% if complaint['status'] == 'RESOLVED'
+                  and complaint['final_response'] is defined
+                  and complaint['final_response'] %}
+                <div class="response-box">
+                    <h4>Final Solution</h4>
+                    <p>{{ complaint['final_response'] }}</p>
+                </div>
+            {% elif complaint['status'] != 'RESOLVED' %}
+                <p class="detail">
+                    <strong>Progress:</strong>
+                    Your complaint is being processed.
+                    The final solution will appear here once resolved.
+                </p>
+            {% endif %}
+
+        </article>
+    {% else %}
+        <div class="empty">
+            <h3>You haven't submitted any complaints yet.</h3>
+
+            <p style="margin-top: 12px;">
+                Click "New Complaint" to submit your first complaint.
+            </p>
+
+            <br>
+
+            <a class="btn btn-primary" href="{{ url_for('new_complaint') }}">
+                Submit a Complaint
+            </a>
+        </div>
+    {% endfor %}
+</section>
+
+
+</main>
+
+<footer>
+    <p>AIMT Problem Solving System</p>
+    <p>Your Problem, Our Priority</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Details | AIMT Problem Solving System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #172554, #2563eb);
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        header p {
+            margin-top: 6px;
+            color: #dbeafe;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-light {
+            background: white;
+            color: #1d4ed8;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        main {
+            width: 92%;
+            max-width: 900px;
+            margin: 30px auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
+        }
+
+        h2 {
+            color: #1d4ed8;
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        .detail {
+            margin-bottom: 18px;
+        }
+
+        .detail strong {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .detail p {
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .flash {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            resize: vertical;
+            margin: 12px 0 18px;
+        }
+
+        textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .note {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        .solution-item {
+            border-left: 4px solid #2563eb;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .solution-item p {
+            line-height: 1.7;
+            white-space: pre-wrap;
+            margin-top: 8px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 19px;
+            }
+
+            main {
+                width: 94%;
+                margin: 20px auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>AIMT Problem Solving System</h1>
+        <p>HOD — Complaint Details</p>
+    </div>
+
+    <a class="btn btn-light"
+       href="{{ url_for('hod_dashboard') }}">
+        Back to Dashboard
+    </a>
+</header>
+
+<main>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <section class="card">
+        <h2>Complaint Information</h2>
+
+        <div class="detail">
+            <strong>Complaint ID</strong>
+            <p>#{{ complaint.id }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Student Name</strong>
+            <p>{{ complaint.student_name }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Complaint Title</strong>
+            <p>{{ complaint.title }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Description</strong>
+            <p>{{ complaint.description }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Course</strong>
+            <p>{{ complaint.course }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Year</strong>
+            <p>{{ complaint.year }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Branch</strong>
+            <p>{{ complaint.branch }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Department</strong>
+            <p>{{ complaint.department }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Submitted Date</strong>
+            <p>{{ complaint.created_at }}</p>
+        </div>
+
+        <div class="detail">
+            <strong>Current Status</strong>
+            <span class="status">
+                {{ complaint.status|replace('_', ' ') }}
+            </span>
+        </div>
+
+        {% if complaint.attachment %}
+        <div class="detail">
+            <strong>Attachment</strong>
+            <a class="btn btn-primary"
+               href="{{ url_for('uploaded_complaint_file', filename=complaint.attachment) }}">
+                View / Download Attachment
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <h2>Previous Remarks and Solutions</h2>
+
+        {% if solutions %}
+            {% for item in solutions %}
+                <div class="solution-item">
+                    <strong>
+                        {{ item.author_name }} ({{ item.author_role|upper }})
+                    </strong>
+
+                    <p>{{ item.solution }}</p>
+
+                    <div class="note">
+                        {{ item.created_at }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="note">No remarks or solutions have been recorded yet.</p>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <h2>Write Solution for Staff</h2>
+
+        {% if complaint.status == 'FORWARDED_TO_HOD' %}
+
+            <form method="POST"
+                  action="{{ url_for('hod_submit_solution', complaint_id=complaint.id) }}">
+
+                <label for="solution">
+                    <strong>Solution / Instructions</strong>
+                </label>
+
+                <textarea
+                    id="solution"
+                    name="solution"
+                    placeholder="Write the solution or instructions for the staff member..."
+                    required
+                    minlength="3"
+                    maxlength="5000"></textarea>
+
+                <button type="submit" class="btn btn-primary">
+                    Send Solution to Staff
+                </button>
+            </form>
+
+            <p class="note">
+                After submission, the complaint status will change to
+                SOLUTION SENT TO STAFF and the assigned staff member
+                will receive a notification.
+            </p>
+
+        {% elif complaint.status == 'SOLUTION_SENT_TO_STAFF' %}
+
+            <p>
+                The solution has already been sent to Staff.
+            </p>
+
+        {% else %}
+
+            <p class="note">
+                You can submit a solution after Staff forwards this complaint to HOD.
+            </p>
+
+        {% endif %}
+    </section>
+
+</main>
+
+<footer>
+    © 2026 AIMT Problem Solving System
+</footer>
+
+</body>
+</html>

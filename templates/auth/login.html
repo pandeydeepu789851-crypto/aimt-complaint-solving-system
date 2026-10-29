@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | AIMT Problem Solving System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+            background-color: #06111f;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            /* AIMT POSTER BACKGROUND */
+            background-color: #06111f !important;
+            background-image:
+                linear-gradient(
+                    rgba(4, 15, 35, 0.35),
+                    rgba(4, 15, 35, 0.55)
+                ),
+                url("/static/images/aimt-poster.png") !important;
+
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            background-attachment: fixed !important;
+
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+            padding: 35px 28px;
+
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            border-radius: 20px;
+
+            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+
+            animation: appear 0.5s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-logo {
+            display: block;
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+        }
+
+        h1 {
+            margin: 0;
+            color: #102a56;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin: 10px 0 25px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #26354d;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+
+            border: 1px solid #d5dce8;
+            border-radius: 9px;
+
+            font-size: 15px;
+            background: #ffffff;
+        }
+
+        input:focus {
+            outline: 2px solid #7ba7ff;
+            border-color: #245fca;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+
+            border: none;
+            border-radius: 9px;
+
+            background: linear-gradient(135deg, #174ea6, #0878e8);
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(135deg, #103978, #065dbb);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(23, 78, 166, 0.25);
+        }
+
+        .login-button:active {
+            transform: scale(0.98);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .message.success {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .message.warning {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .message.info {
+            background: #cff4fc;
+            color: #055160;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .register-link a {
+            color: #174ea6;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 18px;
+
+            text-align: center;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #174ea6;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 15px;
+                background-attachment: scroll !important;
+            }
+
+            .login-container {
+                padding: 28px 22px;
+            }
+
+            .login-logo {
+                width: 75px;
+                height: 75px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .login-container {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <img
+            class="login-logo"
+            src="{{ url_for('static', filename='images/aimt-logo.png') }}"
+            alt="AIMT Logo"
+            onerror="this.style.display='none'">
+
+        <h1>Welcome Back!</h1>
+
+        <p class="subtitle">
+            AIMT Problem Solving System<br>
+            Login to your account
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <div class="form-group">
+                <label for="email">Email / Gmail</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your registered email"
+                    autocomplete="username"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required>
+            </div>
+
+            <button type="submit" class="login-button">
+                Login Securely
+            </button>
+
+        </form>
+
+        <div class="register-link">
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Create Account</a>
+        </div>
+
+        <a href="{{ url_for('home') }}" class="back-link">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>
