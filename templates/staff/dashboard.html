@@ -229,6 +229,7 @@
             opacity: 0;
             transform: translateY(12px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -290,6 +291,7 @@
 
     <!-- Dashboard Header -->
     <section class="dashboard-header">
+
         <h1>Staff Dashboard</h1>
 
         <p>
@@ -300,8 +302,9 @@
         <p>AIMT Complaint Solving System</p>
 
         <p>
-           Here you can see the complaints from your department and section.
+            Here you can see the complaints from your department and section.
         </p>
+
     </section>
 
     <!-- Dashboard Statistics -->
@@ -309,22 +312,30 @@
 
         <div class="stat-card">
             <h3>Total Complaints</h3>
-            <div class="stat-number">{{ stats.get("total", 0) }}</div>
+            <div class="stat-number">
+                {{ stats.get("total", 0) }}
+            </div>
         </div>
 
         <div class="stat-card">
             <h3>Pending Complaints</h3>
-            <div class="stat-number">{{ stats.get("pending", 0) }}</div>
+            <div class="stat-number">
+                {{ stats.get("pending", 0) }}
+            </div>
         </div>
 
         <div class="stat-card">
             <h3>Forwarded Complaints</h3>
-            <div class="stat-number">{{ stats.get("forwarded", 0) }}</div>
+            <div class="stat-number">
+                {{ stats.get("forwarded", 0) }}
+            </div>
         </div>
 
         <div class="stat-card">
             <h3>Resolved Complaints</h3>
-            <div class="stat-number">{{ stats.get("resolved", 0) }}</div>
+            <div class="stat-number">
+                {{ stats.get("resolved", 0) }}
+            </div>
         </div>
 
     </section>
@@ -343,6 +354,11 @@
                 Dashboard
             </a>
 
+            <a href="{{ url_for('staff_students') }}"
+               class="dashboard-button secondary-button">
+                👨‍🎓 All Students
+            </a>
+
             <a href="{{ url_for('notifications') }}"
                class="dashboard-button secondary-button">
                 Notifications
@@ -352,10 +368,12 @@
                class="dashboard-button secondary-button">
                 My Profile
             </a>
-               <a href="{{ url_for('student_approvals') }}"
-            class="dashboard-button primary-button">
-             ✅ Student Approvals
+
+            <a href="{{ url_for('student_approvals') }}"
+               class="dashboard-button primary-button">
+                ✅ Student Approvals
             </a>
+
         </div>
 
     </section>
@@ -364,11 +382,13 @@
     <section class="section-card">
 
         <div class="section-heading">
+
             <h2>Department Complaints</h2>
 
             <span class="status-badge">
                 {{ complaints|length }} Complaints
             </span>
+
         </div>
 
         {% if complaints %}
@@ -382,12 +402,14 @@
                         <div class="complaint-top">
 
                             <div>
+
                                 <h3 class="complaint-title">
                                     {{ complaint["title"] or
                                        ("Complaint #" ~ complaint["id"]) }}
                                 </h3>
 
                                 <div class="complaint-meta">
+
                                     <strong>Complaint ID:</strong>
                                     #{{ complaint["id"] }}
                                     <br>
@@ -411,7 +433,9 @@
                                         <strong>Submitted:</strong>
                                         {{ complaint["created_at"] }}
                                     {% endif %}
+
                                 </div>
+
                             </div>
 
                             {% set status = complaint["status"] or "SUBMITTED" %}
@@ -438,21 +462,28 @@
                         </div>
 
                         <div class="complaint-description">
+
                             {% if complaint["description"] %}
+
                                 {{ complaint["description"]|truncate(250, True, "...") }}
+
                             {% elif complaint["complaint_text"] %}
+
                                 {{ complaint["complaint_text"]|truncate(250, True, "...") }}
+
                             {% else %}
+
                                 No description available.
+
                             {% endif %}
+
                         </div>
 
-                        <a
-                            href="{{ url_for(
+                        <a href="{{ url_for(
                                 'staff_complaint_details',
                                 complaint_id=complaint['id']
                             ) }}"
-                            class="dashboard-button primary-button">
+                           class="dashboard-button primary-button">
 
                             View Complaint
 
@@ -467,10 +498,14 @@
         {% else %}
 
             <div class="empty-state">
+
                 <h3>No Complaints Found</h3>
+
                 <p>
-                    There are no complaints available for your department and section right now.
+                    There are no complaints available for your department
+                    and section right now.
                 </p>
+
             </div>
 
         {% endif %}

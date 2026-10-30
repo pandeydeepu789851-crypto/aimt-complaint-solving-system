@@ -1,438 +1,504 @@
-
 {% extends "base.html" %}
 
-{% block title %}HOD Dashboard | AIMT Complaint Solving System{% endblock %}
+{% block title %}HOD Dashboard | AIMT Complaint System{% endblock %}
 
 {% block content %}
 
 <style>
-    .hod-dashboard {
-        max-width: 1200px;
-        margin: 25px auto;
-        padding: 20px;
-        font-family: Arial, sans-serif;
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Background */
+.hod-page {
+    min-height: 100vh;
+    padding: 25px 20px;
+    background:
+        linear-gradient(rgba(5, 20, 35, 0.58), rgba(5, 20, 35, 0.68)),
+        url("{{ url_for('static', filename='images/aimt-campus.jpg') }}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Main Container */
+.hod-container {
+    max-width: 1250px;
+    margin: auto;
+}
+
+/* Welcome Alert */
+.welcome-alert {
+    background: #d9ffe8;
+    color: #075c32;
+    padding: 18px;
+    border-radius: 13px;
+    margin-bottom: 35px;
+    font-size: 17px;
+    border: 1px solid #a5e9bd;
+    animation: fadeDown 0.7s ease;
+}
+
+/* Hero Section */
+.hod-hero {
+    background: linear-gradient(120deg, #14264f, #285078);
+    color: white;
+    padding: 35px 30px;
+    border-radius: 22px;
+    margin-bottom: 28px;
+    border: 1px solid #315e89;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    animation: fadeUp 0.8s ease;
+}
+
+.hod-hero h1 {
+    font-size: 30px;
+    margin: 0 0 18px;
+}
+
+.hod-hero p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 8px 0;
+}
+
+/* Statistics */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 19px;
+    border-top: 5px solid #234d75;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    transition: 0.3s ease;
+    animation: fadeUp 1s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+}
+
+.stat-card h3 {
+    font-size: 15px;
+    color: #45566f;
+    margin: 0 0 20px;
+}
+
+.stat-card .number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #102653;
+}
+
+/* Quick Access */
+.quick-access {
+    background: white;
+    padding: 27px;
+    border-radius: 22px;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    animation: fadeUp 1.1s ease;
+}
+
+.quick-access h2 {
+    color: #102653;
+    margin: 0 0 22px;
+    font-size: 24px;
+}
+
+.quick-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.quick-btn {
+    display: inline-block;
+    padding: 13px 18px;
+    background: #e9eff7;
+    color: #102653;
+    text-decoration: none;
+    border-radius: 11px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.quick-btn:hover {
+    background: #244d75;
+    color: white;
+    transform: translateY(-5px);
+}
+
+.quick-btn.primary {
+    background: #244d75;
+    color: white;
+}
+
+.quick-btn.primary:hover {
+    background: #102653;
+}
+
+/* Complaints Table */
+.complaints-section {
+    background: white;
+    padding: 27px;
+    border-radius: 22px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    animation: fadeUp 1.2s ease;
+}
+
+.complaints-section h2 {
+    color: #102653;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+th {
+    background: #203f68;
+    color: white;
+    padding: 15px;
+    text-align: left;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #e6eaf0;
+    color: #34445b;
+}
+
+tr:hover td {
+    background: #f3f7fc;
+}
+
+.status {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    background: #fff0c7;
+    color: #805500;
+}
+
+.status.resolved {
+    background: #d9fbe5;
+    color: #087338;
+}
+
+.status.progress {
+    background: #dcecff;
+    color: #14569a;
+}
+
+.view-btn {
+    display: inline-block;
+    padding: 8px 13px;
+    border-radius: 8px;
+    background: #244d75;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.view-btn:hover {
+    background: #102653;
+}
+
+/* Empty Message */
+.empty-message {
+    text-align: center;
+    padding: 30px;
+    color: #667085;
+}
+
+/* Animations */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 900px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .hod-page {
+        padding: 15px 10px;
+        background-attachment: scroll;
     }
 
-    body {
-        background-image:
-            linear-gradient(rgba(240, 247, 255, 0.80),
-                            rgba(240, 247, 255, 0.85)),
-            url("/static/images/aimt-background.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        background-repeat: no-repeat;
+    .hod-hero {
+        padding: 25px 20px;
     }
 
-    .hod-header {
-        background: linear-gradient(135deg, #123c69, #2563a6);
-        color: white;
-        padding: 25px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        flex-wrap: wrap;
-        box-shadow: 0 8px 25px rgba(46, 33, 33, 0.15);
+    .hod-hero h1 {
+        font-size: 24px;
     }
 
-    .hod-header-left {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-    }
-
-    .hod-logo {
-        width: 75px;
-        height: 75px;
-        object-fit: contain;
-        background: white;
-        padding: 5px;
-        border-radius: 12px;
-    }
-
-    .hod-header h1 {
-        margin: 0 0 8px;
-        font-size: 27px;
-    }
-
-    .hod-header p {
-        margin: 5px 0;
-        color: #eaf3ff;
-    }
-
-    .hod-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .hod-btn {
-        display: inline-block;
-        text-decoration: none;
-        padding: 11px 16px;
-        border-radius: 8px;
-        background: white;
-        color: #174678;
-        font-weight: bold;
-        transition: 0.25s ease;
-        border: none;
-    }
-
-    .hod-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .hod-btn.primary {
-        background: #fbbf24;
-        color: #222;
-    }
-
-    .hod-section-title {
-        margin: 30px 0 15px;
-        color: #0f0f1063;
-        font-size: 23px;
-    }
-
-    .hod-stats {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 18px;
-        margin-top: 25px;
-    }
-
-    .hod-stat-card {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 22px;
-        border-radius: 14px;
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.09);
-        border-left: 5px solid #2563eb;
-        transition: 0.25s ease;
-    }
-
-    .hod-stat-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .hod-stat-card h3 {
-        margin: 0 0 12px;
-        color: #475569;
-        font-size: 15px;
-    }
-
-    .hod-stat-number {
-        font-size: 32px;
-        font-weight: bold;
-        color: #17365d;
-    }
-
-    .complaints-container {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-    }
-
-    .complaint-card {
-        background: rgba(255, 255, 255, 0.96);
-        border-radius: 14px;
-        padding: 20px;
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.09);
-        border-top: 4px solid #2563eb;
-        transition: 0.25s ease;
-        animation: fadeIn 0.5s ease;
-        overflow-wrap: anywhere;
-    }
-
-    .complaint-card:hover {
-        transform: translateY(-4px);
-    }
-
-    .complaint-card h3 {
-        margin-top: 0;
-        color: #17365d;
-    }
-
-    .complaint-info {
-        margin: 9px 0;
-        color: #475569;
+    .hod-hero p {
         font-size: 14px;
     }
 
-    .complaint-info strong {
-        color: #1e293b;
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
     }
 
-    .status-badge {
-        display: inline-block;
-        padding: 6px 11px;
-        border-radius: 20px;
+    .stat-card {
+        padding: 17px;
+    }
+
+    .stat-card h3 {
         font-size: 12px;
-        font-weight: bold;
-        background: #dbeafe;
-        color: #1d4ed8;
     }
 
-    .status-resolved {
-        background: #dcfce7;
-        color: #166534;
+    .stat-card .number {
+        font-size: 25px;
     }
 
-    .status-rejected {
-        background: #fee2e2;
-        color: #991b1b;
+    .quick-access,
+    .complaints-section {
+        padding: 20px 15px;
     }
 
-    .status-progress {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .empty-state {
+    .quick-btn {
+        width: 100%;
         text-align: center;
-        padding: 40px 20px;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 14px;
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
     }
-
-    .empty-state h3 {
-        color: #17365d;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @media (max-width: 900px) {
-        .hod-stats {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .complaints-container {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 600px) {
-        .hod-dashboard {
-            padding: 12px;
-            margin: 10px auto;
-        }
-
-        .hod-header {
-            padding: 18px;
-        }
-
-        .hod-header-left {
-            align-items: flex-start;
-        }
-
-        .hod-logo {
-            width: 55px;
-            height: 55px;
-        }
-
-        .hod-header h1 {
-            font-size: 21px;
-        }
-
-        .hod-actions {
-            width: 100%;
-        }
-
-        .hod-btn {
-            text-align: center;
-            flex: 1 1 120px;
-        }
-
-        .hod-stats {
-            gap: 10px;
-        }
-
-        .hod-stat-card {
-            padding: 15px;
-        }
-
-        .hod-stat-number {
-            font-size: 26px;
-        }
-    }
+}
 </style>
 
-<div class="hod-dashboard">
 
-    <!-- HOD HEADER -->
-    <section class="hod-header">
+<div class="hod-page">
+<div class="hod-container">
 
-        <div class="hod-header-left">
+    <!-- Welcome Alert -->
+    <div class="welcome-alert">
+        Welcome, {{ user.full_name }}!
+    </div>
 
-            <img
-                src="{{ url_for('static', filename='images/aimt-logo.png') }}"
-                alt="AIMT Logo"
-                class="hod-logo"
-            >
+    <!-- Hero Section -->
+    <section class="hod-hero">
+        <h1>HOD Dashboard</h1>
 
-            <div>
-                <h1>HOD Dashboard</h1>
+        <p>
+            Welcome,
+            <strong>{{ user.full_name }}</strong>
+        </p>
 
-                <p>
-                    Welcome,
-                    {{ user['full_name'] if user['full_name'] is defined else user['name'] }}
-                </p>
+        <p>AIMT Complaint Solving System</p>
 
-                <p>AIMT Complaint Solving System</p>
-            </div>
-
-        </div>
-
-        <div class="hod-actions">
-
-            <a href="{{ url_for('hod_dashboard') }}" class="hod-btn">
-                Dashboard
-            </a>
-
-            <a href="/hod/staff-approvals" class="hod-btn primary">
-                Staff Approvals
-            </a>
-
-            <a href="{{ url_for('notifications') }}" class="hod-btn">
-                Notifications
-            </a>
-
-            <a href="{{ url_for('edit_profile') }}" class="hod-btn">
-                My Profile
-            </a>
-
-            <a href="{{ url_for('logout') }}" class="hod-btn">
-                Logout
-            </a>
-
-        </div>
-
+        <p>
+            Here you can manage staff members and monitor
+            complaints forwarded to your department.
+        </p>
     </section>
 
-    <!-- STATISTICS -->
-    <h2 class="hod-section-title">Complaint Overview</h2>
 
-    <section class="hod-stats">
+    <!-- Statistics -->
+    <section class="stats-grid">
 
-        <div class="hod-stat-card">
+        <div class="stat-card">
             <h3>Total Complaints</h3>
-            <div class="hod-stat-number">
+            <div class="number">
                 {{ stats.get('total', 0) }}
             </div>
         </div>
 
-        <div class="hod-stat-card">
+        <div class="stat-card">
             <h3>Pending Complaints</h3>
-            <div class="hod-stat-number">
+            <div class="number">
                 {{ stats.get('pending', 0) }}
             </div>
         </div>
 
-        <div class="hod-stat-card">
-            <h3>Solutions Sent</h3>
-            <div class="hod-stat-number">
+        <div class="stat-card">
+            <h3>Responded Complaints</h3>
+            <div class="number">
                 {{ stats.get('responded', 0) }}
             </div>
         </div>
 
-        <div class="hod-stat-card">
+        <div class="stat-card">
             <h3>Resolved Complaints</h3>
-            <div class="hod-stat-number">
+            <div class="number">
                 {{ stats.get('resolved', 0) }}
             </div>
         </div>
 
     </section>
 
-    <!-- COMPLAINT LIST -->
-    <h2 class="hod-section-title">Complaints Assigned to You</h2>
 
-    {% if complaints %}
+    <!-- Quick Access -->
+    <section class="quick-access">
 
-        <section class="complaints-container">
+        <h2>Quick Access</h2>
 
-            {% for complaint in complaints %}
+        <div class="quick-buttons">
 
-                <article class="complaint-card">
+            <a href="{{ url_for('hod_dashboard') }}"
+               class="quick-btn primary">
+                Dashboard
+            </a>
 
-                    <h3>
-                        {{ complaint['title'] or 'Untitled Complaint' }}
-                    </h3>
+            <a href="{{ url_for('hod_staff_list') }}"
+               class="quick-btn">
+                👨‍🏫 All Staff
+            </a>
 
-                    <p class="complaint-info">
-                        <strong>Complaint ID:</strong>
-                        #{{ complaint['id'] }}
-                    </p>
+            <a href="{{ url_for('staff_approvals') }}"
+               class="quick-btn">
+                ✅ Staff Approvals
+            </a>
 
-                    <p class="complaint-info">
-                        <strong>Student:</strong>
-                        {{ complaint['student_name'] or 'Not Available' }}
-                    </p>
+            <a href="{{ url_for('notifications') }}"
+               class="quick-btn">
+                🔔 Notifications
+            </a>
 
-                    <p class="complaint-info">
-                        <strong>Roll Number:</strong>
-                        {{ complaint['student_roll_number'] or 'Not Available' }}
-                    </p>
+            <a href="{{ url_for('profile') }}"
+               class="quick-btn">
+                👤 My Profile
+            </a>
 
-                    <p class="complaint-info">
-                        <strong>Assigned Staff:</strong>
-                        {{ complaint['staff_name'] or 'Not Assigned' }}
-                    </p>
+            <a href="{{ url_for('edit_profile') }}"
+               class="quick-btn">
+                ✏️ Edit Profile
+            </a>
 
-                    <p class="complaint-info">
-                        <strong>Category:</strong>
-                        {{ complaint['category'] or 'General' }}
-                    </p>
-
-                    <p class="complaint-info">
-                        <strong>Submitted:</strong>
-                        {{ complaint['created_at'] or 'Date unavailable' }}
-                    </p>
-
-                    <p class="complaint-info">
-                        <strong>Status:</strong>
-
-                        {% set current_status = complaint['status'] %}
-
-                        <span class="status-badge
-                            {% if current_status == 'RESOLVED' %}
-                                status-resolved
-                            {% elif current_status == 'REJECTED' %}
-                                status-rejected
-                            {% elif current_status in ['IN_PROGRESS', 'FORWARDED_TO_HOD', 'SOLUTION_SENT_TO_STAFF'] %}
-                                status-progress
-                            {% endif %}
-                        ">
-                            {{ current_status.replace('_', ' ') }}
-                        </span>
-                    </p>
-
-                </article>
-
-            {% endfor %}
-
-        </section>
-
-    {% else %}
-
-        <div class="empty-state">
-            <h3>No Complaints Found</h3>
-            <p>There are currently no complaints assigned to your department.</p>
         </div>
 
-    {% endif %}
+    </section>
 
+
+    <!-- Complaints Table -->
+    <section class="complaints-section">
+
+        <h2>Department Complaints</h2>
+
+        {% if complaints %}
+
+        <div class="table-wrapper">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Complaint Title</th>
+                        <th>Student</th>
+                        <th>Staff</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for complaint in complaints %}
+
+                    <tr>
+                        <td>#{{ complaint.id }}</td>
+
+                        <td>
+                            {{ complaint.title }}
+                        </td>
+
+                        <td>
+                            {{ complaint.student_name }}
+                        </td>
+
+                        <td>
+                            {{ complaint.staff_name or 'Not Assigned' }}
+                        </td>
+
+                        <td>
+                            {% if complaint.status == 'RESOLVED' %}
+                                <span class="status resolved">
+                                    Resolved
+                                </span>
+
+                            {% elif complaint.status == 'SOLUTION_SENT_TO_STAFF' %}
+                                <span class="status progress">
+                                    Responded
+                                </span>
+
+                            {% else %}
+                                <span class="status">
+                                    {{ complaint.status.replace('_', ' ') }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a class="view-btn"
+                               href="{{ url_for('hod_complaint_details', complaint_id=complaint.id) }}">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            <h3>No Complaints Found</h3>
+            <p>Currently, there are no complaints assigned to you.</p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
 </div>
 
 {% endblock %}

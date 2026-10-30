@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,8 +15,12 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
-    <!-- Global AIMT Poster Background -->
     <style>
+
+        /* ==============================
+           GLOBAL PAGE DESIGN
+        ============================== */
+
         html {
             min-height: 100%;
         }
@@ -27,8 +31,8 @@
             font-family: "Segoe UI", Arial, sans-serif;
             color: #172033;
 
-            /* POSTER BACKGROUND */
             background-color: #101827;
+
             background-image:
                 linear-gradient(
                     rgba(8, 15, 35, 0.38),
@@ -42,90 +46,170 @@
             background-attachment: fixed;
         }
 
-        /* HEADER */
+
+        /* ==============================
+           HEADER
+        ============================== */
+
         .site-header {
             position: relative;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.96);
+
+            background: rgba(255, 255, 255, 0.97);
+
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
+
+        /* HEADER CONTAINER */
+
         .header-container {
             width: 92%;
             max-width: 1400px;
+
             margin: auto;
+
             min-height: 72px;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
+
             gap: 20px;
             flex-wrap: wrap;
+
             padding: 12px 0;
         }
 
+
+        /* ==============================
+           AIMT LOGO
+        ============================== */
+
         .site-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
             color: #173b78;
             text-decoration: none;
+
             font-size: 23px;
             font-weight: 900;
+
             line-height: 1.4;
+
+            flex-shrink: 0;
         }
 
-        .site-logo span {
+
+        /* LOGO IMAGE */
+
+        .aimt-logo-img {
+            width: 65px;
+            height: 65px;
+
+            object-fit: contain;
+
             display: block;
+
+            flex-shrink: 0;
+        }
+
+
+        /* LOGO TEXT */
+
+        .site-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-logo-text span {
+            display: block;
+
             color: #475569;
+
             font-size: 12px;
             font-weight: 700;
         }
 
-        /* NAVIGATION */
+
+        /* ==============================
+           NAVIGATION
+        ============================== */
+
         .main-nav {
             display: flex;
+
             align-items: center;
             justify-content: center;
+
             flex-wrap: wrap;
             gap: 8px;
         }
 
+
         .main-nav a {
             color: #173b78;
+
             text-decoration: none;
+
             font-size: 14px;
             font-weight: 700;
+
             padding: 10px 12px;
+
             border-radius: 9px;
-            transition: background 0.25s, color 0.25s,
-                        transform 0.25s;
+
+            transition:
+                background 0.25s,
+                color 0.25s,
+                transform 0.25s;
         }
+
 
         .main-nav a:hover {
             color: #fff;
             background: #173b78;
+
             transform: translateY(-2px);
         }
 
-        /* FLASH MESSAGES */
+
+        /* ==============================
+           FLASH MESSAGES
+        ============================== */
+
         .flash-container {
             width: 92%;
             max-width: 1100px;
+
             margin: 15px auto 0;
         }
 
+
         .alert {
             padding: 13px 16px;
+
             margin-bottom: 10px;
+
             border-radius: 10px;
+
             font-weight: 600;
+
             overflow-wrap: anywhere;
         }
+
 
         .alert-success {
             color: #166534;
             background: #dcfce7;
             border: 1px solid #86efac;
         }
+
 
         .alert-danger,
         .alert-error {
@@ -134,11 +218,13 @@
             border: 1px solid #fca5a5;
         }
 
+
         .alert-warning {
             color: #92400e;
             background: #fef3c7;
             border: 1px solid #fcd34d;
         }
+
 
         .alert-info,
         .alert-message {
@@ -147,32 +233,56 @@
             border: 1px solid #93c5fd;
         }
 
-        /* MAIN CONTENT */
+
+        /* ==============================
+           MAIN CONTENT
+        ============================== */
+
         main.page-content {
             min-height: calc(100vh - 180px);
+
             background: transparent;
+
             padding: 1px 0 30px;
         }
 
-        /* FOOTER */
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
         .site-footer {
             position: relative;
+
             margin-top: 25px;
+
             padding: 22px 15px;
+
             text-align: center;
+
             color: #fff;
+
             background: rgba(8, 15, 35, 0.82);
+
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
+
         .site-footer p {
             margin: 0;
+
             font-size: 13px;
+
             line-height: 1.7;
         }
 
-        /* MOBILE RESPONSIVE */
+
+        /* ==============================
+           MOBILE RESPONSIVE
+        ============================== */
+
         @media (max-width: 768px) {
+
             body {
                 background-attachment: scroll;
                 background-position: center center;
@@ -180,18 +290,28 @@
 
             .header-container {
                 width: 94%;
+
                 flex-direction: column;
                 align-items: center;
+
                 gap: 12px;
             }
 
             .site-logo {
-                text-align: center;
+                justify-content: center;
+                text-align: left;
+
                 font-size: 21px;
+            }
+
+            .aimt-logo-img {
+                width: 55px;
+                height: 55px;
             }
 
             .main-nav {
                 width: 100%;
+
                 gap: 5px;
             }
 
@@ -205,7 +325,35 @@
             }
         }
 
+
+        /* SMALL MOBILE */
+
+        @media (max-width: 400px) {
+
+            .aimt-logo-img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .site-logo {
+                font-size: 19px;
+            }
+
+            .site-logo-text span {
+                font-size: 11px;
+            }
+
+            .main-nav a {
+                font-size: 11px;
+                padding: 8px;
+            }
+        }
+
+
+        /* REDUCED MOTION */
+
         @media (prefers-reduced-motion: reduce) {
+
             *,
             *::before,
             *::after {
@@ -213,51 +361,101 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
     </style>
 
     {% block head %}{% endblock %}
+
 </head>
+
 
 <body>
 
-    <!-- HEADER -->
+
+    <!-- ==============================
+         HEADER
+    ============================== -->
+
     <header class="site-header">
+
         <div class="header-container">
 
+
+            <!-- AIMT LOGO -->
+
             <a href="{{ url_for('home') }}" class="site-logo">
-                AIMT
-                <span>Problem Solving System</span>
+
+                <img
+                    src="{{ url_for('static', filename='images/aimt-logo.png') }}"
+                    alt="AIMT Logo"
+                    class="aimt-logo-img"
+                >
+
+                <div class="site-logo-text">
+
+                    AIMT
+
+                    <span>
+                        Problem Solving System
+                    </span>
+
+                </div>
+
             </a>
+
+
+            <!-- NAVIGATION -->
 
             <nav class="main-nav">
 
-                <a href="{{ url_for('home') }}">Home</a>
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
 
                 {% if session.get('user_id') %}
 
                     {% set current_role = session.get('role', '')|lower %}
 
+
+                    <!-- STUDENT NAVIGATION -->
+
                     {% if current_role == 'student' %}
+
                         <a href="{{ url_for('student_dashboard') }}">
                             Dashboard
                         </a>
+
                         <a href="{{ url_for('new_complaint') }}">
                             New Complaint
                         </a>
+
                         <a href="{{ url_for('my_complaints') }}">
                             My Complaints
                         </a>
 
+
+                    <!-- STAFF NAVIGATION -->
+
                     {% elif current_role == 'staff' %}
+
                         <a href="{{ url_for('staff_dashboard') }}">
                             Dashboard
                         </a>
 
+
+                    <!-- HOD NAVIGATION -->
+
                     {% elif current_role == 'hod' %}
+
                         <a href="{{ url_for('hod_dashboard') }}">
                             Dashboard
                         </a>
+
                     {% endif %}
+
+
+                    <!-- COMMON LINKS -->
 
                     <a href="{{ url_for('notifications') }}">
                         Notifications
@@ -271,45 +469,92 @@
                         Logout
                     </a>
 
+
                 {% else %}
 
-                    <a href="{{ url_for('login') }}">Login</a>
-                    <a href="{{ url_for('register') }}">Register</a>
+
+                    <a href="{{ url_for('login') }}">
+                        Login
+                    </a>
+
+                    <a href="{{ url_for('register') }}">
+                        Register
+                    </a>
+
 
                 {% endif %}
 
             </nav>
+
         </div>
+
     </header>
 
-    <!-- FLASH MESSAGES -->
+
+
+    <!-- ==============================
+         FLASH MESSAGES
+    ============================== -->
+
     <div class="flash-container">
+
         {% with messages = get_flashed_messages(with_categories=true) %}
+
             {% if messages %}
+
                 {% for category, message in messages %}
+
                     <div class="alert alert-{{ category }}">
                         {{ message }}
                     </div>
+
                 {% endfor %}
+
             {% endif %}
+
         {% endwith %}
+
     </div>
 
-    <!-- PAGE CONTENT -->
+
+
+    <!-- ==============================
+         PAGE CONTENT
+    ============================== -->
+
     <main class="page-content">
-        {% block content %}{% endblock %}
+
+        {% block content %}
+
+        {% endblock %}
+
     </main>
 
-    <!-- FOOTER -->
+
+
+    <!-- ==============================
+         FOOTER
+    ============================== -->
+
     <footer class="site-footer">
+
         <p>
+
             &copy; {{ now().year if now is defined else 2026 }}
+
             AIMT Problem Solving System.
+
             All rights reserved.
+
         </p>
+
     </footer>
+
+
 
     {% block scripts %}{% endblock %}
 
+
 </body>
+
 </html>

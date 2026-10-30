@@ -1,0 +1,355 @@
+
+{% extends "base.html" %}
+
+{% block title %}All Students | AIMT Complaint Solving System{% endblock %}
+
+{% block content %}
+
+<style>
+    .students-page {
+        max-width: 1200px;
+        margin: 25px auto;
+        padding: 20px;
+        color: #263449;
+    }
+
+    .page-header {
+        padding: 28px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        background: linear-gradient(135deg, #142850, #27496d);
+        color: white;
+        box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    }
+
+    .page-header h1 {
+        margin: 0 0 10px;
+        font-size: 28px;
+    }
+
+    .page-header p {
+        margin: 7px 0;
+        color: #e7eef8;
+    }
+
+    .section-card {
+        background: white;
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,.07);
+    }
+
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+        margin: 0;
+        color: #142850;
+        font-size: 22px;
+    }
+
+    .count-badge {
+        background: #e8eef6;
+        color: #142850;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .quick-links {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .dashboard-button {
+        display: inline-block;
+        text-decoration: none;
+        border: none;
+        border-radius: 9px;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .dashboard-button:hover {
+        transform: translateY(-2px);
+        opacity: .9;
+    }
+
+    .primary-button {
+        background: #27496d;
+        color: white;
+    }
+
+    .secondary-button {
+        background: #e8eef6;
+        color: #142850;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .students-table {
+        width: 100%;
+        min-width: 950px;
+        border-collapse: collapse;
+    }
+
+    .students-table th {
+        background: #142850;
+        color: white;
+        padding: 15px 12px;
+        text-align: left;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .students-table td {
+        padding: 14px 12px;
+        border-bottom: 1px solid #e5eaf1;
+        color: #374151;
+        font-size: 14px;
+    }
+
+    .students-table tr:hover {
+        background: #f5f8fc;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-approved {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-pending {
+        background: #fff0d9;
+        color: #945600;
+    }
+
+    .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .empty-state {
+        padding: 35px 15px;
+        text-align: center;
+        color: #657286;
+        border: 1px dashed #cbd5e1;
+        border-radius: 14px;
+        background: #fbfcfe;
+    }
+
+    .empty-state h3 {
+        color: #142850;
+        margin-bottom: 8px;
+    }
+
+    @media (max-width: 600px) {
+        .students-page {
+            padding: 12px;
+            margin: 12px auto;
+        }
+
+        .page-header {
+            padding: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 23px;
+        }
+
+        .section-card {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="students-page">
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>All Students</h1>
+
+        <p>
+            Welcome,
+            <strong>{{ user["full_name"] or "Staff" }}</strong>
+        </p>
+
+        <p>AIMT Complaint Solving System</p>
+
+        <p>
+            Here you can view students belonging to your department,
+            year and section.
+        </p>
+    </section>
+
+    <!-- Quick Access -->
+    <section class="section-card">
+
+        <div class="section-heading">
+            <h2>Quick Access</h2>
+        </div>
+
+        <div class="quick-links">
+
+            <a href="{{ url_for('staff_dashboard') }}"
+               class="dashboard-button primary-button">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('notifications') }}"
+               class="dashboard-button secondary-button">
+                Notifications
+            </a>
+
+            <a href="{{ url_for('edit_profile') }}"
+               class="dashboard-button secondary-button">
+                My Profile
+            </a>
+
+            <a href="{{ url_for('student_approvals') }}"
+               class="dashboard-button secondary-button">
+                Student Approvals
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- Students List -->
+    <section class="section-card">
+
+        <div class="section-heading">
+            <h2>Students List</h2>
+
+            <span class="count-badge">
+                {{ students|length }} Students
+            </span>
+        </div>
+
+        {% if students %}
+
+        <div class="table-wrapper">
+
+            <table class="students-table">
+
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Branch</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    {% set status = student["approval_status"] or "PENDING" %}
+
+                    <tr>
+                        <td>{{ loop.index }}</td>
+
+                        <td>
+                            <strong>
+                                {{ student["full_name"] or "Student" }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ student["roll_number"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["email"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["mobile"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["course"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["year"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["department"] or student["branch"] or "-" }}
+                        </td>
+
+                        <td>
+                            {{ student["section"] or "-" }}
+                        </td>
+
+                        <td>
+                            <span class="status-badge
+                                {% if status == 'APPROVED' %}
+                                    status-approved
+                                {% elif status == 'REJECTED' %}
+                                    status-rejected
+                                {% else %}
+                                    status-pending
+                                {% endif %}">
+                                {{ status }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+            <h3>No Students Found</h3>
+
+            <p>
+                No students are currently available
+                for your department, year and section.
+            </p>
+        </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

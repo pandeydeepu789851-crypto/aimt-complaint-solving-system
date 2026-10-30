@@ -2,7 +2,6 @@ import sqlite3
 from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 # ==================================================
 # DATABASE CONFIGURATION
 # ==================================================
@@ -27,12 +26,10 @@ def get_db():
 
 
 # ==================================================
-# ADD MISSING COLUMN TO EXISTING DATABASE
+# ADD MISSING COLUMN
 # ==================================================
 
 def add_column_if_missing(conn, table, column, definition):
-    """Add a missing column without deleting existing records."""
-
     columns = {
         row["name"]
         for row in conn.execute(
@@ -60,13 +57,9 @@ def init_db():
             CREATE TABLE IF NOT EXISTS users (
 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-
                 full_name TEXT NOT NULL,
-
                 email TEXT NOT NULL COLLATE NOCASE UNIQUE,
-
                 mobile TEXT NOT NULL,
-
                 password_hash TEXT NOT NULL,
 
                 role TEXT NOT NULL
@@ -76,13 +69,9 @@ def init_db():
                     CHECK (course IN ('BTech', 'MBA', 'MTech', 'BCA')),
 
                 year TEXT,
-
                 branch TEXT,
-
                 department TEXT,
-
                 section TEXT,
-
                 roll_number TEXT,
 
                 approval_status TEXT NOT NULL DEFAULT 'PENDING'
@@ -95,7 +84,6 @@ def init_db():
                     ),
 
                 profile_photo TEXT,
-
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
 
             );
@@ -104,27 +92,19 @@ def init_db():
             CREATE TABLE IF NOT EXISTS complaints (
 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-
                 student_id INTEGER NOT NULL,
-
                 assigned_staff_id INTEGER,
-
                 assigned_hod_id INTEGER,
 
                 title TEXT NOT NULL,
-
                 description TEXT NOT NULL,
 
                 course TEXT NOT NULL,
-
                 year TEXT NOT NULL,
-
                 branch TEXT NOT NULL,
-
                 department TEXT NOT NULL,
 
                 section TEXT,
-
                 attachment TEXT,
 
                 status TEXT NOT NULL DEFAULT 'SUBMITTED'
@@ -140,17 +120,11 @@ def init_db():
                     ),
 
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-
                 updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (student_id)
-                    REFERENCES users(id),
-
-                FOREIGN KEY (assigned_staff_id)
-                    REFERENCES users(id),
-
-                FOREIGN KEY (assigned_hod_id)
-                    REFERENCES users(id)
+                FOREIGN KEY (student_id) REFERENCES users(id),
+                FOREIGN KEY (assigned_staff_id) REFERENCES users(id),
+                FOREIGN KEY (assigned_hod_id) REFERENCES users(id)
 
             );
 
@@ -158,18 +132,14 @@ def init_db():
             CREATE TABLE IF NOT EXISTS complaint_solutions (
 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-
                 complaint_id INTEGER NOT NULL,
-
                 author_id INTEGER NOT NULL,
-
                 solution TEXT NOT NULL,
 
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
                 FOREIGN KEY (complaint_id)
-                    REFERENCES complaints(id)
-                    ON DELETE CASCADE,
+                    REFERENCES complaints(id) ON DELETE CASCADE,
 
                 FOREIGN KEY (author_id)
                     REFERENCES users(id)
@@ -180,51 +150,31 @@ def init_db():
             CREATE TABLE IF NOT EXISTS notifications (
 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-
                 user_id INTEGER NOT NULL,
-
                 complaint_id INTEGER,
-
                 message TEXT NOT NULL,
 
                 is_read INTEGER NOT NULL DEFAULT 0,
 
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (user_id)
-                    REFERENCES users(id),
+                FOREIGN KEY (user_id) REFERENCES users(id),
 
                 FOREIGN KEY (complaint_id)
-                    REFERENCES complaints(id)
-                    ON DELETE CASCADE
+                    REFERENCES complaints(id) ON DELETE CASCADE
 
             );
 
         """)
 
-        # ==========================================
-        # MIGRATION FOR EXISTING DATABASE
-        # ==========================================
+        # MIGRATION
 
-        add_column_if_missing(
-            conn, "users", "section", "TEXT"
-        )
+        add_column_if_missing(conn, "users", "section", "TEXT")
+        add_column_if_missing(conn, "users", "roll_number", "TEXT")
+        add_column_if_missing(conn, "users", "profile_photo", "TEXT")
+        add_column_if_missing(conn, "complaints", "section", "TEXT")
 
-        add_column_if_missing(
-            conn, "users", "roll_number", "TEXT"
-        )
-
-        add_column_if_missing(
-            conn, "users", "profile_photo", "TEXT"
-        )
-
-        add_column_if_missing(
-            conn, "complaints", "section", "TEXT"
-        )
-
-        # ==========================================
         # DATABASE INDEXES
-        # ==========================================
 
         conn.executescript("""
 
@@ -272,10 +222,6 @@ def create_user(
     section=None
 ):
 
-    # ----------------------------------------------
-    # CLEAN INPUT VALUES
-    # ----------------------------------------------
-
     full_name = (full_name or "").strip()
     email = (email or "").strip().lower()
     mobile = (mobile or "").strip()
@@ -284,14 +230,11 @@ def create_user(
 
     year = (year or "").strip() or None
     section = (section or "").strip().upper() or None
-
     branch = (branch or "").strip() or None
     department = (department or "").strip() or None
     roll_number = (roll_number or "").strip() or None
 
-    # ----------------------------------------------
-    # REQUIRED FIELD VALIDATION
-    # ----------------------------------------------
+    # REQUIRED VALIDATION
 
     if not full_name:
         raise ValueError("Please enter your full name.")
@@ -305,49 +248,22 @@ def create_user(
     if not password:
         raise ValueError("Please enter your password.")
 
-    # ----------------------------------------------
-    # PASSWORD VALIDATION
-    # ----------------------------------------------
-
     if len(password) < 8:
-        raise ValueError(
-            "Password must contain at least 8 characters."
-        )
-
-    # ----------------------------------------------
-    # ROLE VALIDATION
-    # ----------------------------------------------
+        raise ValueError("Password must contain at least 8 characters.")
 
     if role not in VALID_ROLES:
         raise ValueError("Invalid account role.")
 
-    # ----------------------------------------------
-    # COURSE VALIDATION
-    # ----------------------------------------------
-
     if course not in VALID_COURSES:
         raise ValueError("Please select a valid course.")
 
-    # ----------------------------------------------
-    # MOBILE VALIDATION
-    # ----------------------------------------------
-
     if not mobile.isdigit() or len(mobile) != 10:
-        raise ValueError(
-            "Enter a valid 10-digit mobile number."
-        )
-
-    # ----------------------------------------------
-    # YEAR VALIDATION
-    # ----------------------------------------------
+        raise ValueError("Enter a valid 10-digit mobile number.")
 
     if role in ("student", "staff") and not year:
         raise ValueError("Please select your year.")
 
-    # ----------------------------------------------
     # SECTION VALIDATION
-    # HOD DOES NOT NEED A SECTION
-    # ----------------------------------------------
 
     if role == "hod":
         section = None
@@ -355,37 +271,25 @@ def create_user(
     elif role in ("student", "staff"):
 
         if section not in VALID_SECTIONS:
-            raise ValueError(
-                "Please select a valid section (A-F)."
-            )
+            raise ValueError("Please select a valid section (A-F).")
 
-    # ----------------------------------------------
-    # STUDENT ROLL NUMBER VALIDATION
-    # ----------------------------------------------
+    # STUDENT ROLL NUMBER
 
     if role == "student" and not roll_number:
-        raise ValueError(
-            "Student roll number is required."
-        )
+        raise ValueError("Student roll number is required.")
 
-    # ----------------------------------------------
     # ACCOUNT APPROVAL
-    # ----------------------------------------------
 
     if role == "hod":
-        approval_status = "approved"
+        approval_status = "APPROVED"
     else:
         approval_status = "PENDING"
 
-    # ----------------------------------------------
-    # HASH PASSWORD
-    # ----------------------------------------------
+    # PASSWORD HASH
 
     password_hash = generate_password_hash(password)
 
-    # ----------------------------------------------
-    # INSERT USER INTO DATABASE
-    # ----------------------------------------------
+    # INSERT USER
 
     conn = get_db()
 
@@ -465,30 +369,19 @@ def verify_password(stored_hash, password):
 # CREATE NOTIFICATION
 # ==================================================
 
-def create_notification(
-    db,
-    uid,
-    message,
-    cid=None
-):
+def create_notification(db, uid, message, cid=None):
 
     db.execute("""
 
         INSERT INTO notifications (
-
             user_id,
             complaint_id,
             message
-
         )
 
         VALUES (?, ?, ?)
 
-    """, (
-        uid,
-        cid,
-        message
-    ))
+    """, (uid, cid, message))
 
 
 # ==================================================
@@ -538,6 +431,109 @@ def get_user_by_id(user_id):
 
 
 # ==================================================
+# SHOW ALL REGISTERED USERS
+# ==================================================
+
+def show_all_users():
+
+    conn = get_db()
+
+    try:
+
+        users = conn.execute("""
+
+            SELECT
+                id,
+                full_name,
+                email,
+                role,
+                course,
+                department
+            FROM users
+            ORDER BY id
+
+        """).fetchall()
+
+        print("\n========== REGISTERED USERS ==========")
+
+        if not users:
+            print("No users found in this database.")
+
+        for user in users:
+
+            print(
+                f"ID: {user['id']} | "
+                f"Name: {user['full_name']} | "
+                f"Email: {user['email']} | "
+                f"Role: {user['role']} | "
+                f"Course: {user['course']} | "
+                f"Department: {user['department']}"
+            )
+
+    finally:
+        conn.close()
+
+
+# ==================================================
+# FIX OLD HOD ACCOUNT
+# ==================================================
+
+def fix_old_hod_account(email):
+
+    email = (email or "").strip().lower()
+
+    if not email:
+        print("No email entered. No account was changed.")
+        return
+
+    conn = get_db()
+
+    try:
+
+        user = conn.execute("""
+
+            SELECT id, full_name, email, role
+            FROM users
+            WHERE email = ?
+
+        """, (email,)).fetchone()
+
+        if user is None:
+            print("HOD email not found. No account was changed.")
+            return
+
+        print("\nSelected Account:")
+        print("ID:", user["id"])
+        print("Name:", user["full_name"])
+        print("Email:", user["email"])
+        print("Current Role:", user["role"])
+
+        confirm = input(
+            "\nIf this is the correct HOD account, type YES: "
+        ).strip()
+
+        if confirm != "YES":
+            print("Update cancelled.")
+            return
+
+        conn.execute("""
+
+            UPDATE users
+            SET role = 'hod',
+                approval_status = 'APPROVED'
+            WHERE id = ?
+
+        """, (user["id"],))
+
+        conn.commit()
+
+        print("\nHOD account updated successfully!")
+
+    finally:
+        conn.close()
+
+
+# ==================================================
 # RUN DATABASE FILE DIRECTLY
 # ==================================================
 
@@ -545,6 +541,13 @@ if __name__ == "__main__":
 
     init_db()
 
-    print("AIMT database initialized successfully!")
-
+    print("\nAIMT database initialized successfully!")
     print(f"Database location: {DATABASE_PATH}")
+
+    show_all_users()
+
+    print("\nEnter the exact registered HOD email.")
+    hod_email = input("HOD Email (press Enter to skip): ").strip()
+
+    if hod_email:
+        fix_old_hod_account(hod_email)

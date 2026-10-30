@@ -1,229 +1,541 @@
-
 {% extends "base.html" %}
 
-{% block title %}Student Notifications | AIMT{% endblock %}
+{% block title %}New Complaint | AIMT{% endblock %}
 
 {% block head %}
 <style>
-.student-notifications {
-    max-width: 950px;
-    margin: 30px auto;
-    padding: 0 15px;
-    color: #172033;
-}
+/* ===============================
+   MAIN POSTER BACKGROUND
+================================ */
 
-.student-notifications .page-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 25px;
-}
+.complaint-page {
+    min-height: 90vh;
+    padding: 40px 15px;
 
-.student-notifications h1 {
+    background:
+        linear-gradient(
+            rgba(4, 15, 38, 0.48),
+            rgba(4, 15, 38, 0.65)
+        ),
+        url("{{ url_for('static', filename='images/aimt-poster.jpg') }}");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    border-radius: 18px;
     color: white;
-    font-size: 27px;
-    text-shadow: 0 2px 8px #000;
 }
 
-.student-notifications .back-btn {
-    padding: 11px 16px;
-    background: #173b78;
+/* ===============================
+   MAIN CONTAINER
+================================ */
+
+.complaint-container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* ===============================
+   PAGE HEADING
+================================ */
+
+.page-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-heading h1 {
+    font-size: 35px;
+    font-weight: 800;
     color: white;
-    text-decoration: none;
-    border-radius: 9px;
-    font-weight: 700;
+    text-shadow: 0 3px 15px #000;
 }
 
-.student-notifications .notification-card {
+.page-heading p {
+    color: #e2e8f0;
+    font-size: 15px;
+}
+
+/* ===============================
+   GLASS CARD
+================================ */
+
+.glass-card {
+    display: grid;
+    grid-template-columns: 0.8fr 1.5fr;
+    gap: 25px;
+
+    padding: 25px;
+
+    background: rgba(255,255,255,0.13);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 25px;
+
+    box-shadow: 0 20px 55px rgba(0,0,0,0.35);
+
+    animation: appear 0.7s ease;
+}
+
+/* ===============================
+   LEFT INFORMATION PANEL
+================================ */
+
+.info-panel {
     padding: 25px;
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-    animation: notificationAppear 0.45s ease;
+
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.25);
+
+    color: white;
 }
 
-.student-notifications .subtitle {
-    margin-bottom: 20px;
-    color: #475569;
-    line-height: 1.6;
+.info-panel h2 {
+    font-size: 23px;
+    margin-bottom: 15px;
 }
 
-.student-notifications .notification-item {
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-    padding: 18px;
-    margin-bottom: 14px;
-    background: #f8fafc;
-    border: 1px solid #dbe4f0;
-    border-left: 5px solid #2563eb;
-    border-radius: 12px;
-    overflow-wrap: anywhere;
-    transition: 0.25s;
-}
-
-.student-notifications .notification-item:hover {
-    background: #eff6ff;
-    transform: translateY(-2px);
-}
-
-.student-notifications .notification-icon {
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #dbeafe;
-    font-size: 21px;
-}
-
-.student-notifications .notification-body {
-    flex: 1;
-    min-width: 0;
-}
-
-.student-notifications .notification-body h3 {
-    margin: 0 0 8px;
-    color: #173b78;
-    font-size: 16px;
-}
-
-.student-notifications .notification-body p {
-    margin: 0 0 10px;
-    color: #334155;
-    line-height: 1.6;
+.info-panel p {
+    color: #f1f5f9;
+    line-height: 1.7;
     font-size: 14px;
-    white-space: pre-wrap;
 }
 
-.student-notifications .notification-time {
-    color: #64748b;
-    font-size: 12px;
+.info-item {
+    margin-top: 20px;
+    padding: 15px;
+
+    border-radius: 13px;
+    background: rgba(255,255,255,0.13);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    transition: 0.3s;
 }
 
-.student-notifications .empty-state {
-    text-align: center;
-    padding: 40px 15px;
-    color: #64748b;
-    background: #f8fafc;
-    border-radius: 12px;
+.info-item:hover {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
 }
 
-.student-notifications .empty-state .empty-icon {
-    font-size: 42px;
-    margin-bottom: 12px;
+.info-item strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #bfdbfe;
 }
 
-.student-notifications .empty-state h3 {
+/* ===============================
+   FORM PANEL
+================================ */
+
+.form-panel {
+    padding: 28px;
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.96);
+    color: #172554;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.form-panel h2 {
     color: #173b78;
+    font-size: 25px;
+    font-weight: 800;
     margin-bottom: 8px;
 }
 
-@keyframes notificationAppear {
+.form-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+/* ===============================
+   FORM INPUTS
+================================ */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1e3a5f;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 13px 14px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 11px;
+
+    background: #f8fafc;
+    color: #172033;
+
+    font-size: 14px;
+    outline: none;
+
+    transition: 0.3s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #2563eb;
+    background: white;
+
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.13);
+}
+
+textarea.form-control {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* ===============================
+   FILE UPLOAD
+================================ */
+
+.upload-area {
+    padding: 16px;
+
+    border: 2px dashed #93c5fd;
+    border-radius: 12px;
+
+    background: #eff6ff;
+}
+
+.upload-area small {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+
+.form-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.submit-btn,
+.back-btn {
+    flex: 1;
+    padding: 14px;
+
+    border-radius: 11px;
+    text-align: center;
+    text-decoration: none;
+
+    font-weight: 800;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.submit-btn {
+    color: white;
+    border: none;
+
+    background: linear-gradient(
+        135deg,
+        #174a9b,
+        #3b82f6
+    );
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 25px
+        rgba(37,99,235,0.4);
+}
+
+.back-btn {
+    color: #173b78;
+    background: #e8effa;
+
+    border: 1px solid #cbdcf5;
+}
+
+.back-btn:hover {
+    background: #dbeafe;
+    transform: translateY(-3px);
+}
+
+/* ===============================
+   ANIMATION
+================================ */
+
+@keyframes appear {
     from {
         opacity: 0;
-        transform: translateY(15px);
+        transform: translateY(25px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-@media (max-width: 600px) {
-    .student-notifications {
-        margin: 18px auto;
-        padding: 0 10px;
+/* ===============================
+   MOBILE RESPONSIVE
+================================ */
+
+@media(max-width: 750px) {
+
+    .complaint-page {
+        padding: 25px 10px;
+        background-attachment: scroll;
     }
 
-    .student-notifications h1 {
-        font-size: 22px;
+    .glass-card {
+        grid-template-columns: 1fr;
+        padding: 14px;
     }
 
-    .student-notifications .notification-card {
-        padding: 16px;
+    .info-panel {
+        padding: 18px;
     }
 
-    .student-notifications .notification-item {
-        padding: 13px;
-        gap: 10px;
+    .form-panel {
+        padding: 20px 15px;
     }
 
-    .student-notifications .notification-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 18px;
+    .page-heading h1 {
+        font-size: 25px;
+    }
+}
+
+@media(max-width: 450px) {
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .back-btn {
+        width: 100%;
     }
 }
 </style>
 {% endblock %}
 
+
 {% block content %}
-<div class="student-notifications">
 
-    <div class="page-heading">
-        <h1>🔔 My Notifications</h1>
+<div class="complaint-page">
 
-        <a class="back-btn"
-           href="{{ url_for('student_dashboard') }}">
-            ← Dashboard
-        </a>
-    </div>
+    <div class="complaint-container">
 
-    <section class="notification-card">
+        <!-- PAGE HEADING -->
 
-        <h2>Notification Center</h2>
+        <div class="page-heading">
+            <h1>✦ AIMT Complaint Portal</h1>
+            <p>
+                We're here to listen and solve your problems.
+            </p>
+        </div>
 
-        <p class="subtitle">
-            Your complaint updates will be shown here.
-        </p>
 
-        {% if notifications %}
-            {% for notification in notifications %}
+        <div class="glass-card">
 
-                <article class="notification-item">
+            <!-- LEFT INFORMATION PANEL -->
 
-                    <div class="notification-icon">🔔</div>
+            <div class="info-panel">
 
-                    <div class="notification-body">
+                <h2>Welcome Student 👋</h2>
 
-                        <h3>
-                            {{ notification.title or 'Complaint Update' }}
-                        </h3>
+                <p>
+                    Submit your complaint using this portal.
+                    Our team will review your issue and work
+                    towards a suitable solution.
+                </p>
 
-                        <p>{{ notification.message }}</p>
+                <div class="info-item">
+                    <strong>📌 STEP 01</strong>
+                    Submit your complaint with correct details.
+                </div>
 
-                        {% if notification.created_at %}
-                            <span class="notification-time">
-                                {{ notification.created_at }}
-                            </span>
-                        {% endif %}
+                <div class="info-item">
+                    <strong>🔍 STEP 02</strong>
+                    Staff will review your complaint.
+                </div>
+
+                <div class="info-item">
+                    <strong>📢 STEP 03</strong>
+                    Track updates through notifications.
+                </div>
+
+                <div class="info-item">
+                    <strong>🔒 PRIVACY</strong>
+                    Your complaint details are handled securely.
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT FORM PANEL -->
+
+            <div class="form-panel">
+
+                <h2>📝 New Complaint</h2>
+
+                <p class="form-subtitle">
+                    Fill in the details below.
+                </p>
+
+
+                <form method="POST"
+                      action="{{ url_for('new_complaint') }}"
+                      enctype="multipart/form-data">
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group">
+
+                        <label>Complaint Title *</label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            class="form-control"
+                            placeholder="Enter complaint title"
+                            maxlength="150"
+                            required>
 
                     </div>
 
-                </article>
 
-            {% endfor %}
+                    <!-- CATEGORY -->
 
-        {% else %}
+                    <div class="form-group">
 
-            <div class="empty-state">
-                <div class="empty-icon">📭</div>
+                        <label>Complaint Category *</label>
 
-                <h3>No Notifications Yet</h3>
+                        <select
+                            name="category"
+                            class="form-select"
+                            required>
 
-                <p>
-                    There are no notifications right now. Any updates on your complaint will appear here.
-                </p>
+                            <option value="">Select Category</option>
+
+                            <option value="Academic">
+                                Academic Issue
+                            </option>
+
+                            <option value="Faculty">
+                                Faculty Issue
+                            </option>
+
+                            <option value="Examination">
+                                Examination
+                            </option>
+
+                            <option value="Infrastructure">
+                                Infrastructure
+                            </option>
+
+                            <option value="Library">
+                                Library
+                            </option>
+
+                            <option value="Hostel">
+                                Hostel
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label>Complaint Description *</label>
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            placeholder="Describe your problem in detail..."
+                            required></textarea>
+
+                    </div>
+
+
+                    <!-- ATTACHMENT -->
+
+                    <div class="form-group">
+
+                        <label>Supporting Document</label>
+
+                        <div class="upload-area">
+
+                            <input
+                                type="file"
+                                name="attachment"
+                                class="form-control"
+                                accept=".pdf,.png,.jpg,.jpeg,.doc,.docx">
+
+                            <small>
+                                PDF, JPG, PNG, DOC, DOCX | Maximum 5 MB
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="form-buttons">
+
+                        <button
+                            type="submit"
+                            class="submit-btn">
+
+                            🚀 Submit Complaint
+
+                        </button>
+
+
+                        <a
+                            href="{{ url_for('student_dashboard') }}"
+                            class="back-btn">
+
+                            ← Dashboard
+
+                        </a>
+
+                    </div>
+
+                </form>
+
             </div>
 
-        {% endif %}
+        </div>
 
-    </section>
+    </div>
 
 </div>
+
 {% endblock %}

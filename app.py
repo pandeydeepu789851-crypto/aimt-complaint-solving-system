@@ -1030,7 +1030,52 @@ def staff_dashboard():
         stats=stats,
     )
 
+# ==========================================
+# STAFF - ALL STUDENTS
+# ==========================================
 
+@app.route("/staff/students")
+@role_required("staff")
+def staff_students():
+
+    user = get_current_user()
+
+    students = query_db(
+        """
+        SELECT
+            id,
+            full_name,
+            email,
+            mobile,
+            roll_number,
+            course,
+            year,
+            branch,
+            department,
+            section,
+            approval_status,
+            created_at
+        FROM users
+        WHERE role = 'student'
+          AND course = ?
+          AND year = ?
+          AND section = ?
+          AND LOWER(COALESCE(department, branch, '')) = LOWER(?)
+        ORDER BY created_at DESC
+        """,
+        (
+            user["course"],
+            normalize_year(user["year"]),
+            user["section"],
+            get_user_department(user),
+        ),
+    )
+
+    return render_template(
+        "staff/students.html",
+        user=user,
+        students=students,
+    )
 # =========================================================
 # STAFF CLAIM COMPLAINT
 # =========================================================
@@ -1375,8 +1420,50 @@ def hod_dashboard():
         complaints=complaints,
         stats=stats,
     )
+    
+# ==========================================
+# HOD - ALL STAFF
+# ==========================================
 
+@app.route("/hod/staff-list")
+@role_required("hod")
+def hod_staff_list():
 
+    user = get_current_user()
+
+    staff_members = query_db(
+        """
+        SELECT
+            id,
+            full_name,
+            email,
+            mobile,
+            course,
+            year,
+            branch,
+            department,
+            section,
+            approval_status,
+            created_at
+        FROM users
+        WHERE role = 'staff'
+          AND course = ?
+          AND LOWER(
+              COALESCE(department, branch, '')
+          ) = LOWER(?)
+        ORDER BY created_at DESC
+        """,
+        (
+            user["course"],
+            get_user_department(user)
+        )
+    )
+
+    return render_template(
+        "hod/staff_list.html",
+        user=user,
+        staff_members=staff_members
+    )
 # =========================================================
 # HOD COMPLAINT DETAILS
 # =========================================================
@@ -1492,8 +1579,6 @@ def hod_complaint_details(complaint_id):
         complaint=complaint,
         solutions=get_complaint_solutions(complaint_id),
     )
-
-
 # =========================================================
 # PROFILE
 # =========================================================
@@ -1501,53 +1586,54 @@ def hod_complaint_details(complaint_id):
 @app.route("/profile")
 @role_required("student", "staff", "hod")
 def profile():
+
     user = get_current_user()
 
-    return render_template(
-        "student/profile.html",
-        user=user,
-    )
+    role = (user["role"] or "").strip().lower()
 
+    if role == "hod":
+        template = "hod/profile.html"
+
+    elif role == "staff":
+        template = "staff/profile.html"
+
+    else:
+        template = "student/profile.html"
+
+    return render_template(
+        template,
+        user=user
+    )
+# =========================================================
+# EDIT PROFILE
+# =========================================================
 
 @app.route("/edit-profile", methods=["GET", "POST"])
 @role_required("student", "staff", "hod")
 def edit_profile():
+
     user = get_current_user()
 
     if request.method == "POST":
-        full_name = request.form.get(
-            "full_name",
-            "",
-        ).strip()
 
-        mobile = request.form.get(
-            "mobile",
-            "",
-        ).strip()
+        full_name = request.form.get("full_name", "").strip()
+        mobile = request.form.get("mobile", "").strip()
 
         if not full_name:
             flash("Name is required.", "danger")
-            return redirect(url_for("edit_profile"))
+            return redirect(url_for("profile"))
 
         if not mobile.isdigit() or len(mobile) != 10:
-            flash(
-                "Enter a valid 10-digit mobile number.",
-                "danger",
-            )
-            return redirect(url_for("edit_profile"))
+            flash("Enter a valid 10-digit mobile number.", "danger")
+            return redirect(url_for("profile"))
 
         execute_db(
             """
             UPDATE users
-            SET full_name = ?,
-                mobile = ?
+            SET full_name = ?, mobile = ?
             WHERE id = ?
             """,
-            (
-                full_name,
-                mobile,
-                user["id"],
-            ),
+            (full_name, mobile, user["id"])
         )
 
         g.pop("current_user", None)
@@ -1557,9 +1643,8 @@ def edit_profile():
 
     return render_template(
         "edit_profile.html",
-        user=user,
+        user=user
     )
-
 # =========================================================
 # ACCOUNT APPROVAL SYSTEM
 # =========================================================
