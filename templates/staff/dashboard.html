@@ -1,493 +1,689 @@
 
 {% extends "base.html" %}
 
-{% block title %}Staff Dashboard | AIMT Complaint Solving System{% endblock %}
+{% block title %}Staff Dashboard | AIMT Problem Solving System{% endblock %}
 
 {% block content %}
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
+.staff-dashboard {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+    color: #eaf6ff;
+}
+
+/* HEADER */
+
+.staff-header {
+    background: rgba(5, 20, 39, 0.12);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.55);
+    border-radius: 16px;
+    padding: 27px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    animation: staffFade .6s ease;
+}
+
+.staff-header h1 {
+    color: #38d9ff;
+    font-size: 28px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 5px #000;
+}
+
+.staff-header p {
+    color: #ffffff;
+    line-height: 1.8;
+}
+
+/* BUTTONS */
+
+.staff-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.staff-btn {
+    display: inline-block;
+    padding: 11px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.staff-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.20);
+}
+
+.staff-primary {
+    background: rgba(25, 201, 237, 0.78);
+    color: #06111d;
+    border-color: rgba(56, 217, 255, 0.7);
+}
+
+.staff-primary:hover {
+    background: #72e8ff;
+}
+
+.staff-secondary {
+    background: rgba(23, 55, 80, 0.48);
+    color: white;
+    border-color: rgba(56, 217, 255, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.staff-secondary:hover {
+    background: rgba(36, 82, 113, 0.85);
+}
+
+/* WELCOME */
+
+.staff-welcome {
+    background: rgba(5, 20, 39, 0.12);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.45);
+    padding: 23px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    color: #ffffff;
+}
+
+.staff-welcome h2 {
+    color: #38d9ff;
+    margin-bottom: 10px;
+}
+
+.staff-welcome p {
+    color: #ffffff;
+    line-height: 1.8;
+}
+
+/* STATISTICS */
+
+.staff-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.staff-stat-card {
+    background: rgba(5, 20, 39, 0.12);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.40);
+    border-radius: 14px;
+    padding: 23px;
+    transition: .25s;
+    animation: staffCard .6s ease both;
+}
+
+.staff-stat-card:hover {
+    background: rgba(5, 20, 39, 0.22);
+    transform: translateY(-5px);
+    border-color: #38d9ff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.staff-stat-card h3 {
+    color: #e0efff;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.staff-stat-card p {
+    color: #38d9ff;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* SECTIONS */
+
+.staff-section {
+    background: rgba(5, 20, 39, 0.10);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.45);
+    border-radius: 15px;
+    padding: 23px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+}
+
+.staff-section h2 {
+    color: #38d9ff;
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+}
+
+/* ANALYTICS */
+
+.staff-analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.staff-chart-card {
+    background: rgba(5, 20, 39, 0.13);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.35);
+    border-radius: 13px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.staff-chart-card h3 {
+    color: #38d9ff;
+    margin-bottom: 18px;
+}
+
+.staff-chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+/* COMPLAINTS */
+
+.staff-complaint-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.staff-complaint-card {
+    background: rgba(5, 20, 39, 0.14);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.35);
+    border-radius: 14px;
+    padding: 21px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    transition: .25s;
+    animation: staffCard .5s ease;
+}
+
+.staff-complaint-card:hover {
+    background: rgba(5, 20, 39, 0.25);
+    transform: translateY(-4px);
+    border-color: #38d9ff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.staff-complaint-card h3 {
+    color: white;
+    margin-bottom: 13px;
+    line-height: 1.5;
+}
+
+.staff-detail {
+    color: #ffffff;
+    line-height: 1.8;
+    margin: 9px 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.staff-detail strong {
+    color: #bdeeff;
+}
+
+.staff-status {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    margin: 10px 0 15px;
+    font-size: 12px;
+    font-weight: bold;
+    background: rgba(23, 55, 80, 0.65);
+    color: #55e3ff;
+    border: 1px solid #39718e;
+}
+
+.staff-status.status-pending {
+    background: rgba(120, 53, 15, 0.65);
+    color: #fde68a;
+}
+
+.staff-status.status-progress {
+    background: rgba(7, 89, 133, 0.65);
+    color: #bae6fd;
+}
+
+.staff-status.status-forwarded {
+    background: rgba(88, 28, 135, 0.65);
+    color: #e9d5ff;
+}
+
+.staff-status.status-resolved {
+    background: rgba(20, 83, 45, 0.65);
+    color: #bbf7d0;
+}
+
+.staff-status.status-rejected {
+    background: rgba(127, 29, 29, 0.65);
+    color: #fecaca;
+}
+
+/* EMPTY STATE */
+
+.staff-empty {
+    text-align: center;
+    padding: 35px 20px;
+    color: #ffffff;
+    background: rgba(5, 20, 39, 0.10);
+    border: 1px dashed rgba(56, 217, 255, 0.55);
+    border-radius: 14px;
+    grid-column: 1 / -1;
+}
+
+.staff-empty h3 {
+    color: #38d9ff;
+    margin-bottom: 10px;
+}
+
+.staff-empty p {
+    line-height: 1.8;
+}
+
+/* ANIMATION */
+
+@keyframes staffFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes staffCard {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+    .staff-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .staff-complaint-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
     .staff-dashboard {
-        max-width: 1200px;
-        margin: 25px auto;
+        width: 92%;
+        margin: 22px auto;
+    }
+
+    .staff-header {
         padding: 20px;
-        color: #263449;
     }
 
-    .dashboard-header {
-        padding: 28px;
-        border-radius: 18px;
-        margin-bottom: 25px;
-        background: linear-gradient(135deg, #142850, #27496d);
-        color: white;
-        box-shadow: 0 8px 25px rgba(0,0,0,.15);
-        animation: fadeIn .6s ease;
+    .staff-header h1 {
+        font-size: 23px;
     }
 
-    .dashboard-header h1 {
-        margin: 0 0 10px;
-        font-size: 28px;
-    }
-
-    .dashboard-header p {
-        margin: 7px 0;
-        color: #e7eef8;
-    }
-
-    .dashboard-grid {
+    .staff-links {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 18px;
-        margin-bottom: 28px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .stat-card {
-        padding: 22px;
-        border-radius: 16px;
-        background: white;
-        box-shadow: 0 5px 18px rgba(0,0,0,.08);
-        border-top: 4px solid #27496d;
-        transition: transform .25s, box-shadow .25s;
-        animation: fadeIn .7s ease;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,.12);
-    }
-
-    .stat-card h3 {
-        margin: 0 0 12px;
-        color: #536174;
-        font-size: 14px;
-    }
-
-    .stat-number {
-        font-size: 30px;
-        font-weight: 700;
-        color: #142850;
-    }
-
-    .section-card {
-        background: white;
-        border-radius: 18px;
-        padding: 24px;
-        margin-bottom: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,.07);
-        animation: fadeIn .8s ease;
-    }
-
-    .section-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-    }
-
-    .section-heading h2 {
-        margin: 0;
-        color: #142850;
-        font-size: 22px;
-    }
-
-    .complaint-list {
-        display: grid;
-        gap: 16px;
-    }
-
-    .complaint-card {
-        padding: 20px;
-        border: 1px solid #e5eaf1;
-        border-radius: 14px;
-        background: #fbfcfe;
-        transition: transform .2s, box-shadow .2s;
-    }
-
-    .complaint-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 20px rgba(0,0,0,.07);
-    }
-
-    .complaint-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    .complaint-title {
-        color: #142850;
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0 0 10px;
-        overflow-wrap: anywhere;
-    }
-
-    .complaint-meta {
-        color: #657286;
-        font-size: 13px;
-        line-height: 1.9;
-        margin-bottom: 12px;
-        overflow-wrap: anywhere;
-    }
-
-    .complaint-description {
-        color: #374151;
-        line-height: 1.7;
-        margin: 12px 0 18px;
-        overflow-wrap: anywhere;
-        white-space: pre-wrap;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 6px 11px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        background: #e9eef5;
-        color: #344054;
-        white-space: nowrap;
-    }
-
-    .status-submitted {
-        background: #fff0d9;
-        color: #945600;
-    }
-
-    .status-progress {
-        background: #dceeff;
-        color: #075985;
-    }
-
-    .status-forwarded {
-        background: #eee5ff;
-        color: #6b21a8;
-    }
-
-    .status-resolved {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .status-rejected {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-
-    .dashboard-button {
-        display: inline-block;
-        text-decoration: none;
-        border: none;
-        border-radius: 9px;
-        padding: 10px 16px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform .2s, opacity .2s;
-    }
-
-    .dashboard-button:hover {
-        transform: translateY(-2px);
-        opacity: .9;
-    }
-
-    .primary-button {
-        background: #27496d;
-        color: white;
-    }
-
-    .secondary-button {
-        background: #e8eef6;
-        color: #142850;
-    }
-
-    .quick-links {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    .empty-state {
-        padding: 35px 15px;
+    .staff-btn {
         text-align: center;
-        color: #657286;
-        border: 1px dashed #cbd5e1;
-        border-radius: 14px;
-        background: #fbfcfe;
+        padding: 11px 7px;
+        font-size: 13px;
     }
 
-    .empty-state h3 {
-        color: #142850;
-        margin-bottom: 8px;
+    .staff-stat-card {
+        padding: 16px;
     }
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .staff-stat-card p {
+        font-size: 26px;
     }
 
-    @media (max-width: 900px) {
-        .dashboard-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
+    .staff-section {
+        padding: 16px;
     }
 
-    @media (max-width: 600px) {
-        .staff-dashboard {
-            padding: 12px;
-            margin: 12px auto;
-        }
-
-        .dashboard-header {
-            padding: 20px;
-        }
-
-        .dashboard-header h1 {
-            font-size: 23px;
-        }
-
-        .dashboard-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .stat-card {
-            padding: 15px;
-        }
-
-        .stat-number {
-            font-size: 25px;
-        }
-
-        .section-card {
-            padding: 16px;
-        }
-
-        .complaint-card {
-            padding: 15px;
-        }
-
-        .section-heading h2 {
-            font-size: 19px;
-        }
-
-        .dashboard-button {
-            padding: 10px 12px;
-        }
+    .staff-analytics-grid {
+        grid-template-columns: 1fr;
     }
+
+    .staff-chart-container {
+        height: 250px;
+    }
+}
+
+@media (max-width: 360px) {
+    .staff-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
 </style>
 
 <div class="staff-dashboard">
 
-    <!-- Dashboard Header -->
-    <section class="dashboard-header">
+    <!-- HEADER -->
 
-        <h1>Staff Dashboard</h1>
+    <header class="staff-header">
 
-        <p>
-            Welcome,
-            <strong>{{ user["full_name"] or "Staff" }}</strong>
-        </p>
+        <h1>AIMT Problem Solving System</h1>
 
-        <p>AIMT Complaint Solving System</p>
+        <p>Department Staff Dashboard</p>
 
-        <p>
-            Here you can see the complaints from your department and section.
-        </p>
-
-    </section>
-
-    <!-- Dashboard Statistics -->
-    <section class="dashboard-grid">
-
-        <div class="stat-card">
-            <h3>Total Complaints</h3>
-            <div class="stat-number">
-                {{ stats.get("total", 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Pending Complaints</h3>
-            <div class="stat-number">
-                {{ stats.get("pending", 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Forwarded Complaints</h3>
-            <div class="stat-number">
-                {{ stats.get("forwarded", 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Resolved Complaints</h3>
-            <div class="stat-number">
-                {{ stats.get("resolved", 0) }}
-            </div>
-        </div>
-
-    </section>
-
-    <!-- Quick Access -->
-    <section class="section-card">
-
-        <div class="section-heading">
-            <h2>Quick Access</h2>
-        </div>
-
-        <div class="quick-links">
+        <div class="staff-links">
 
             <a href="{{ url_for('staff_dashboard') }}"
-               class="dashboard-button primary-button">
+               class="staff-btn staff-primary">
                 Dashboard
             </a>
 
+            <a href="{{ url_for('staff_student_search') }}"
+               class="staff-btn staff-primary">
+                Search Students
+            </a>
+
             <a href="{{ url_for('staff_students') }}"
-               class="dashboard-button secondary-button">
-                👨‍🎓 All Students
+               class="staff-btn staff-secondary">
+                All Students
             </a>
 
             <a href="{{ url_for('notifications') }}"
-               class="dashboard-button secondary-button">
+               class="staff-btn staff-secondary">
                 Notifications
             </a>
 
             <a href="{{ url_for('edit_profile') }}"
-               class="dashboard-button secondary-button">
+               class="staff-btn staff-secondary">
                 My Profile
             </a>
 
             <a href="{{ url_for('student_approvals') }}"
-               class="dashboard-button primary-button">
-                ✅ Student Approvals
+               class="staff-btn staff-secondary">
+                Student Approvals
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="staff-btn staff-secondary">
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- WELCOME -->
+
+    <section class="staff-welcome">
+
+        <h2>
+            Welcome,
+            {{ user["full_name"] or "Staff" }}
+        </h2>
+
+        <p>
+            Here, you can view complaints from your department and section,
+            work on them, and forward them to the HOD when necessary.
+        </p>
+
+    </section>
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="staff-welcome">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- STATISTICS -->
+
+    <section class="staff-stats">
+
+        <div class="staff-stat-card">
+            <h3>Total Complaints</h3>
+            <p>{{ stats.get("total", 0) }}</p>
+        </div>
+
+        <div class="staff-stat-card">
+            <h3>Pending Complaints</h3>
+            <p>{{ stats.get("pending", 0) }}</p>
+        </div>
+
+        <div class="staff-stat-card">
+            <h3>In Progress</h3>
+            <p>{{ stats.get("in_progress", 0) }}</p>
+        </div>
+
+        <div class="staff-stat-card">
+            <h3>Forwarded Complaints</h3>
+            <p>{{ stats.get("forwarded", 0) }}</p>
+        </div>
+
+        <div class="staff-stat-card">
+            <h3>Resolved Complaints</h3>
+            <p>{{ stats.get("resolved", 0) }}</p>
+        </div>
+
+    </section>
+
+    <!-- ANALYTICS -->
+
+    <section class="staff-section">
+
+        <h2>Department Complaint Analytics</h2>
+
+        <div class="staff-stats">
+
+            <div class="staff-stat-card">
+                <h3>Rejected Complaints</h3>
+                <p>{{ analytics.rejected }}</p>
+            </div>
+
+        </div>
+
+        <div class="staff-analytics-grid">
+
+            <div class="staff-chart-card">
+                <h3>Complaint Status</h3>
+                <div class="staff-chart-container">
+                    <canvas id="staffStatusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="staff-chart-card">
+                <h3>Monthly Complaints</h3>
+                <div class="staff-chart-container">
+                    <canvas id="staffMonthlyChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- QUICK ACCESS -->
+
+    <section class="staff-section">
+
+        <h2>Quick Access</h2>
+
+        <div class="staff-links">
+
+            <a href="{{ url_for('staff_students') }}"
+               class="staff-btn staff-secondary">
+                All Students
+            </a>
+
+            <a href="{{ url_for('notifications') }}"
+               class="staff-btn staff-secondary">
+                Notifications
+            </a>
+
+            <a href="{{ url_for('edit_profile') }}"
+               class="staff-btn staff-secondary">
+                Edit Profile
             </a>
 
         </div>
 
     </section>
 
-    <!-- Complaint List -->
-    <section class="section-card">
+    <!-- COMPLAINT LIST -->
 
-        <div class="section-heading">
+    <section class="staff-section">
 
-            <h2>Department Complaints</h2>
+        <h2>Department Complaints</h2>
 
-            <span class="status-badge">
-                {{ complaints|length }} Complaints
-            </span>
-
-        </div>
+        <p class="staff-detail">
+            Total Available Complaints: {{ complaints|length }}
+        </p>
 
         {% if complaints %}
 
-            <div class="complaint-list">
+            <div class="staff-complaint-list">
 
                 {% for complaint in complaints %}
 
-                    <article class="complaint-card">
+                    <article class="staff-complaint-card">
 
-                        <div class="complaint-top">
+                        <h3>
+                            {{ complaint["title"] or
+                               ("Complaint #" ~ complaint["id"]) }}
+                        </h3>
 
-                            <div>
+                        <p class="staff-detail">
+                            <strong>Complaint ID:</strong>
+                            #{{ complaint["id"] }}
+                        </p>
 
-                                <h3 class="complaint-title">
-                                    {{ complaint["title"] or
-                                       ("Complaint #" ~ complaint["id"]) }}
-                                </h3>
+                        <p class="staff-detail">
+                            <strong>Student:</strong>
+                            {{ complaint["student_name"] or "Student" }}
+                        </p>
 
-                                <div class="complaint-meta">
+                        <p class="staff-detail">
+                            <strong>Roll Number:</strong>
+                            {{ complaint["student_roll_number"] or "Not provided" }}
+                        </p>
 
-                                    <strong>Complaint ID:</strong>
-                                    #{{ complaint["id"] }}
-                                    <br>
+                        <p class="staff-detail">
+                            <strong>Course:</strong>
+                            {{ complaint["course"] or "Not specified" }}
+                        </p>
 
-                                    <strong>Student:</strong>
-                                    {{ complaint["student_name"] or "Student" }}
-                                    <br>
+                        <p class="staff-detail">
+                            <strong>Department:</strong>
+                            {{ complaint["department"] or "Not specified" }}
+                        </p>
 
-                                    <strong>Roll Number:</strong>
-                                    {{ complaint["student_roll_number"] or
-                                       "Not provided" }}
+                        <p class="staff-detail">
+                            <strong>Section:</strong>
+                            {{ complaint["section"] or "Not specified" }}
+                        </p>
 
-                                    {% if complaint["category"] %}
-                                        <br>
-                                        <strong>Category:</strong>
-                                        {{ complaint["category"] }}
-                                    {% endif %}
+                        <p class="staff-detail">
+                            <strong>Submitted:</strong>
+                            {{ complaint["created_at"] or "Not available" }}
+                        </p>
 
-                                    {% if complaint["created_at"] %}
-                                        <br>
-                                        <strong>Submitted:</strong>
-                                        {{ complaint["created_at"] }}
-                                    {% endif %}
+                        {% set status = complaint["status"] or "SUBMITTED" %}
 
-                                </div>
+                        <span class="staff-status
+                            {% if status == 'SUBMITTED' %}
+                                status-pending
+                            {% elif status == 'IN_PROGRESS' %}
+                                status-progress
+                            {% elif status in ('FORWARDED_TO_HOD', 'SOLUTION_SENT_TO_STAFF') %}
+                                status-forwarded
+                            {% elif status == 'RESOLVED' %}
+                                status-resolved
+                            {% elif status == 'REJECTED' %}
+                                status-rejected
+                            {% endif %}">
+                            {{ status.replace("_", " ") }}
+                        </span>
 
-                            </div>
-
-                            {% set status = complaint["status"] or "SUBMITTED" %}
-
-                            <span class="status-badge
-                                {% if status == 'SUBMITTED' %}
-                                    status-submitted
-                                {% elif status == 'IN_PROGRESS' %}
-                                    status-progress
-                                {% elif status in
-                                    ('FORWARDED_TO_HOD',
-                                     'SOLUTION_SENT_TO_STAFF') %}
-                                    status-forwarded
-                                {% elif status == 'RESOLVED' %}
-                                    status-resolved
-                                {% elif status == 'REJECTED' %}
-                                    status-rejected
-                                {% endif %}">
-
-                                {{ status.replace("_", " ") }}
-
-                            </span>
-
-                        </div>
-
-                        <div class="complaint-description">
+                        <p class="staff-detail">
+                            <strong>Description:</strong><br>
 
                             {% if complaint["description"] %}
-
                                 {{ complaint["description"]|truncate(250, True, "...") }}
-
                             {% elif complaint["complaint_text"] %}
-
                                 {{ complaint["complaint_text"]|truncate(250, True, "...") }}
-
                             {% else %}
-
                                 No description available.
-
                             {% endif %}
+                        </p>
 
-                        </div>
+                        {% if complaint["assigned_staff_id"] is none %}
 
-                        <a href="{{ url_for(
+                            <form method="POST"
+                                  action="{{ url_for('claim_complaint', complaint_id=complaint['id']) }}">
+
+                                <button type="submit"
+                                        class="staff-btn staff-primary">
+                                    Claim Complaint
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <a href="{{ url_for(
                                 'staff_complaint_details',
                                 complaint_id=complaint['id']
                             ) }}"
-                           class="dashboard-button primary-button">
+                               class="staff-btn staff-primary">
+                                View Complaint
+                            </a>
 
-                            View Complaint
-
-                        </a>
+                        {% endif %}
 
                     </article>
 
@@ -497,15 +693,11 @@
 
         {% else %}
 
-            <div class="empty-state">
-
+            <div class="staff-empty">
                 <h3>No Complaints Found</h3>
-
                 <p>
-                    There are no complaints available for your department
-                    and section right now.
+                    There are currently no complaints available for your department and section.
                 </p>
-
             </div>
 
         {% endif %}
@@ -513,5 +705,125 @@
     </section>
 
 </div>
+
+<!-- CHART.JS -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const analytics = {{ analytics | tojson }};
+
+    const statusCanvas = document.getElementById("staffStatusChart");
+    const monthlyCanvas = document.getElementById("staffMonthlyChart");
+
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js is not loaded.");
+        return;
+    }
+
+    if (statusCanvas) {
+        new Chart(statusCanvas, {
+            type: "doughnut",
+
+            data: {
+                labels: [
+                    "Pending",
+                    "In Progress",
+                    "Forwarded",
+                    "Resolved",
+                    "Rejected"
+                ],
+
+                datasets: [{
+                    data: [
+                        analytics.pending,
+                        analytics.in_progress,
+                        analytics.forwarded,
+                        analytics.resolved,
+                        analytics.rejected
+                    ],
+
+                    backgroundColor: [
+                        "#facc15",
+                        "#38bdf8",
+                        "#a78bfa",
+                        "#22c55e",
+                        "#ef4444"
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            color: "#eaf6ff"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    if (monthlyCanvas) {
+        new Chart(monthlyCanvas, {
+            type: "bar",
+
+            data: {
+                labels: analytics.monthly_labels,
+
+                datasets: [{
+                    label: "Complaints",
+                    data: analytics.monthly_values,
+                    backgroundColor: "#19c9ed",
+                    borderRadius: 6
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            color: "#eaf6ff"
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.12)"
+                        }
+                    },
+
+                    x: {
+                        ticks: {
+                            color: "#eaf6ff"
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.08)"
+                        }
+                    }
+                },
+
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "#eaf6ff"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+});
+</script>
 
 {% endblock %}

@@ -11,63 +11,101 @@
     margin: 30px auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+    color: #ffffff;
 }
 
+/* HEADER */
 .approval-header {
     padding: 25px;
     color: white;
-    background: linear-gradient(135deg, #123c69, #2563a6);
+    background: rgba(5, 20, 39, 0.12) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.55);
     border-radius: 14px;
     margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
 }
 
 .approval-header h1 {
     margin-top: 0;
+    color: #38d9ff;
+    text-shadow: 0 2px 8px #000;
 }
 
+.approval-header p {
+    color: #ffffff;
+    line-height: 1.7;
+}
+
+/* COUNT */
 .approval-count {
-    background: #eff6ff;
+    background: rgba(5, 20, 39, 0.10) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.45);
     padding: 18px;
     border-radius: 10px;
     margin-bottom: 20px;
-    color: #123c69;
+    color: #ffffff;
 }
 
+/* STUDENT GRID */
 .student-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
+/* STUDENT CARD */
 .student-card {
-    background: white;
+    background: rgba(5, 20, 39, 0.10) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     padding: 22px;
     border-radius: 14px;
-    box-shadow: 0 4px 15px #00000015;
-    border-top: 4px solid #2563eb;
+    border: 1px solid rgba(56, 217, 255, 0.45);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+    border-top: 4px solid #38d9ff;
     overflow-wrap: anywhere;
+    transition: 0.25s;
+}
+
+.student-card:hover {
+    background: rgba(5, 20, 39, 0.17) !important;
+    transform: translateY(-4px);
+    border-color: #38d9ff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.20);
 }
 
 .student-card h3 {
-    color: #123c69;
+    color: #38d9ff;
     margin-top: 0;
 }
 
 .student-card p {
-    color: #475569;
-    line-height: 1.5;
+    color: #ffffff;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
 }
 
+.student-card p strong {
+    color: #bdefff;
+}
+
+/* STATUS */
 .status {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 7px 12px;
     border-radius: 20px;
-    background: #fef3c7;
-    color: #92400e;
+    background: rgba(120, 53, 15, 0.65);
+    border: 1px solid #facc15;
+    color: #fde68a;
     font-size: 12px;
     font-weight: bold;
 }
 
+/* ACTION BUTTONS */
 .actions {
     display: flex;
     gap: 10px;
@@ -86,6 +124,12 @@
     color: white;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.25s;
+}
+
+.actions button:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
 }
 
 .approve-btn {
@@ -96,23 +140,45 @@
     background: #dc2626;
 }
 
+/* BACK BUTTON */
 .back-btn {
     display: inline-block;
-    background: white;
-    color: #123c69;
+    background: rgba(25, 201, 237, 0.9);
+    color: #06111d !important;
     padding: 10px 15px;
     border-radius: 8px;
     text-decoration: none;
+    font-weight: bold;
+    transition: 0.25s;
 }
 
+.back-btn:hover {
+    background: #38d9ff;
+    transform: translateY(-2px);
+}
+
+/* EMPTY STATE */
 .empty-state {
-    background: white;
+    background: rgba(5, 20, 39, 0.10) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.45);
     text-align: center;
     padding: 35px 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px #00000010;
+    color: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
 }
 
+.empty-state h2 {
+    color: #38d9ff;
+}
+
+.empty-state p {
+    color: #ffffff;
+}
+
+/* RESPONSIVE */
 @media (max-width: 700px) {
     .student-grid {
         grid-template-columns: 1fr;
@@ -120,6 +186,19 @@
 
     .approval-container {
         padding: 12px;
+        margin: 15px auto;
+    }
+
+    .approval-header {
+        padding: 20px;
+    }
+
+    .approval-header h1 {
+        font-size: 23px;
+    }
+
+    .student-card {
+        padding: 18px;
     }
 
     .actions {
@@ -131,13 +210,18 @@
 <div class="approval-container">
 
     <div class="approval-header">
+
         <h1>Student Approval Management</h1>
-        <p>Review student registration requests for your department.</p>
+
+        <p>
+            Review student registration requests for your department.
+        </p>
 
         <a href="{{ url_for('staff_dashboard') }}"
            class="back-btn">
             Back to Dashboard
         </a>
+
     </div>
 
     <div class="approval-count">
@@ -207,6 +291,7 @@
                             <button type="submit" class="approve-btn">
                                 Approve
                             </button>
+
                         </form>
 
                         <form
@@ -221,6 +306,7 @@
                             <button type="submit" class="reject-btn">
                                 Reject
                             </button>
+
                         </form>
 
                     </div>
@@ -234,8 +320,13 @@
     {% else %}
 
         <div class="empty-state">
+
             <h2>No Pending Students</h2>
-            <p>There are no student registration requests awaiting approval.</p>
+
+            <p>
+                There are no student registration requests awaiting approval.
+            </p>
+
         </div>
 
     {% endif %}

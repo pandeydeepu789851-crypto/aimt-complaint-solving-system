@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block title %}Staff Profile | AIMT Problem Solving System{% endblock %}
@@ -9,8 +10,10 @@
     max-width: 850px;
     margin: 25px auto;
     padding: 0 15px;
-    color: #101b33;
+    color: #ffffff;
 }
+
+/* TOP BAR */
 
 .staff-profile-page .topbar {
     display: flex;
@@ -24,12 +27,13 @@
 .staff-profile-page .topbar h1 {
     font-size: 25px;
     color: #fff;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, .8);
+    text-shadow: 0 2px 8px #000;
 }
 
 .staff-profile-page .back-btn {
     text-decoration: none;
-    background: #173b78;
+    background: rgba(25, 201, 237, 0.18);
+    border: 1px solid rgba(56, 217, 255, 0.65);
     color: #fff;
     padding: 11px 16px;
     border-radius: 9px;
@@ -38,23 +42,31 @@
 }
 
 .staff-profile-page .back-btn:hover {
-    background: #0c2857;
+    background: rgba(25, 201, 237, 0.35);
     transform: translateY(-2px);
 }
 
+/* MAIN PROFILE CARD */
+
 .staff-profile-page .profile-card {
     overflow: hidden;
-    background: #fff;
+    background: rgba(5, 20, 39, 0.12) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.55);
     border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, .3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     animation: staffAppear .5s ease;
 }
+
+/* PROFILE HEADER */
 
 .staff-profile-page .profile-header {
     padding: 30px 20px;
     text-align: center;
     color: #fff;
-    background: linear-gradient(135deg, #102c60, #2458a5);
+    background: rgba(5, 20, 39, 0.12) !important;
+    border-bottom: 1px solid rgba(56, 217, 255, 0.35);
 }
 
 .staff-profile-page .avatar {
@@ -64,16 +76,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #fff;
+    border: 3px solid #38d9ff;
     border-radius: 50%;
-    background: rgba(255, 255, 255, .15);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
     font-size: 36px;
     font-weight: bold;
+    object-fit: cover;
 }
 
 .staff-profile-page .profile-header h2 {
     margin-bottom: 8px;
     color: #fff;
+    text-shadow: 0 2px 6px #000;
     overflow-wrap: anywhere;
 }
 
@@ -81,23 +96,29 @@
     display: inline-block;
     padding: 6px 14px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, .18);
+    background: rgba(56, 217, 255, 0.18);
+    border: 1px solid rgba(56, 217, 255, 0.5);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
 }
 
+/* PROFILE CONTENT */
+
 .staff-profile-page .profile-content {
     padding: 28px;
-    background: #fff;
+    background: rgba(5, 20, 39, 0.10) !important;
 }
 
 .staff-profile-page .section-title {
     margin-bottom: 20px;
-    color: #102c60;
+    color: #38d9ff;
     font-size: 19px;
     font-weight: 800;
+    text-shadow: 0 2px 5px #000;
 }
+
+/* INFORMATION GRID */
 
 .staff-profile-page .info-grid {
     display: grid;
@@ -109,32 +130,37 @@
 .staff-profile-page .info-box {
     min-width: 0;
     padding: 16px;
-    background: #dce6f5;
-    border: 1px solid #9eb5d8;
+    background: rgba(5, 20, 39, 0.12) !important;
+    border: 1px solid rgba(56, 217, 255, 0.35);
     border-radius: 10px;
-    transition: .2s;
+    transition: .25s;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
 .staff-profile-page .info-box:hover {
-    background: #cfddf1;
-    border-color: #6f91c3;
+    background: rgba(5, 20, 39, 0.22) !important;
+    border-color: #38d9ff;
+    transform: translateY(-2px);
 }
 
 .staff-profile-page .info-box label {
     display: block;
     margin-bottom: 8px;
-    color: #263c60;
+    color: #bdeeff;
     font-size: 14px;
     font-weight: 700;
 }
 
 .staff-profile-page .info-box p {
-    color: #101b33;
+    color: #fff;
     font-size: 16px;
     font-weight: 800;
     overflow-wrap: anywhere;
     line-height: 1.5;
 }
+
+/* EDIT PROFILE FORM */
 
 .staff-profile-page .form-group {
     margin-bottom: 18px;
@@ -143,7 +169,7 @@
 .staff-profile-page .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #172033;
+    color: #fff;
     font-size: 14px;
     font-weight: 700;
 }
@@ -153,7 +179,7 @@
     padding: 13px;
     box-sizing: border-box;
     color: #101b33;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid #9aaecb;
     border-radius: 9px;
     outline: none;
@@ -162,17 +188,19 @@
 }
 
 .staff-profile-page .form-group input:focus {
-    border-color: #2458a5;
-    box-shadow: 0 0 0 3px rgba(36, 88, 165, .18);
+    border-color: #38d9ff;
+    box-shadow: 0 0 0 3px rgba(56, 217, 255, 0.25);
 }
+
+/* SAVE BUTTON */
 
 .staff-profile-page .save-btn {
     width: 100%;
     padding: 14px;
-    border: none;
+    border: 1px solid #38d9ff;
     border-radius: 10px;
-    background: #173b78;
-    color: #fff;
+    background: rgba(25, 201, 237, 0.85);
+    color: #06111d;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
@@ -180,21 +208,103 @@
 }
 
 .staff-profile-page .save-btn:hover {
-    background: #0c2857;
+    background: #72e8ff;
     transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.2);
 }
 
 .staff-profile-page .note {
     margin-top: 14px;
-    color: #344563;
+    color: #d0eaff;
     font-size: 12px;
     line-height: 1.6;
 }
 
-@keyframes staffAppear {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
+/* CHANGE PASSWORD */
+
+.staff-profile-page .change-password-section {
+    margin-top: 30px;
+    padding: 25px 0;
+    border-top: 1px solid rgba(56, 217, 255, 0.35);
+    text-align: center;
 }
+
+.staff-profile-page .password-btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border: 1px solid rgba(74, 222, 128, 0.6);
+    border-radius: 10px;
+    background: rgba(21, 128, 61, 0.75);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    transition: .25s;
+}
+
+.staff-profile-page .password-btn:hover {
+    background: rgba(22, 101, 52, 0.95);
+    transform: translateY(-2px);
+}
+
+/* CHANGE PROFILE PHOTO */
+
+.staff-profile-page .change-photo-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(56, 217, 255, 0.35);
+    text-align: center;
+}
+
+.staff-profile-page .photo-btn {
+    padding: 13px 24px;
+    border: 1px solid rgba(56, 217, 255, 0.65);
+    border-radius: 10px;
+    background: rgba(23, 59, 120, 0.75);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.staff-profile-page .photo-btn:hover {
+    background: rgba(12, 40, 87, 0.95);
+    transform: translateY(-2px);
+}
+
+.staff-profile-page .photo-options {
+    display: none;
+    margin-top: 18px;
+}
+
+.staff-profile-page .photo-options input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0 auto 15px;
+    border: 1px solid #9aaecb;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #101b33;
+}
+
+/* ANIMATION */
+
+@keyframes staffAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 600px) {
     .staff-profile-page {
@@ -217,91 +327,246 @@
     .staff-profile-page .info-box p {
         font-size: 15px;
     }
+
+    .staff-profile-page .photo-btn,
+    .staff-profile-page .password-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
 </style>
 
 {% endblock %}
 
+
 {% block content %}
 
 <div class="staff-profile-page">
 
+    <!-- TOP BAR -->
+    <div class="topbar">
 
-<div class="topbar">
-    <h1>Staff Profile</h1>
-    <a class="back-btn" href="{{ url_for('staff_dashboard') }}">← Dashboard</a>
-</div>
+        <h1>Staff Profile</h1>
 
-<section class="profile-card">
+        <a class="back-btn" href="{{ url_for('staff_dashboard') }}">
+            ← Dashboard
+        </a>
 
-    <div class="profile-header">
-        <div class="avatar">{{ (user.full_name or 'S')[0]|upper }}</div>
-        <h2>{{ user.full_name or 'Staff Member' }}</h2>
-        <span class="role-badge">AIMT Staff Member</span>
     </div>
 
-    <div class="profile-content">
-        <h3 class="section-title">Account Information</h3>
 
-        <div class="info-grid">
-            <div class="info-box">
-                <label>Gmail / Email Address</label>
-                <p>{{ user.email or 'Not provided' }}</p>
-            </div>
+    <!-- PROFILE CARD -->
+    <section class="profile-card">
 
-            <div class="info-box">
-                <label>Role</label>
-                <p>Staff</p>
-            </div>
+        <!-- PROFILE HEADER -->
+        <div class="profile-header">
 
-            <div class="info-box">
-                <label>Course</label>
-                <p>{{ user.course or 'Not provided' }}</p>
-            </div>
+            {% if user.profile_photo %}
 
-            <div class="info-box">
-                <label>Department</label>
-                <p>{{ user.department or 'Not provided' }}</p>
-            </div>
+                <img
+                    src="{{ url_for('profile_photo', filename=user.profile_photo) }}"
+                    class="avatar"
+                    alt="Staff Profile Photo">
 
-            <div class="info-box">
-                <label>Account Status</label>
-                <p>{{ user.approval_status or 'Not provided' }}</p>
-            </div>
+            {% else %}
 
-            <div class="info-box">
-                <label>Mobile Number</label>
-                <p>{{ user.mobile or 'Not provided' }}</p>
-            </div>
+                <div class="avatar">
+                    {{ (user.full_name or 'S')[0]|upper }}
+                </div>
+
+            {% endif %}
+
+            <h2>{{ user.full_name or 'Staff' }}</h2>
+
+            <span class="role-badge">
+                AIMT Staff
+            </span>
+
         </div>
 
-        <h3 class="section-title">Edit Profile</h3>
 
-        <form method="POST" action="{{ url_for('edit_profile') }}">
-            <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name"
-                       value="{{ user.full_name or '' }}"
-                       required minlength="2" maxlength="100">
+        <!-- PROFILE CONTENT -->
+        <div class="profile-content">
+
+            <h3 class="section-title">
+                Account Information
+            </h3>
+
+            <div class="info-grid">
+
+                <div class="info-box">
+                    <label>Gmail / Email Address</label>
+                    <p>{{ user.email or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Role</label>
+                    <p>Staff</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Mobile Number</label>
+                    <p>{{ user.mobile or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Course</label>
+                    <p>{{ user.course or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Year</label>
+                    <p>{{ user.year or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Department</label>
+                    <p>{{ user.department or user.branch or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Section</label>
+                    <p>{{ user.section or 'Not provided' }}</p>
+                </div>
+
+                <div class="info-box">
+                    <label>Account Status</label>
+                    <p>{{ user.approval_status or 'Not provided' }}</p>
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label for="mobile">Mobile Number</label>
-                <input type="tel" id="mobile" name="mobile"
-                       value="{{ user.mobile or '' }}"
-                       pattern="[0-9]{10}" maxlength="10"
-                       inputmode="numeric"
-                       placeholder="Enter 10-digit mobile number">
+
+            <!-- EDIT PROFILE -->
+            <h3 class="section-title">
+                Edit Profile
+            </h3>
+
+            <form
+                method="POST"
+                action="{{ url_for('edit_profile') }}">
+
+                <div class="form-group">
+
+                    <label for="full_name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="full_name"
+                        name="full_name"
+                        value="{{ user.full_name or '' }}"
+                        required
+                        minlength="2"
+                        maxlength="100">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="mobile">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="mobile"
+                        name="mobile"
+                        value="{{ user.mobile or '' }}"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        inputmode="numeric"
+                        placeholder="Enter 10-digit mobile number">
+
+                </div>
+
+
+                <button type="submit" class="save-btn">
+                    Save Changes
+                </button>
+
+                <p class="note">
+                    Your email, course, year and department are displayed
+                    from your registered account information.
+                </p>
+
+            </form>
+
+
+            <!-- CHANGE PASSWORD SECTION -->
+            <div class="change-password-section">
+
+                <h3 class="section-title">
+                    Account Security
+                </h3>
+
+                <a href="{{ url_for('change_password') }}"
+                   class="password-btn">
+                    🔐 Change Password
+                </a>
+
             </div>
 
-            <button type="submit" class="save-btn">Save Changes</button>
 
-            <p class="note">
-                Your email, course and department are displayed from your registered account information.
-            </p>
-        </form>
-    </div>
-</section>
+            <!-- CHANGE PROFILE PHOTO AT BOTTOM -->
+            <div class="change-photo-section">
+
+                <h3 class="section-title">
+                    Profile Photo
+                </h3>
+
+                <button
+                    type="button"
+                    class="photo-btn"
+                    id="changePhotoButton"
+                    onclick="showPhotoOptions()">
+
+                    Change the Photo
+
+                </button>
+
+
+                <div class="photo-options" id="photoOptions">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('upload_profile_photo') }}"
+                        enctype="multipart/form-data">
+
+                        <input
+                            type="file"
+                            name="profile_photo"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            required>
+
+                        <button type="submit" class="photo-btn">
+                            Update Profile Photo
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
+
+
+<script>
+function showPhotoOptions() {
+
+    document.getElementById("photoOptions").style.display = "block";
+
+    document.getElementById("changePhotoButton").style.display = "none";
+
+}
+</script>
+
 {% endblock %}

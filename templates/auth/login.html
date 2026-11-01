@@ -29,12 +29,11 @@
             align-items: center;
             justify-content: center;
 
-            /* AIMT POSTER BACKGROUND */
             background-color: #06111f !important;
             background-image:
                 linear-gradient(
-                    rgba(4, 15, 35, 0.35),
-                    rgba(4, 15, 35, 0.55)
+                    rgba(4, 15, 35, 0.20),
+                    rgba(4, 15, 35, 0.30)
                 ),
                 url("/static/images/aimt-poster.png") !important;
 
@@ -46,16 +45,20 @@
             font-family: Arial, sans-serif;
         }
 
+        /* TRANSPARENT LOGIN CONTAINER */
         .login-container {
             width: 100%;
             max-width: 430px;
             padding: 35px 28px;
 
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.10) !important;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+
+            border: 1px solid rgba(255, 255, 255, 0.35);
             border-radius: 20px;
 
-            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.15);
 
             animation: appear 0.5s ease;
         }
@@ -87,7 +90,7 @@
         }
 
         .subtitle {
-            color: #666;
+            color: #17365d;
             text-align: center;
             margin: 10px 0 25px;
             line-height: 1.5;
@@ -101,30 +104,39 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #26354d;
+            color: #102a56;
         }
 
+        /* TRANSPARENT INPUTS */
         input {
             width: 100%;
             padding: 13px;
 
-            border: 1px solid #d5dce8;
+            border: 1px solid rgba(36, 95, 202, 0.35);
             border-radius: 9px;
 
             font-size: 15px;
-            background: #ffffff;
+            color: #102a56 !important;
+            background: rgba(255, 255, 255, 0.18) !important;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        input::placeholder {
+            color: rgba(16, 42, 86, 0.70);
         }
 
         input:focus {
             outline: 2px solid #7ba7ff;
             border-color: #245fca;
+            background: rgba(255, 255, 255, 0.28) !important;
         }
 
         .login-button {
             width: 100%;
             padding: 14px;
 
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 9px;
 
             background: linear-gradient(135deg, #174ea6, #0878e8);
@@ -156,29 +168,29 @@
         }
 
         .message.error {
-            background: #f8d7da;
+            background: rgba(248, 215, 218, 0.85);
             color: #842029;
         }
 
         .message.success {
-            background: #d1e7dd;
+            background: rgba(209, 231, 221, 0.85);
             color: #0f5132;
         }
 
         .message.warning {
-            background: #fff3cd;
+            background: rgba(255, 243, 205, 0.85);
             color: #664d03;
         }
 
         .message.info {
-            background: #cff4fc;
+            background: rgba(207, 244, 252, 0.85);
             color: #055160;
         }
 
         .register-link {
             text-align: center;
             margin-top: 22px;
-            color: #555;
+            color: #17365d;
             line-height: 1.7;
         }
 
@@ -197,7 +209,7 @@
             margin-top: 18px;
 
             text-align: center;
-            color: #666;
+            color: #17365d;
             text-decoration: none;
             font-size: 14px;
 

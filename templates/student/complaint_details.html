@@ -1,0 +1,323 @@
+
+{% extends "base.html" %}
+
+{% block title %}Complaint Details | AIMT{% endblock %}
+
+{% block content %}
+
+<style>
+.complaint-page {
+    max-width: 1000px;
+    margin: 25px auto;
+    padding: 18px;
+    font-family: Arial, sans-serif;
+}
+
+.complaint-header {
+    background: linear-gradient(135deg, #123c69, #2563a6);
+    color: white;
+    padding: 25px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+}
+
+.complaint-header h1 {
+    margin: 0 0 10px;
+}
+
+.complaint-card,
+.timeline-card,
+.solution-card {
+    background: white;
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 13px;
+    box-shadow: 0 4px 16px #00000012;
+}
+
+.complaint-card h2,
+.timeline-card h2,
+.solution-card h2 {
+    color: #174678;
+    margin-top: 0;
+}
+
+.info-row {
+    margin: 12px 0;
+    color: #475569;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.info-row strong {
+    color: #1e293b;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.timeline {
+    position: relative;
+    margin: 20px 0 5px 10px;
+    padding-left: 28px;
+    border-left: 3px solid #bfdbfe;
+}
+
+.timeline-item {
+    position: relative;
+    padding: 0 0 25px 15px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -38px;
+    top: 2px;
+    width: 17px;
+    height: 17px;
+    background: #2563eb;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #2563eb;
+}
+
+.timeline-item h3 {
+    margin: 0 0 7px;
+    color: #17365d;
+    font-size: 17px;
+}
+
+.timeline-item p {
+    margin: 5px 0;
+    color: #475569;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.timeline-time {
+    color: #64748b !important;
+    font-size: 12px;
+}
+
+.timeline-remarks {
+    background: #f1f5f9;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-top: 9px !important;
+}
+
+.solution-item {
+    padding: 15px;
+    border-left: 4px solid #2563eb;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.solution-item p {
+    color: #475569;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #174678;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    background: #2563a6;
+}
+
+.empty-message {
+    color: #64748b;
+    padding: 12px 0;
+}
+
+@media (max-width: 600px) {
+    .complaint-page {
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .complaint-header,
+    .complaint-card,
+    .timeline-card,
+    .solution-card {
+        padding: 17px;
+    }
+
+    .complaint-header h1 {
+        font-size: 23px;
+    }
+}
+</style>
+
+<div class="complaint-page">
+
+    <header class="complaint-header">
+        <h1>Complaint Details</h1>
+        <p>View your complaint information and track its progress.</p>
+    </header>
+
+    <!-- COMPLAINT INFORMATION -->
+
+    <section class="complaint-card">
+
+        <h2>Complaint Information</h2>
+
+        <p class="info-row">
+            <strong>Title:</strong>
+            {{ complaint['title'] }}
+        </p>
+
+        <p class="info-row">
+            <strong>Category:</strong>
+            {{ complaint['category'] or 'Not specified' }}
+        </p>
+
+        <p class="info-row">
+            <strong>Description:</strong><br>
+            {{ complaint['description'] }}
+        </p>
+
+        <p class="info-row">
+            <strong>Current Status:</strong>
+            <span class="status-badge">
+                {{ complaint['status'].replace('_', ' ') }}
+            </span>
+        </p>
+
+        <p class="info-row">
+            <strong>Submitted On:</strong>
+            {{ complaint['created_at'] }}
+        </p>
+
+        {% if complaint['attachment'] %}
+            <p class="info-row">
+                <strong>Attachment:</strong>
+                <a href="{{ url_for(
+                    'complaint_attachment',
+                    complaint_id=complaint['id']
+                ) }}">
+                    View / Download Attachment
+                </a>
+            </p>
+        {% endif %}
+
+    </section>
+
+
+    <!-- COMPLAINT TIMELINE -->
+
+    <section class="timeline-card">
+
+        <h2>Complaint Progress Timeline</h2>
+
+        {% if history %}
+
+            <div class="timeline">
+
+                {% for item in history %}
+
+                    <div class="timeline-item">
+
+                        <span class="timeline-dot"></span>
+
+                        <h3>
+                            {{ item['status'].replace('_', ' ') }}
+                        </h3>
+
+                        <p class="timeline-time">
+                            {{ item['created_at'] }}
+                        </p>
+
+                        <p>
+                            <strong>Updated by:</strong>
+                            {{ item['updated_by_name'] or 'System' }}
+
+                            {% if item['updated_by_role'] %}
+                                ({{ item['updated_by_role']|upper }})
+                            {% endif %}
+                        </p>
+
+                        {% if item['remarks'] %}
+                            <p class="timeline-remarks">
+                                {{ item['remarks'] }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="empty-message">
+                No progress history is available yet.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- SOLUTIONS AND RESPONSES -->
+
+    <section class="solution-card">
+
+        <h2>Staff / HOD Responses</h2>
+
+        {% if solutions %}
+
+            {% for solution in solutions %}
+
+                <div class="solution-item">
+
+                    <p>{{ solution['solution'] }}</p>
+
+                    {% if solution['created_at'] %}
+                        <small>
+                            {{ solution['created_at'] }}
+                        </small>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-message">
+                No response has been added yet.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <a href="{{ url_for('my_complaints') }}" class="back-btn">
+        Back to My Complaints
+    </a>
+
+</div>
+
+{% endblock %}

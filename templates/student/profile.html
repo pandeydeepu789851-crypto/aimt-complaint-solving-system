@@ -6,30 +6,16 @@
 {% block head %}
 
 <style>
-/* PAGE BACKGROUND */
-.staff-profile-page {
-    max-width: 900px;
+.student-profile-page {
+    max-width: 850px;
     margin: 25px auto;
     padding: 0 15px;
-    color: #101b33;
-
-    /* AIMT POSTER BACKGROUND */
-    background-image:
-        linear-gradient(
-            rgba(8, 20, 55, 0.25),
-            rgba(8, 20, 55, 0.25)
-        ),
-        url("{{ url_for('static', filename='images/aimt-poster.jpg') }}");
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    border-radius: 18px;
+    color: #ffffff;
 }
 
 /* TOP BAR */
-.staff-profile-page .topbar {
+
+.student-profile-page .topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -38,15 +24,18 @@
     margin-bottom: 25px;
 }
 
-.staff-profile-page .topbar h1 {
+.student-profile-page .topbar h1 {
     font-size: 25px;
     color: #fff;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, .9);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .8);
 }
 
-.staff-profile-page .back-btn {
+.student-profile-page .back-btn {
     text-decoration: none;
-    background: #173b78;
+    background: rgba(23, 59, 120, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.45);
     color: #fff;
     padding: 11px 16px;
     border-radius: 9px;
@@ -54,131 +43,144 @@
     transition: .25s;
 }
 
-.staff-profile-page .back-btn:hover {
-    background: #0c2857;
+.student-profile-page .back-btn:hover {
+    background: rgba(12, 40, 87, 0.85);
     transform: translateY(-2px);
 }
 
-/* PROFILE CARD */
-.staff-profile-page .profile-card {
+/* MAIN PROFILE CARD */
+
+.student-profile-page .profile-card {
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
+    background: rgba(5, 20, 39, 0.12);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.50);
     border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, .7);
-    box-shadow: 0 12px 35px rgba(0, 0, 0, .3);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .15);
     animation: studentAppear .5s ease;
 }
 
 /* PROFILE HEADER */
-.staff-profile-page .profile-header {
+
+.student-profile-page .profile-header {
     padding: 30px 20px;
     text-align: center;
     color: #fff;
-    background: linear-gradient(135deg, #102c60, #2458a5);
+    background: rgba(5, 20, 39, 0.20);
+    border-bottom: 1px solid rgba(56, 217, 255, 0.40);
 }
 
-.staff-profile-page .avatar {
+.student-profile-page .avatar {
     width: 90px;
     height: 90px;
     margin: 0 auto 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid #fff;
+    border: 3px solid #38d9ff;
     border-radius: 50%;
     background: rgba(255, 255, 255, .15);
+    color: #ffffff;
     font-size: 36px;
     font-weight: bold;
+    object-fit: cover;
 }
 
-.staff-profile-page .profile-header h2 {
+.student-profile-page .profile-header h2 {
     margin-bottom: 8px;
     color: #fff;
     overflow-wrap: anywhere;
 }
 
-.staff-profile-page .role-badge {
+.student-profile-page .role-badge {
     display: inline-block;
     padding: 6px 14px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, .18);
-    color: #fff;
+    background: rgba(56, 217, 255, .18);
+    border: 1px solid rgba(56, 217, 255, .45);
+    color: #ffffff;
     font-size: 13px;
     font-weight: 600;
 }
 
-/* CONTENT */
-.staff-profile-page .profile-content {
+/* PROFILE CONTENT */
+
+.student-profile-page .profile-content {
     padding: 28px;
-    background: rgba(255, 255, 255, .91);
+    background: rgba(5, 20, 39, 0.10);
 }
 
-.staff-profile-page .section-title {
+.student-profile-page .section-title {
     margin-bottom: 20px;
-    color: #102c60;
+    color: #38d9ff;
     font-size: 19px;
     font-weight: 800;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .35);
 }
 
-.staff-profile-page .info-grid {
+/* INFORMATION GRID */
+
+.student-profile-page .info-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
     margin-bottom: 30px;
 }
 
-.staff-profile-page .info-box {
+.student-profile-page .info-box {
     min-width: 0;
     padding: 16px;
-    background: #dce6f5;
-    border: 1px solid #9eb5d8;
+    background: rgba(5, 20, 39, 0.16);
+    border: 1px solid rgba(56, 217, 255, 0.35);
     border-radius: 10px;
     transition: .2s;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 }
 
-.staff-profile-page .info-box:hover {
-    background: #cfddf1;
-    border-color: #6f91c3;
+.student-profile-page .info-box:hover {
+    background: rgba(5, 20, 39, 0.28);
+    border-color: #38d9ff;
     transform: translateY(-2px);
 }
 
-.staff-profile-page .info-box label {
+.student-profile-page .info-box label {
     display: block;
     margin-bottom: 8px;
-    color: #263c60;
+    color: #bdeeff;
     font-size: 14px;
     font-weight: 700;
 }
 
-.staff-profile-page .info-box p {
-    color: #101b33;
+.student-profile-page .info-box p {
+    color: #ffffff;
     font-size: 16px;
     font-weight: 800;
     overflow-wrap: anywhere;
     line-height: 1.5;
 }
 
-/* EDIT FORM */
-.staff-profile-page .form-group {
+/* EDIT PROFILE FORM */
+
+.student-profile-page .form-group {
     margin-bottom: 18px;
 }
 
-.staff-profile-page .form-group label {
+.student-profile-page .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #172033;
+    color: #ffffff;
     font-size: 14px;
     font-weight: 700;
 }
 
-.staff-profile-page .form-group input {
+.student-profile-page .form-group input {
     width: 100%;
     padding: 13px;
     box-sizing: border-box;
     color: #101b33;
-    background: #fff;
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid #9aaecb;
     border-radius: 9px;
     outline: none;
@@ -186,17 +188,19 @@
     transition: .2s;
 }
 
-.staff-profile-page .form-group input:focus {
-    border-color: #2458a5;
-    box-shadow: 0 0 0 3px rgba(36, 88, 165, .18);
+.student-profile-page .form-group input:focus {
+    border-color: #38d9ff;
+    box-shadow: 0 0 0 3px rgba(56, 217, 255, .22);
 }
 
-.staff-profile-page .save-btn {
+/* SAVE BUTTON */
+
+.student-profile-page .save-btn {
     width: 100%;
     padding: 14px;
-    border: none;
+    border: 1px solid rgba(56, 217, 255, .55);
     border-radius: 10px;
-    background: #173b78;
+    background: rgba(23, 59, 120, 0.75);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -204,19 +208,92 @@
     transition: .25s;
 }
 
-.staff-profile-page .save-btn:hover {
-    background: #0c2857;
+.student-profile-page .save-btn:hover {
+    background: rgba(12, 40, 87, 0.95);
     transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(0, 0, 0, .20);
 }
 
-.staff-profile-page .note {
+.student-profile-page .note {
     margin-top: 14px;
-    color: #344563;
+    color: #e0efff;
     font-size: 12px;
     line-height: 1.6;
 }
 
+/* CHANGE PASSWORD SECTION */
+
+.student-profile-page .change-password-section {
+    margin-top: 30px;
+    padding: 25px 0;
+    border-top: 1px solid rgba(56, 217, 255, 0.35);
+    text-align: center;
+}
+
+.student-profile-page .password-btn {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 10px;
+    background: rgba(21, 128, 61, 0.75);
+    border: 1px solid rgba(134, 239, 172, .50);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    transition: .25s;
+}
+
+.student-profile-page .password-btn:hover {
+    background: rgba(22, 101, 52, 0.95);
+    transform: translateY(-2px);
+}
+
+/* CHANGE PROFILE PHOTO SECTION */
+
+.student-profile-page .change-photo-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(56, 217, 255, 0.35);
+    text-align: center;
+}
+
+.student-profile-page .photo-btn {
+    padding: 13px 24px;
+    border: 1px solid rgba(56, 217, 255, .55);
+    border-radius: 10px;
+    background: rgba(23, 59, 120, 0.75);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.student-profile-page .photo-btn:hover {
+    background: rgba(12, 40, 87, 0.95);
+    transform: translateY(-2px);
+}
+
+.student-profile-page .photo-options {
+    display: none;
+    margin-top: 18px;
+}
+
+.student-profile-page .photo-options input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin: 0 auto 15px;
+    border: 1px solid #9aaecb;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .95);
+    color: #101b33;
+}
+
 /* ANIMATION */
+
 @keyframes studentAppear {
     from {
         opacity: 0;
@@ -228,61 +305,90 @@
     }
 }
 
-/* MOBILE */
+/* MOBILE RESPONSIVE */
+
 @media (max-width: 600px) {
-    .staff-profile-page {
+
+    .student-profile-page {
         margin: 15px auto;
         padding: 0 10px;
-        background-attachment: scroll;
     }
 
-    .staff-profile-page .topbar h1 {
+    .student-profile-page .topbar h1 {
         font-size: 20px;
     }
 
-    .staff-profile-page .profile-content {
+    .student-profile-page .profile-content {
         padding: 20px 15px;
     }
 
-    .staff-profile-page .info-grid {
+    .student-profile-page .info-grid {
         grid-template-columns: 1fr;
     }
 
-    .staff-profile-page .info-box p {
+    .student-profile-page .info-box p {
         font-size: 15px;
     }
 
-    .staff-profile-page .avatar {
-        width: 78px;
-        height: 78px;
-        font-size: 32px;
+    .student-profile-page .photo-btn,
+    .student-profile-page .password-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
 </style>
 
 {% endblock %}
 
+
 {% block content %}
 
-<div class="staff-profile-page">
+<div class="student-profile-page">
+
+    <!-- TOP BAR -->
 
     <div class="topbar">
+
         <h1>Student Profile</h1>
 
-        <a class="back-btn"
-           href="{{ url_for('student_dashboard') }}">
+        <a class="back-btn" href="{{ url_for('student_dashboard') }}">
             ← Dashboard
         </a>
+
     </div>
+
+    <!-- PROFILE CARD -->
 
     <section class="profile-card">
 
         <!-- PROFILE HEADER -->
+
         <div class="profile-header">
 
-            <div class="avatar">
-                {{ (user.full_name or 'S')[0]|upper }}
-            </div>
+            {% if user.profile_photo %}
+
+                <img
+                    src="{{ url_for('profile_photo', filename=user.profile_photo) }}"
+                    class="avatar"
+                    alt="Student Profile Photo">
+
+            {% else %}
+
+                <div class="avatar">
+                    {{ (user.full_name or 'S')[0]|upper }}
+                </div>
+
+            {% endif %}
 
             <h2>{{ user.full_name or 'Student' }}</h2>
 
@@ -293,18 +399,16 @@
         </div>
 
         <!-- PROFILE CONTENT -->
+
         <div class="profile-content">
+
+            <!-- ACCOUNT INFORMATION -->
 
             <h3 class="section-title">
                 Account Information
             </h3>
 
             <div class="info-grid">
-
-                <div class="info-box">
-                    <label>Full Name</label>
-                    <p>{{ user.full_name or 'Not provided' }}</p>
-                </div>
 
                 <div class="info-box">
                     <label>Gmail / Email Address</label>
@@ -322,22 +426,14 @@
                 </div>
 
                 <div class="info-box">
-                    <label>Account Status</label>
-                    <p>{{ user.approval_status or 'Not provided' }}</p>
-                </div>
-
-                <div class="info-box">
                     <label>Roll Number</label>
                     <p>{{ user.roll_number or 'Not provided' }}</p>
                 </div>
 
-            </div>
-
-            <h3 class="section-title">
-                Academic Information
-            </h3>
-
-            <div class="info-grid">
+                <div class="info-box">
+                    <label>Section</label>
+                    <p>{{ user.section or 'Not provided' }}</p>
+                </div>
 
                 <div class="info-box">
                     <label>Course</label>
@@ -359,17 +455,28 @@
                     <p>{{ user.department or 'Not provided' }}</p>
                 </div>
 
+                <div class="info-box">
+                    <label>Account Status</label>
+                    <p>{{ user.approval_status or 'Not provided' }}</p>
+                </div>
+
             </div>
+
+            <!-- EDIT PROFILE -->
 
             <h3 class="section-title">
                 Edit Profile
             </h3>
 
-            <form method="POST"
-                  action="{{ url_for('edit_profile') }}">
+            <form
+                method="POST"
+                action="{{ url_for('edit_profile') }}">
 
                 <div class="form-group">
-                    <label for="full_name">Full Name</label>
+
+                    <label for="full_name">
+                        Full Name
+                    </label>
 
                     <input
                         type="text"
@@ -379,10 +486,14 @@
                         required
                         minlength="2"
                         maxlength="100">
+
                 </div>
 
                 <div class="form-group">
-                    <label for="mobile">Mobile Number</label>
+
+                    <label for="mobile">
+                        Mobile Number
+                    </label>
 
                     <input
                         type="tel"
@@ -393,6 +504,43 @@
                         maxlength="10"
                         inputmode="numeric"
                         placeholder="Enter 10-digit mobile number">
+
+                </div>
+
+                <!-- ROLL NUMBER -->
+
+                <div class="form-group">
+
+                    <label for="roll_number">
+                        Roll Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="roll_number"
+                        name="roll_number"
+                        value="{{ user.roll_number or '' }}"
+                        maxlength="30"
+                        placeholder="Enter your roll number">
+
+                </div>
+
+                <!-- SECTION -->
+
+                <div class="form-group">
+
+                    <label for="section">
+                        Section
+                    </label>
+
+                    <input
+                        type="text"
+                        id="section"
+                        name="section"
+                        value="{{ user.section or '' }}"
+                        maxlength="20"
+                        placeholder="Enter your section">
+
                 </div>
 
                 <button type="submit" class="save-btn">
@@ -400,16 +548,84 @@
                 </button>
 
                 <p class="note">
-                    Your email, roll number, course, year and department
-                    are displayed from your registered account information.
+                    You can update your name, mobile number, roll number
+                    and section after registration. Your course, year
+                    and department are managed through your registered
+                    account information.
                 </p>
 
             </form>
+
+            <!-- CHANGE PASSWORD SECTION -->
+
+            <div class="change-password-section">
+
+                <h3 class="section-title">
+                    Account Security
+                </h3>
+
+                <a href="{{ url_for('change_password') }}"
+                   class="password-btn">
+                    🔐 Change Password
+                </a>
+
+            </div>
+
+            <!-- CHANGE PROFILE PHOTO -->
+
+            <div class="change-photo-section">
+
+                <h3 class="section-title">
+                    Profile Photo
+                </h3>
+
+                <button
+                    type="button"
+                    class="photo-btn"
+                    id="changePhotoButton"
+                    onclick="showPhotoOptions()">
+
+                    Change the Photo
+
+                </button>
+
+                <div class="photo-options" id="photoOptions">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('upload_profile_photo') }}"
+                        enctype="multipart/form-data">
+
+                        <input
+                            type="file"
+                            name="profile_photo"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            required>
+
+                        <button type="submit" class="photo-btn">
+                            Update Profile Photo
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
     </section>
 
 </div>
+
+<script>
+function showPhotoOptions() {
+
+    document.getElementById("photoOptions").style.display = "block";
+
+    document.getElementById("changePhotoButton").style.display = "none";
+
+}
+</script>
 
 {% endblock %}

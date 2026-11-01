@@ -1,6 +1,7 @@
+
 {% extends "base.html" %}
 
-{% block title %}HOD Dashboard | AIMT Complaint System{% endblock %}
+{% block title %}HOD Dashboard | AIMT Problem Solving System{% endblock %}
 
 {% block content %}
 
@@ -9,236 +10,288 @@
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+.hod-dashboard {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+    color: #eaf6ff;
 }
 
-/* Background */
-.hod-page {
-    min-height: 100vh;
-    padding: 25px 20px;
-    background:
-        linear-gradient(rgba(5, 20, 35, 0.58), rgba(5, 20, 35, 0.68)),
-        url("{{ url_for('static', filename='images/aimt-campus.jpg') }}");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+/* GLASS HEADER */
+.hod-header,
+.hod-welcome,
+.hod-section,
+.hod-stat-card,
+.hod-chart-card,
+.hod-complaint-card {
+    background: rgba(5, 20, 39, .24);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(56, 217, 255, .35);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .12);
 }
 
-/* Main Container */
-.hod-container {
-    max-width: 1250px;
-    margin: auto;
-}
-
-/* Welcome Alert */
-.welcome-alert {
-    background: #d9ffe8;
-    color: #075c32;
-    padding: 18px;
-    border-radius: 13px;
-    margin-bottom: 35px;
-    font-size: 17px;
-    border: 1px solid #a5e9bd;
-    animation: fadeDown 0.7s ease;
-}
-
-/* Hero Section */
-.hod-hero {
-    background: linear-gradient(120deg, #14264f, #285078);
-    color: white;
-    padding: 35px 30px;
-    border-radius: 22px;
-    margin-bottom: 28px;
-    border: 1px solid #315e89;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-    animation: fadeUp 0.8s ease;
-}
-
-.hod-hero h1 {
-    font-size: 30px;
-    margin: 0 0 18px;
-}
-
-.hod-hero p {
-    font-size: 16px;
-    line-height: 1.7;
-    margin: 8px 0;
-}
-
-/* Statistics */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 28px;
-}
-
-.stat-card {
-    background: white;
-    padding: 25px;
-    border-radius: 19px;
-    border-top: 5px solid #234d75;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
-    transition: 0.3s ease;
-    animation: fadeUp 1s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-}
-
-.stat-card h3 {
-    font-size: 15px;
-    color: #45566f;
-    margin: 0 0 20px;
-}
-
-.stat-card .number {
-    font-size: 32px;
-    font-weight: bold;
-    color: #102653;
-}
-
-/* Quick Access */
-.quick-access {
-    background: white;
+.hod-header {
+    border-radius: 16px;
     padding: 27px;
-    border-radius: 22px;
-    margin-bottom: 28px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-    animation: fadeUp 1.1s ease;
+    margin-bottom: 25px;
+    animation: hodFade .6s ease;
 }
 
-.quick-access h2 {
-    color: #102653;
-    margin: 0 0 22px;
-    font-size: 24px;
+.hod-header h1 {
+    color: #38d9ff;
+    font-size: 28px;
+    margin: 0 0 10px;
 }
 
-.quick-buttons {
+.hod-header p,
+.hod-welcome p {
+    color: #eaf6ff;
+    line-height: 1.8;
+}
+
+/* BUTTONS */
+.hod-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-.quick-btn {
+.hod-btn {
     display: inline-block;
-    padding: 13px 18px;
-    background: #e9eff7;
-    color: #102653;
+    padding: 11px 16px;
+    border-radius: 8px;
     text-decoration: none;
-    border-radius: 11px;
-    font-weight: 600;
-    transition: 0.3s;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: .25s ease;
 }
 
-.quick-btn:hover {
-    background: #244d75;
-    color: white;
-    transform: translateY(-5px);
+.hod-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.25);
 }
 
-.quick-btn.primary {
-    background: #244d75;
-    color: white;
+.hod-primary {
+    background: rgba(25, 201, 237, .88);
+    color: #06111d;
+    border-color: #38d9ff;
 }
 
-.quick-btn.primary:hover {
-    background: #102653;
+.hod-secondary {
+    background: rgba(5, 30, 50, .30);
+    color: #eaf6ff;
+    border-color: rgba(56, 217, 255, .45);
 }
 
-/* Complaints Table */
-.complaints-section {
-    background: white;
-    padding: 27px;
-    border-radius: 22px;
+/* WELCOME */
+.hod-welcome {
+    padding: 23px;
+    border-radius: 14px;
     margin-bottom: 25px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
-    animation: fadeUp 1.2s ease;
 }
 
-.complaints-section h2 {
-    color: #102653;
-    margin-top: 0;
+.hod-welcome h2 {
+    color: #38d9ff;
+    margin-bottom: 10px;
+}
+
+/* FLASH */
+.hod-flash {
+    background: rgba(5, 30, 50, .55);
+    border: 1px solid #38d9ff;
+    border-radius: 9px;
+    padding: 13px 16px;
+    margin-bottom: 15px;
+    color: #eaf6ff;
+}
+
+/* STATISTICS */
+.hod-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.hod-stat-card {
+    border-radius: 14px;
+    padding: 23px;
+    transition: .25s;
+    animation: hodCard .6s ease both;
+    min-width: 0;
+}
+
+.hod-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #38d9ff;
+    box-shadow: 0 10px 25px #0005;
+}
+
+.hod-stat-card h3 {
+    color: #e0efff;
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.hod-stat-card p {
+    color: #38d9ff;
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* SECTIONS */
+.hod-section {
+    border-radius: 15px;
+    padding: 23px;
+    margin-bottom: 28px;
+}
+
+.hod-section h2 {
+    color: #38d9ff;
+    font-size: 22px;
     margin-bottom: 20px;
 }
 
-.table-wrapper {
-    overflow-x: auto;
+/* ANALYTICS */
+.hod-analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
 }
 
-table {
+.hod-chart-card {
+    border-radius: 13px;
+    padding: 20px;
+    min-width: 0;
+}
+
+.hod-chart-card h3 {
+    color: #38d9ff;
+    margin-bottom: 18px;
+}
+
+.hod-chart-container {
+    position: relative;
     width: 100%;
-    border-collapse: collapse;
-    min-width: 750px;
+    height: 280px;
 }
 
-th {
-    background: #203f68;
-    color: white;
-    padding: 15px;
-    text-align: left;
+/* QUICK ACCESS */
+.hod-quick-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
 }
 
-td {
-    padding: 14px;
-    border-bottom: 1px solid #e6eaf0;
-    color: #34445b;
+.hod-quick-links .hod-btn {
+    text-align: center;
 }
 
-tr:hover td {
-    background: #f3f7fc;
+/* COMPLAINTS */
+.hod-complaint-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
 }
 
-.status {
+.hod-complaint-card {
+    border-radius: 14px;
+    padding: 21px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    transition: .25s;
+    animation: hodCard .5s ease;
+}
+
+.hod-complaint-card:hover {
+    transform: translateY(-4px);
+    border-color: #38d9ff;
+    box-shadow: 0 10px 25px #0004;
+}
+
+.hod-complaint-card h3 {
+    color: #fff;
+    margin-bottom: 13px;
+    line-height: 1.5;
+}
+
+.hod-detail {
+    color: #e0efff;
+    line-height: 1.8;
+    margin: 9px 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.hod-detail strong {
+    color: #38d9ff;
+}
+
+/* STATUS */
+.hod-status {
     display: inline-block;
-    padding: 7px 11px;
+    padding: 7px 12px;
     border-radius: 20px;
+    margin: 10px 0 15px;
     font-size: 12px;
     font-weight: bold;
-    background: #fff0c7;
-    color: #805500;
+    background: rgba(23, 55, 80, .65);
+    color: #55e3ff;
+    border: 1px solid #39718e;
 }
 
-.status.resolved {
-    background: #d9fbe5;
-    color: #087338;
+.status-pending {
+    background: rgba(120, 53, 15, .65);
+    color: #fde68a;
 }
 
-.status.progress {
-    background: #dcecff;
-    color: #14569a;
+.status-progress {
+    background: rgba(7, 89, 133, .65);
+    color: #bae6fd;
 }
 
-.view-btn {
-    display: inline-block;
-    padding: 8px 13px;
-    border-radius: 8px;
-    background: #244d75;
-    color: white;
-    text-decoration: none;
-    font-size: 13px;
+.status-forwarded {
+    background: rgba(88, 28, 135, .65);
+    color: #e9d5ff;
 }
 
-.view-btn:hover {
-    background: #102653;
+.status-resolved {
+    background: rgba(20, 83, 45, .65);
+    color: #bbf7d0;
 }
 
-/* Empty Message */
-.empty-message {
+.status-rejected {
+    background: rgba(127, 29, 29, .65);
+    color: #fecaca;
+}
+
+/* EMPTY */
+.hod-empty {
     text-align: center;
-    padding: 30px;
-    color: #667085;
+    padding: 35px 20px;
+    color: #e0efff;
+    border: 1px dashed #39718e;
+    border-radius: 14px;
+    grid-column: 1 / -1;
+    background: rgba(5, 20, 39, .15);
 }
 
-/* Animations */
-@keyframes fadeUp {
+.hod-empty h3 {
+    color: #38d9ff;
+    margin-bottom: 10px;
+}
+
+/* ANIMATIONS */
+@keyframes hodFade {
     from {
         opacity: 0;
-        transform: translateY(25px);
+        transform: translateY(12px);
     }
     to {
         opacity: 1;
@@ -246,10 +299,10 @@ tr:hover td {
     }
 }
 
-@keyframes fadeDown {
+@keyframes hodCard {
     from {
         opacity: 0;
-        transform: translateY(-15px);
+        transform: translateY(18px);
     }
     to {
         opacity: 1;
@@ -257,248 +310,473 @@ tr:hover td {
     }
 }
 
-/* Mobile Responsive */
-@media (max-width: 900px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* RESPONSIVE */
+@media (max-width: 850px) {
+    .hod-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hod-complaint-list {
+        grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 600px) {
-    .hod-page {
-        padding: 15px 10px;
-        background-attachment: scroll;
+@media (max-width: 650px) {
+    .hod-dashboard {
+        width: 92%;
+        margin: 22px auto;
     }
 
-    .hod-hero {
-        padding: 25px 20px;
+    .hod-header {
+        padding: 20px;
     }
 
-    .hod-hero h1 {
-        font-size: 24px;
+    .hod-header h1 {
+        font-size: 23px;
     }
 
-    .hod-hero p {
-        font-size: 14px;
+    .hod-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .stat-card {
-        padding: 17px;
-    }
-
-    .stat-card h3 {
-        font-size: 12px;
-    }
-
-    .stat-card .number {
-        font-size: 25px;
-    }
-
-    .quick-access,
-    .complaints-section {
-        padding: 20px 15px;
-    }
-
-    .quick-btn {
-        width: 100%;
+    .hod-btn {
         text-align: center;
+        padding: 11px 7px;
+        font-size: 13px;
+    }
+
+    .hod-stat-card {
+        padding: 16px;
+    }
+
+    .hod-stat-card p {
+        font-size: 26px;
+    }
+
+    .hod-section {
+        padding: 16px;
+    }
+
+    .hod-analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hod-chart-container {
+        height: 250px;
+    }
+
+    .hod-quick-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 360px) {
+    .hod-stats,
+    .hod-quick-links {
+        grid-template-columns: 1fr;
     }
 }
 </style>
 
+<div class="hod-dashboard">
 
-<div class="hod-page">
-<div class="hod-container">
+    <header class="hod-header">
 
-    <!-- Welcome Alert -->
-    <div class="welcome-alert">
-        Welcome, {{ user.full_name }}!
-    </div>
+        <h1>AIMT Problem Solving System</h1>
 
-    <!-- Hero Section -->
-    <section class="hod-hero">
-        <h1>HOD Dashboard</h1>
+        <p>Head of Department Dashboard</p>
 
-        <p>
-            Welcome,
-            <strong>{{ user.full_name }}</strong>
-        </p>
-
-        <p>AIMT Complaint Solving System</p>
-
-        <p>
-            Here you can manage staff members and monitor
-            complaints forwarded to your department.
-        </p>
-    </section>
-
-
-    <!-- Statistics -->
-    <section class="stats-grid">
-
-        <div class="stat-card">
-            <h3>Total Complaints</h3>
-            <div class="number">
-                {{ stats.get('total', 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Pending Complaints</h3>
-            <div class="number">
-                {{ stats.get('pending', 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Responded Complaints</h3>
-            <div class="number">
-                {{ stats.get('responded', 0) }}
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Resolved Complaints</h3>
-            <div class="number">
-                {{ stats.get('resolved', 0) }}
-            </div>
-        </div>
-
-    </section>
-
-
-    <!-- Quick Access -->
-    <section class="quick-access">
-
-        <h2>Quick Access</h2>
-
-        <div class="quick-buttons">
+        <div class="hod-links">
 
             <a href="{{ url_for('hod_dashboard') }}"
-               class="quick-btn primary">
+               class="hod-btn hod-primary">
                 Dashboard
             </a>
 
             <a href="{{ url_for('hod_staff_list') }}"
-               class="quick-btn">
-                👨‍🏫 All Staff
+               class="hod-btn hod-secondary">
+                Department Staff
             </a>
 
             <a href="{{ url_for('staff_approvals') }}"
-               class="quick-btn">
-                ✅ Staff Approvals
+               class="hod-btn hod-secondary">
+                Staff Approvals
             </a>
 
             <a href="{{ url_for('notifications') }}"
-               class="quick-btn">
-                🔔 Notifications
-            </a>
-
-            <a href="{{ url_for('profile') }}"
-               class="quick-btn">
-                👤 My Profile
+               class="hod-btn hod-secondary">
+                Notifications
             </a>
 
             <a href="{{ url_for('edit_profile') }}"
-               class="quick-btn">
-                ✏️ Edit Profile
+               class="hod-btn hod-secondary">
+                My Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="hod-btn hod-secondary">
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+    <section class="hod-welcome">
+
+        <h2>
+            Welcome,
+            {{ user["full_name"] or "HOD" }}
+        </h2>
+
+        <p>
+            Monitor department complaints, review staff activities,
+            respond to forwarded complaints and manage their resolution.
+        </p>
+
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="hod-flash">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <!-- STATISTICS -->
+    <section class="hod-stats">
+
+        <div class="hod-stat-card">
+            <h3>Total Complaints</h3>
+            <p>{{ stats.get("total", 0) }}</p>
+        </div>
+
+        <div class="hod-stat-card">
+            <h3>Pending Complaints</h3>
+            <p>{{ stats.get("pending", 0) }}</p>
+        </div>
+
+        <div class="hod-stat-card">
+            <h3>Responded Complaints</h3>
+            <p>{{ stats.get("responded", 0) }}</p>
+        </div>
+
+        <div class="hod-stat-card">
+            <h3>Resolved Complaints</h3>
+            <p>{{ stats.get("resolved", 0) }}</p>
+        </div>
+
+    </section>
+
+    <!-- ANALYTICS -->
+    <section class="hod-section">
+
+        <h2>Department Complaint Analytics</h2>
+
+        <div class="hod-stats">
+
+            <div class="hod-stat-card">
+                <h3>Rejected Complaints</h3>
+                <p>{{ analytics.rejected }}</p>
+            </div>
+
+        </div>
+
+        <div class="hod-analytics-grid">
+
+            <div class="hod-chart-card">
+                <h3>Complaint Status</h3>
+
+                <div class="hod-chart-container">
+                    <canvas id="hodStatusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="hod-chart-card">
+                <h3>Monthly Complaints</h3>
+
+                <div class="hod-chart-container">
+                    <canvas id="hodMonthlyChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- QUICK ACCESS -->
+    <section class="hod-section">
+
+        <h2>Quick Access</h2>
+
+        <div class="hod-quick-links">
+
+            <a href="{{ url_for('hod_staff_list') }}"
+               class="hod-btn hod-secondary">
+                Department Staff
+            </a>
+
+            <a href="{{ url_for('staff_approvals') }}"
+               class="hod-btn hod-secondary">
+                Staff Approvals
+            </a>
+
+            <a href="{{ url_for('notifications') }}"
+               class="hod-btn hod-secondary">
+                Notifications
+            </a>
+
+            <a href="{{ url_for('profile') }}"
+               class="hod-btn hod-secondary">
+                My Profile
+            </a>
+
+            <a href="{{ url_for('edit_profile') }}"
+               class="hod-btn hod-secondary">
+                Edit Profile
             </a>
 
         </div>
 
     </section>
 
-
-    <!-- Complaints Table -->
-    <section class="complaints-section">
+    <!-- DEPARTMENT COMPLAINTS -->
+    <section class="hod-section">
 
         <h2>Department Complaints</h2>
 
+        <p class="hod-detail">
+            Total Department Complaints: {{ complaints|length }}
+        </p>
+
         {% if complaints %}
 
-        <div class="table-wrapper">
+            <div class="hod-complaint-list">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Complaint Title</th>
-                        <th>Student</th>
-                        <th>Staff</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+                {% for complaint in complaints %}
 
-                <tbody>
+                    <article class="hod-complaint-card">
 
-                    {% for complaint in complaints %}
+                        <h3>
+                            {{ complaint["title"] or
+                               ("Complaint #" ~ complaint["id"]) }}
+                        </h3>
 
-                    <tr>
-                        <td>#{{ complaint.id }}</td>
+                        <p class="hod-detail">
+                            <strong>Complaint ID:</strong>
+                            #{{ complaint["id"] }}
+                        </p>
 
-                        <td>
-                            {{ complaint.title }}
-                        </td>
+                        <p class="hod-detail">
+                            <strong>Student:</strong>
+                            {{ complaint["student_name"] or "Student" }}
+                        </p>
 
-                        <td>
-                            {{ complaint.student_name }}
-                        </td>
+                        <p class="hod-detail">
+                            <strong>Roll Number:</strong>
+                            {{ complaint["student_roll_number"] or "Not provided" }}
+                        </p>
 
-                        <td>
-                            {{ complaint.staff_name or 'Not Assigned' }}
-                        </td>
+                        <p class="hod-detail">
+                            <strong>Course:</strong>
+                            {{ complaint["course"] or "Not specified" }}
+                        </p>
 
-                        <td>
-                            {% if complaint.status == 'RESOLVED' %}
-                                <span class="status resolved">
-                                    Resolved
-                                </span>
+                        <p class="hod-detail">
+                            <strong>Department:</strong>
+                            {{ complaint["department"] or "Not specified" }}
+                        </p>
 
-                            {% elif complaint.status == 'SOLUTION_SENT_TO_STAFF' %}
-                                <span class="status progress">
-                                    Responded
-                                </span>
+                        <p class="hod-detail">
+                            <strong>Assigned Staff:</strong>
+                            {{ complaint["staff_name"] or "Not Assigned" }}
+                        </p>
 
+                        <p class="hod-detail">
+                            <strong>Submitted:</strong>
+                            {{ complaint["created_at"] or "Not available" }}
+                        </p>
+
+                        {% set status = complaint["status"] or "SUBMITTED" %}
+
+                        <span class="hod-status
+                            {% if status == 'SUBMITTED' %}
+                                status-pending
+                            {% elif status == 'IN_PROGRESS' %}
+                                status-progress
+                            {% elif status in ('FORWARDED_TO_HOD', 'SOLUTION_SENT_TO_STAFF') %}
+                                status-forwarded
+                            {% elif status == 'RESOLVED' %}
+                                status-resolved
+                            {% elif status == 'REJECTED' %}
+                                status-rejected
+                            {% endif %}">
+                            {{ status.replace("_", " ") }}
+                        </span>
+
+                        <p class="hod-detail">
+                            <strong>Description:</strong><br>
+
+                            {% if complaint["description"] %}
+                                {{ complaint["description"]|truncate(250, True, "...") }}
+                            {% elif complaint["complaint_text"] %}
+                                {{ complaint["complaint_text"]|truncate(250, True, "...") }}
                             {% else %}
-                                <span class="status">
-                                    {{ complaint.status.replace('_', ' ') }}
-                                </span>
+                                No description available.
                             {% endif %}
-                        </td>
+                        </p>
 
-                        <td>
-                            <a class="view-btn"
-                               href="{{ url_for('hod_complaint_details', complaint_id=complaint.id) }}">
-                                View
-                            </a>
-                        </td>
-                    </tr>
+                        <a href="{{ url_for(
+                            'hod_complaint_details',
+                            complaint_id=complaint['id']
+                        ) }}"
+                           class="hod-btn hod-primary">
+                            View Complaint Details
+                        </a>
 
-                    {% endfor %}
+                    </article>
 
-                </tbody>
-            </table>
+                {% endfor %}
 
-        </div>
+            </div>
 
         {% else %}
 
-        <div class="empty-message">
-            <h3>No Complaints Found</h3>
-            <p>Currently, there are no complaints assigned to you.</p>
-        </div>
+            <div class="hod-empty">
+                <h3>No Department Complaints Found</h3>
+
+                <p>
+                    There are currently no complaints available for your department.
+                </p>
+            </div>
 
         {% endif %}
 
     </section>
 
 </div>
-</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const analytics = {{ analytics | tojson }};
+
+    if (typeof Chart === "undefined") {
+        console.error("Chart.js is not loaded.");
+        return;
+    }
+
+    const statusCanvas = document.getElementById("hodStatusChart");
+
+    if (statusCanvas) {
+
+        new Chart(statusCanvas, {
+            type: "doughnut",
+
+            data: {
+                labels: [
+                    "Pending",
+                    "In Progress",
+                    "Forwarded",
+                    "Resolved",
+                    "Rejected"
+                ],
+
+                datasets: [{
+                    data: [
+                        analytics.pending || 0,
+                        analytics.in_progress || 0,
+                        analytics.forwarded || 0,
+                        analytics.resolved || 0,
+                        analytics.rejected || 0
+                    ],
+
+                    backgroundColor: [
+                        "#facc15",
+                        "#38bdf8",
+                        "#a78bfa",
+                        "#22c55e",
+                        "#ef4444"
+                    ],
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: {
+                            color: "#eaf6ff"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const monthlyCanvas = document.getElementById("hodMonthlyChart");
+
+    if (monthlyCanvas) {
+
+        new Chart(monthlyCanvas, {
+            type: "bar",
+
+            data: {
+                labels: analytics.monthly_labels || [],
+
+                datasets: [{
+                    label: "Complaints",
+                    data: analytics.monthly_values || [],
+                    backgroundColor: "#19c9ed",
+                    borderRadius: 6
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            color: "#eaf6ff"
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.12)"
+                        }
+                    },
+
+                    x: {
+                        ticks: {
+                            color: "#eaf6ff"
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.08)"
+                        }
+                    }
+                },
+
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "#eaf6ff"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+});
+</script>
 
 {% endblock %}

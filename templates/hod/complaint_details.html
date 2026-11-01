@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Complaint Details | AIMT Problem Solving System</title>
+    <title>Complaint Details | AIMT</title>
 
     <style>
         * {
@@ -16,159 +16,258 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
             min-height: 100vh;
+            color: #fff;
+
+            background-color: #071525;
+            background-image:
+                linear-gradient(
+                    rgba(5, 15, 25, .30),
+                    rgba(5, 15, 25, .30)
+                ),
+                url("{{ url_for('static', filename='images/aimt-poster.png') }}");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
-        header {
-            background: linear-gradient(135deg, #172554, #2563eb);
-            color: white;
-            padding: 22px 5%;
+        .page-wrapper {
+            width: 98%;
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 8px;
+        }
+
+        .complaint-card {
+            background: rgba(5, 20, 30, .12);
+            border: 1px solid rgba(56, 217, 255, .65);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, .20);
+            animation: fadeIn .5s ease;
+        }
+
+        .top-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-        }
-
-        header h1 {
-            font-size: 22px;
-        }
-
-        header p {
-            margin-top: 6px;
-            color: #dbeafe;
-            font-size: 14px;
-        }
-
-        .btn {
-            display: inline-block;
-            border: none;
-            border-radius: 8px;
-            padding: 11px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.25s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-light {
-            background: white;
-            color: #1d4ed8;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        main {
-            width: 92%;
-            max-width: 900px;
-            margin: 30px auto;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid rgba(56, 217, 255, .5);
             margin-bottom: 22px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.07);
         }
 
-        h2 {
-            color: #1d4ed8;
-            margin-bottom: 20px;
-            font-size: 21px;
-        }
-
-        .detail {
-            margin-bottom: 18px;
-        }
-
-        .detail strong {
-            display: block;
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 6px;
-        }
-
-        .detail p {
-            line-height: 1.7;
+        .complaint-title {
+            color: #38d9ff;
+            font-size: 35px;
             overflow-wrap: anywhere;
+        }
+
+        .status-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            font-size: 17px;
         }
 
         .status {
             display: inline-block;
-            padding: 7px 12px;
-            border-radius: 20px;
-            background: #dbeafe;
-            color: #1d4ed8;
-            font-size: 12px;
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 13px;
             font-weight: bold;
+            background: rgba(56, 217, 255, .12);
+            border: 1px solid #38d9ff;
+            color: #38d9ff;
+        }
+
+        .status.resolved {
+            color: #bbf7d0;
+            background: rgba(22, 163, 74, .17);
+            border-color: #22c55e;
+        }
+
+        .status.rejected {
+            color: #fecaca;
+            background: rgba(220, 38, 38, .17);
+            border-color: #ef4444;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            color: #38d9ff;
+            background: rgba(5, 20, 39, .45);
+            border: 1px solid rgba(56, 217, 255, .6);
+            font-weight: bold;
+            transition: .25s;
+        }
+
+        .back-btn:hover {
+            background: rgba(56, 217, 255, .18);
+            transform: translateY(-2px);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .detail-box {
+            min-height: 95px;
+            padding: 20px 17px;
+            background: rgba(5, 20, 30, .20);
+            border: 1px solid rgba(56, 217, 255, .55);
+            border-radius: 13px;
+            overflow-wrap: anywhere;
+            transition: .25s;
+        }
+
+        .detail-box:hover {
+            background: rgba(5, 20, 30, .38);
+            border-color: #38d9ff;
+            transform: translateY(-2px);
+        }
+
+        .detail-box strong {
+            display: block;
+            color: #38d9ff;
+            font-size: 15px;
+            margin-bottom: 13px;
+        }
+
+        .detail-box p {
+            color: #fff;
+            font-size: 17px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .section-card {
+            margin-top: 24px;
+            padding: 24px;
+            background: rgba(5, 20, 30, .25);
+            border: 1px solid rgba(56, 217, 255, .5);
+            border-radius: 14px;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .section-card h2 {
+            color: #38d9ff;
+            font-size: 21px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(56, 217, 255, .3);
+        }
+
+        .solution-item {
+            padding: 17px;
+            margin-bottom: 14px;
+            background: rgba(5, 20, 30, .30);
+            border: 1px solid rgba(56, 217, 255, .4);
+            border-left: 4px solid #38d9ff;
+            border-radius: 9px;
+            overflow-wrap: anywhere;
+        }
+
+        .solution-item strong {
+            color: #38d9ff;
+        }
+
+        .solution-item p {
+            color: #fff;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+
+        .note {
+            color: #e0edf5;
+            font-size: 13px;
+            line-height: 1.7;
+            margin-top: 12px;
         }
 
         .flash {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 13px 16px;
+            margin-bottom: 16px;
+            border-radius: 9px;
+            color: #bbf7d0;
+            background: rgba(22, 163, 74, .25);
+            border: 1px solid #22c55e;
         }
 
         textarea {
             width: 100%;
-            min-height: 160px;
-            padding: 13px;
-            border: 1px solid #cbd5e1;
+            min-height: 150px;
+            padding: 14px;
+            margin: 12px 0 17px;
+            color: white;
+            background: rgba(5, 20, 30, .55);
+            border: 1px solid rgba(56, 217, 255, .55);
             border-radius: 9px;
             font-family: Arial, sans-serif;
             font-size: 15px;
             resize: vertical;
-            margin: 12px 0 18px;
+        }
+
+        textarea::placeholder {
+            color: #d0e0ed;
         }
 
         textarea:focus {
-            outline: 2px solid #93c5fd;
-            border-color: #2563eb;
+            outline: 2px solid rgba(56, 217, 255, .5);
+            border-color: #38d9ff;
         }
 
-        .note {
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.6;
-            margin-top: 12px;
+        label strong {
+            color: #38d9ff;
         }
 
-        .solution-item {
-            border-left: 4px solid #2563eb;
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            overflow-wrap: anywhere;
+        .submit-btn {
+            display: inline-block;
+            padding: 12px 19px;
+            color: white;
+            background: rgba(0, 145, 190, .85);
+            border: 1px solid #38d9ff;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .25s;
         }
 
-        .solution-item p {
-            line-height: 1.7;
-            white-space: pre-wrap;
-            margin-top: 8px;
+        .submit-btn:hover {
+            background: #0891b2;
+            transform: translateY(-2px);
+        }
+
+        .attachment-btn {
+            display: inline-block;
+            color: #fff;
+            background: rgba(0, 145, 190, .8);
+            border: 1px solid #38d9ff;
+            border-radius: 8px;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         footer {
             text-align: center;
-            padding: 20px;
-            color: #64748b;
+            color: #eaf6ff;
+            padding: 22px;
             font-size: 13px;
         }
 
@@ -183,22 +282,44 @@
             }
         }
 
-        @media (max-width: 600px) {
-            header {
-                padding: 20px;
-            }
-
-            header h1 {
-                font-size: 19px;
-            }
-
-            main {
-                width: 94%;
-                margin: 20px auto;
-            }
-
-            .card {
+        @media (max-width: 700px) {
+            .complaint-card {
                 padding: 18px;
+            }
+
+            .complaint-title {
+                font-size: 26px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .detail-box {
+                min-height: 85px;
+                padding: 17px;
+            }
+
+            .detail-box p {
+                font-size: 15px;
+            }
+
+            .top-section {
+                align-items: flex-start;
+            }
+
+            .back-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .section-card {
+                padding: 17px;
+            }
+
+            body {
+                background-attachment: scroll;
             }
         }
     </style>
@@ -206,100 +327,118 @@
 
 <body>
 
-<header>
-    <div>
-        <h1>AIMT Problem Solving System</h1>
-        <p>HOD — Complaint Details</p>
-    </div>
+<div class="page-wrapper">
 
-    <a class="btn btn-light"
-       href="{{ url_for('hod_dashboard') }}">
-        Back to Dashboard
-    </a>
-</header>
+    <main class="complaint-card">
 
-<main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% for category, message in messages %}
-            <div class="flash">{{ message }}</div>
-        {% endfor %}
-    {% endwith %}
+        <div class="top-section">
 
-    <section class="card">
-        <h2>Complaint Information</h2>
+            <div>
+                <h1 class="complaint-title">
+                    {{ complaint.title }}
+                </h1>
 
-        <div class="detail">
-            <strong>Complaint ID</strong>
-            <p>#{{ complaint.id }}</p>
-        </div>
+                <div class="status-line">
+                    <strong>Status:</strong>
 
-        <div class="detail">
-            <strong>Student Name</strong>
-            <p>{{ complaint.student_name }}</p>
-        </div>
+                    <span class="status
+                        {% if complaint.status == 'RESOLVED' %}resolved
+                        {% elif complaint.status == 'REJECTED' %}rejected
+                        {% endif %}">
+                        {{ complaint.status|replace('_', ' ') }}
+                    </span>
+                </div>
+            </div>
 
-        <div class="detail">
-            <strong>Complaint Title</strong>
-            <p>{{ complaint.title }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Description</strong>
-            <p>{{ complaint.description }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Course</strong>
-            <p>{{ complaint.course }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Year</strong>
-            <p>{{ complaint.year }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Branch</strong>
-            <p>{{ complaint.branch }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Department</strong>
-            <p>{{ complaint.department }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Submitted Date</strong>
-            <p>{{ complaint.created_at }}</p>
-        </div>
-
-        <div class="detail">
-            <strong>Current Status</strong>
-            <span class="status">
-                {{ complaint.status|replace('_', ' ') }}
-            </span>
-        </div>
-
-        {% if complaint.attachment %}
-        <div class="detail">
-            <strong>Attachment</strong>
-            <a class="btn btn-primary"
-               href="{{ url_for('uploaded_complaint_file', filename=complaint.attachment) }}">
-                View / Download Attachment
+            <a class="back-btn"
+               href="{{ url_for('hod_dashboard') }}">
+                Back to Dashboard
             </a>
-        </div>
-        {% endif %}
-    </section>
 
-    <section class="card">
+        </div>
+
+        <div class="details-grid">
+
+            <div class="detail-box">
+                <strong>Complaint ID</strong>
+                <p>#{{ complaint.id }}</p>
+            </div>
+
+            <div class="detail-box">
+                <strong>Student Name</strong>
+                <p>{{ complaint.student_name }}</p>
+            </div>
+
+            {% if complaint.student_roll_number %}
+            <div class="detail-box">
+                <strong>Roll Number</strong>
+                <p>{{ complaint.student_roll_number }}</p>
+            </div>
+            {% endif %}
+
+            <div class="detail-box">
+                <strong>Course</strong>
+                <p>{{ complaint.course }}</p>
+            </div>
+
+            <div class="detail-box">
+                <strong>Year</strong>
+                <p>{{ complaint.year or 'Not specified' }}</p>
+            </div>
+
+            <div class="detail-box">
+                <strong>Department</strong>
+                <p>{{ complaint.department or complaint.branch or 'Not specified' }}</p>
+            </div>
+
+            {% if complaint.section %}
+            <div class="detail-box">
+                <strong>Section</strong>
+                <p>{{ complaint.section }}</p>
+            </div>
+            {% endif %}
+
+            <div class="detail-box">
+                <strong>Submitted On</strong>
+                <p>{{ complaint.created_at }}</p>
+            </div>
+
+            <div class="detail-box">
+                <strong>Description</strong>
+                <p>{{ complaint.description }}</p>
+            </div>
+
+            {% if complaint.attachment %}
+            <div class="detail-box">
+                <strong>Attachment</strong>
+
+                <a class="attachment-btn"
+                   href="{{ url_for('uploaded_complaint_file', filename=complaint.attachment) }}">
+                    View / Download Attachment
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </main>
+
+    <section class="section-card">
         <h2>Previous Remarks and Solutions</h2>
 
         {% if solutions %}
             {% for item in solutions %}
                 <div class="solution-item">
+
                     <strong>
-                        {{ item.author_name }} ({{ item.author_role|upper }})
+                        {{ item.author_name }}
+                        ({{ item.author_role|upper }})
                     </strong>
 
                     <p>{{ item.solution }}</p>
@@ -307,20 +446,27 @@
                     <div class="note">
                         {{ item.created_at }}
                     </div>
+
                 </div>
             {% endfor %}
         {% else %}
-            <p class="note">No remarks or solutions have been recorded yet.</p>
+            <p class="note">
+                No remarks or solutions have been recorded yet.
+            </p>
         {% endif %}
     </section>
 
-    <section class="card">
+    <section class="section-card">
         <h2>Write Solution for Staff</h2>
 
         {% if complaint.status == 'FORWARDED_TO_HOD' %}
 
             <form method="POST"
-                  action="{{ url_for('hod_submit_solution', complaint_id=complaint.id) }}">
+                  action="{{ url_for('hod_complaint_details', complaint_id=complaint.id) }}">
+
+                <input type="hidden"
+                       name="action"
+                       value="respond">
 
                 <label for="solution">
                     <strong>Solution / Instructions</strong>
@@ -334,9 +480,10 @@
                     minlength="3"
                     maxlength="5000"></textarea>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="submit-btn">
                     Send Solution to Staff
                 </button>
+
             </form>
 
             <p class="note">
@@ -347,9 +494,7 @@
 
         {% elif complaint.status == 'SOLUTION_SENT_TO_STAFF' %}
 
-            <p>
-                The solution has already been sent to Staff.
-            </p>
+            <p>The solution has already been sent to Staff.</p>
 
         {% else %}
 
@@ -360,11 +505,11 @@
         {% endif %}
     </section>
 
-</main>
+    <footer>
+        © 2026 AIMT Problem Solving System
+    </footer>
 
-<footer>
-    © 2026 AIMT Problem Solving System
-</footer>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,276 @@
+
+{% extends "base.html" %}
+
+{% block title %}Search Students | AIMT{% endblock %}
+
+{% block content %}
+
+<style>
+.search-page {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+}
+
+/* Search Header */
+.search-header {
+    background: rgba(5, 20, 39, 0.12) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: white;
+    padding: 25px;
+    border: 1px solid rgba(56, 217, 255, 0.45);
+    border-radius: 15px;
+    margin-bottom: 25px;
+}
+
+.search-header h1 {
+    color: #38d9ff;
+    margin-top: 0;
+}
+
+.search-header p {
+    color: #ffffff;
+}
+
+/* Search Form */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.search-box input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px;
+    background: rgba(5, 20, 39, 0.12) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #ffffff !important;
+    border: 1px solid rgba(56, 217, 255, 0.55);
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #38d9ff;
+    box-shadow: 0 0 8px rgba(56, 217, 255, 0.3);
+}
+
+/* Search Button */
+.search-box button,
+.view-btn {
+    background: rgba(37, 99, 235, 0.55);
+    color: white !important;
+    border: 1px solid rgba(56, 217, 255, 0.7);
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.25s ease;
+}
+
+.search-box button:hover,
+.view-btn:hover {
+    background: rgba(56, 217, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Student Result Card */
+.student-card {
+    background: rgba(5, 20, 39, 0.08) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(56, 217, 255, 0.40);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    transition: 0.3s ease;
+}
+
+.student-card:hover {
+    background: rgba(5, 20, 39, 0.16) !important;
+    border-color: #38d9ff;
+}
+
+.student-card h3 {
+    color: #38d9ff;
+    margin-top: 0;
+}
+
+.student-card p {
+    color: #ffffff;
+    margin: 6px 0;
+}
+
+.student-card strong {
+    color: #38d9ff;
+}
+
+/* Search Results Heading */
+.search-page > h3 {
+    color: #ffffff;
+}
+
+/* Empty Result Box */
+.empty-box {
+    text-align: center;
+    background: rgba(5, 20, 39, 0.08) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 30px;
+    border: 1px dashed rgba(56, 217, 255, 0.55);
+    border-radius: 12px;
+    color: #ffffff;
+}
+
+.empty-box h3 {
+    color: #38d9ff;
+}
+
+.empty-box p {
+    color: #ffffff;
+}
+
+/* Mobile Responsive */
+@media(max-width: 600px) {
+    .search-page {
+        padding: 12px;
+    }
+
+    .search-header {
+        padding: 18px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+
+    .student-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .view-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+    }
+}
+</style>
+
+<div class="search-page">
+
+    <!-- SEARCH HEADER -->
+
+    <div class="search-header">
+        <h1>Search Students</h1>
+        <p>Find students using their name or roll number.</p>
+    </div>
+
+    <!-- SEARCH FORM -->
+
+    <form method="GET"
+          action="{{ url_for('staff_student_search') }}"
+          class="search-box">
+
+        <input
+            type="text"
+            name="q"
+            value="{{ search }}"
+            placeholder="Enter student name or roll number..."
+            required
+        >
+
+        <button type="submit">Search</button>
+
+    </form>
+
+    <!-- SEARCH RESULTS -->
+
+    {% if search %}
+
+        <h3>Search Results</h3>
+
+        {% if students %}
+
+            {% for student in students %}
+
+                <div class="student-card">
+
+                    <div>
+                        <h3>{{ student['full_name'] }}</h3>
+
+                        <p>
+                            <strong>Roll Number:</strong>
+                            {{ student['roll_number'] or 'Not Updated' }}
+                        </p>
+
+                        <p>
+                            <strong>Course:</strong>
+                            {{ student['course'] }}
+                        </p>
+
+                        <p>
+                            <strong>Year:</strong>
+                            {{ student['year'] }}
+                        </p>
+
+                        <p>
+                            <strong>Section:</strong>
+                            {{ student['section'] or 'Not Updated' }}
+                        </p>
+
+                        <p>
+                            <strong>Account:</strong>
+                            {{ 'Active' if student['is_active'] else 'Deactivated' }}
+                        </p>
+                    </div>
+
+                    <a
+                        class="view-btn"
+                        href="{{ url_for(
+                            'staff_view_student',
+                            user_id=student['id']
+                        ) }}"
+                    >
+                        View Profile
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-box">
+                <h3>No Student Found</h3>
+                <p>Try another name or roll number.</p>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

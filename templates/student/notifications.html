@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -17,25 +18,43 @@
     }
 
     .notifications-intro {
-        color: #f0f4ff;
+        color: #ffffff;
         line-height: 1.7;
+        text-shadow: 0 2px 5px #000000;
     }
+
+    /* MAIN NOTIFICATION CONTAINER */
 
     .notification-card {
         margin-top: 20px;
         padding: 20px;
-        background: rgba(7, 18, 40, 0.95);
-        border: 1px solid #607da8;
+        background: rgba(5, 20, 39, 0.12);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(56, 217, 255, 0.55);
         border-radius: 14px;
-        box-shadow: 0 8px 25px #00000055;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     }
 
+    /* INDIVIDUAL NOTIFICATION */
+
     .notification-item {
-        padding: 16px;
+        padding: 20px;
         margin-bottom: 14px;
-        background: #172b49;
+        background: rgba(5, 20, 39, 0.16);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        border: 1px solid rgba(56, 217, 255, 0.30);
         border-left: 5px solid #64a5ff;
         border-radius: 9px;
+        transition: 0.25s ease;
+    }
+
+    .notification-item:hover {
+        background: rgba(5, 20, 39, 0.28);
+        border-color: #38d9ff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
     .notification-item p {
@@ -47,36 +66,65 @@
 
     .notification-date {
         display: block;
-        margin-top: 8px;
-        color: #c4d5f0;
+        margin-top: 12px;
+        color: #d7eaff;
         font-size: 13px;
     }
 
+    /* EMPTY NOTIFICATIONS */
+
     .empty-notifications {
-        padding: 30px 15px;
+        padding: 35px 15px;
         text-align: center;
         color: #ffffff;
+        background: rgba(5, 20, 39, 0.10);
+        border-radius: 10px;
     }
+
+    .empty-notifications h3 {
+        color: #38d9ff;
+        margin-bottom: 10px;
+    }
+
+    .empty-notifications p {
+        color: #ffffff;
+        line-height: 1.7;
+    }
+
+    /* BACK BUTTON */
 
     .back-button {
         display: inline-block;
         margin-top: 20px;
         padding: 12px 18px;
-        background: #1764c0;
+        background: rgba(23, 100, 192, 0.65);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
         border: 1px solid #a8ceff;
         border-radius: 9px;
         color: #ffffff !important;
         text-decoration: none;
         font-weight: bold;
+        transition: 0.25s ease;
     }
 
     .back-button:hover {
-        background: #0d4b96;
+        background: rgba(13, 75, 150, 0.90);
+        transform: translateY(-3px);
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.20);
     }
 
+    .back-button:active {
+        transform: scale(0.96);
+    }
+
+    /* MOBILE RESPONSIVE */
+
     @media (max-width: 600px) {
+
         .notifications-page {
             padding: 12px;
+            margin: 15px auto;
         }
 
         .notifications-page h1 {
@@ -86,41 +134,78 @@
         .notification-card {
             padding: 12px;
         }
+
+        .notification-item {
+            padding: 15px;
+        }
+
+        .back-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    /* REDUCED MOTION */
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            transition-duration: 0.01ms !important;
+        }
     }
 </style>
 
 <div class="notifications-page">
+
     <h1>🔔 Notifications</h1>
 
+    <p class="notifications-intro">
+        Here you can view updates about your complaints.
+    </p>
 
-<p class="notifications-intro">
-    Here you can view updates about your complaints.
-</p>
+    <div class="notification-card">
 
-<div class="notification-card">
-    {% if notifications %}
-        {% for notification in notifications %}
-            <div class="notification-item">
-                <p>{{ notification.message }}</p>
+        {% if notifications %}
 
-                {% if notification.created_at is defined %}
-                    <span class="notification-date">
-                        {{ notification.created_at }}
-                    </span>
-                {% endif %}
+            {% for notification in notifications %}
+
+                <div class="notification-item">
+
+                    <p>{{ notification.message }}</p>
+
+                    {% if notification.created_at is defined %}
+
+                        <span class="notification-date">
+                            {{ notification.created_at }}
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-notifications">
+
+                <h3>📭 No notifications yet.</h3>
+
+                <p>
+                    New notifications will appear here when available.
+                </p>
+
             </div>
-        {% endfor %}
-    {% else %}
-        <div class="empty-notifications">
-            <h3>📭 No notifications yet.</h3>
-            <p>New notifications will appear here when available.</p>
-        </div>
-    {% endif %}
-</div>
 
-<a class="back-button" href="{{ url_for('student_dashboard') }}">
-    ← Back to Dashboard
-</a>
+        {% endif %}
+
+    </div>
+
+    <a class="back-button" href="{{ url_for('student_dashboard') }}">
+        ← Back to Dashboard
+    </a>
 
 </div>
+
 {% endblock %}

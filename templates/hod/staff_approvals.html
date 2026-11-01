@@ -3,32 +3,41 @@
 
 {% block title %}Staff Approvals | AIMT{% endblock %}
 
-{% block content %}
-
+{% block head %}
 <style>
 .approval-page {
     max-width: 1100px;
     margin: 25px auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+    color: #eaf6ff;
+    animation: appear .5s ease;
 }
 
+/* HEADER */
+
 .approval-header {
-    background: linear-gradient(135deg, #123c69, #2563a6);
+    background: rgba(5, 20, 30, .22);
+    border: 1px solid rgba(56,217,255,.5);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     color: white;
     padding: 25px;
     border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 20px #00000015;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.18);
 }
 
 .approval-header h1 {
     margin: 0 0 10px;
+    color: #38d9ff;
+    font-size: 26px;
 }
 
 .approval-header p {
     margin: 0;
-    color: #e5efff;
+    color: #eaf6ff;
+    line-height: 1.6;
 }
 
 .approval-actions {
@@ -38,50 +47,76 @@
     margin-top: 18px;
 }
 
+/* BUTTONS */
+
 .approval-btn {
     display: inline-block;
     text-decoration: none;
-    border: none;
-    padding: 10px 16px;
+    border: 1px solid transparent;
+    padding: 11px 17px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     font-size: 14px;
-    transition: 0.2s;
+    transition: .25s;
 }
 
 .approval-btn:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);
 }
 
 .btn-back {
-    background: white;
-    color: #174678;
+    background: rgba(5,20,30,.35);
+    color: #38d9ff;
+    border-color: rgba(56,217,255,.5);
+}
+
+.btn-back:hover {
+    background: rgba(56,217,255,.15);
 }
 
 .btn-approve {
-    background: #16a34a;
+    background: rgba(22,163,74,.85);
     color: white;
+    border-color: #4ade80;
+}
+
+.btn-approve:hover {
+    background: #15803d;
 }
 
 .btn-reject {
-    background: #dc2626;
+    background: rgba(220,38,38,.85);
     color: white;
+    border-color: #f87171;
 }
 
+.btn-reject:hover {
+    background: #b91c1c;
+}
+
+/* SUMMARY */
+
 .approval-summary {
-    background: #eff6ff;
-    border-left: 5px solid #2563eb;
-    padding: 18px;
+    background: rgba(5,20,30,.22);
+    border: 1px solid rgba(56,217,255,.45);
+    border-left: 5px solid #38d9ff;
+    backdrop-filter: blur(3px);
+    padding: 18px 20px;
     border-radius: 10px;
     margin-bottom: 22px;
+    color: #eaf6ff;
 }
 
 .approval-summary strong {
-    font-size: 25px;
-    color: #174678;
+    display: block;
+    margin-top: 6px;
+    font-size: 27px;
+    color: #38d9ff;
 }
+
+/* STAFF GRID */
 
 .staff-grid {
     display: grid;
@@ -90,40 +125,59 @@
 }
 
 .staff-card {
-    background: rgba(255, 255, 255, 0.97);
+    min-width: 0;
+    background: rgba(5,20,30,.22);
+    border: 1px solid rgba(56,217,255,.45);
+    border-top: 3px solid #38d9ff;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     border-radius: 14px;
     padding: 22px;
-    box-shadow: 0 5px 18px #00000012;
-    border-top: 4px solid #2563eb;
+    box-shadow: 0 7px 20px rgba(0,0,0,.18);
     overflow-wrap: anywhere;
-    animation: appear 0.4s ease;
+    animation: appear .4s ease;
+    transition: .25s;
+}
+
+.staff-card:hover {
+    background: rgba(5,20,30,.38);
+    border-color: rgba(56,217,255,.8);
+    transform: translateY(-3px);
 }
 
 .staff-card h3 {
-    margin-top: 0;
-    color: #17365d;
+    margin: 0 0 17px;
+    color: #38d9ff;
     font-size: 21px;
+    overflow-wrap: anywhere;
 }
 
 .staff-info {
-    margin: 10px 0;
-    color: #475569;
-    line-height: 1.5;
+    margin: 12px 0;
+    color: #eaf6ff;
+    line-height: 1.6;
+    font-size: 14px;
 }
 
 .staff-info strong {
-    color: #1e293b;
+    color: #38d9ff;
 }
+
+/* PENDING BADGE */
 
 .pending-badge {
     display: inline-block;
-    background: #fef3c7;
-    color: #92400e;
-    padding: 6px 10px;
+    background: rgba(245,158,11,.15);
+    color: #fcd34d;
+    border: 1px solid rgba(245,158,11,.5);
+    padding: 7px 12px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: bold;
+    margin-top: 5px;
 }
+
+/* CARD ACTIONS */
 
 .card-actions {
     display: flex;
@@ -134,28 +188,42 @@
 
 .card-actions form {
     flex: 1;
+    min-width: 120px;
 }
 
 .card-actions button {
     width: 100%;
 }
 
+/* EMPTY STATE */
+
 .empty-state {
     text-align: center;
     padding: 40px 20px;
-    background: white;
+    background: rgba(5,20,30,.22);
+    border: 1px solid rgba(56,217,255,.45);
     border-radius: 14px;
-    box-shadow: 0 5px 18px #00000010;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    box-shadow: 0 7px 20px rgba(0,0,0,.18);
 }
 
 .empty-state h2 {
-    color: #174678;
+    color: #38d9ff;
+    margin-bottom: 12px;
 }
+
+.empty-state p {
+    color: #eaf6ff;
+    line-height: 1.6;
+}
+
+/* ANIMATION */
 
 @keyframes appear {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
     }
     to {
         opacity: 1;
@@ -163,10 +231,12 @@
     }
 }
 
+/* MOBILE RESPONSIVE */
+
 @media (max-width: 700px) {
     .approval-page {
         padding: 12px;
-        margin: 10px auto;
+        margin: 12px auto;
     }
 
     .approval-header {
@@ -174,7 +244,15 @@
     }
 
     .approval-header h1 {
-        font-size: 24px;
+        font-size: 22px;
+    }
+
+    .approval-actions {
+        flex-direction: column;
+    }
+
+    .approval-actions a {
+        text-align: center;
     }
 
     .staff-grid {
@@ -188,12 +266,25 @@
     .card-actions {
         flex-direction: column;
     }
+
+    .card-actions form {
+        width: 100%;
+    }
+
+    .approval-summary {
+        padding: 16px;
+    }
 }
 </style>
+{% endblock %}
+
+
+{% block content %}
 
 <div class="approval-page">
 
     <header class="approval-header">
+
         <h1>Staff Approval Management</h1>
 
         <p>
@@ -202,6 +293,7 @@
         </p>
 
         <div class="approval-actions">
+
             <a href="{{ url_for('hod_dashboard') }}"
                class="approval-btn btn-back">
                 Back to Dashboard
@@ -211,13 +303,22 @@
                class="approval-btn btn-back">
                 Notifications
             </a>
+
         </div>
+
     </header>
 
+
+    <!-- PENDING REQUEST SUMMARY -->
+
     <div class="approval-summary">
+
         <div>Pending Staff Requests</div>
+
         <strong>{{ staff_members|length }}</strong>
+
     </div>
+
 
     {% if staff_members %}
 
@@ -276,13 +377,16 @@
                             ) }}"
                             onsubmit="return confirm('Approve this staff account?');"
                         >
+
                             <button
                                 type="submit"
                                 class="approval-btn btn-approve"
                             >
                                 Approve Staff
                             </button>
+
                         </form>
+
 
                         <form
                             method="POST"
@@ -293,12 +397,14 @@
                             ) }}"
                             onsubmit="return confirm('Reject this staff registration?');"
                         >
+
                             <button
                                 type="submit"
                                 class="approval-btn btn-reject"
                             >
                                 Reject Staff
                             </button>
+
                         </form>
 
                     </div>
@@ -312,11 +418,14 @@
     {% else %}
 
         <div class="empty-state">
+
             <h2>No Pending Staff Requests</h2>
+
             <p>
                 There are currently no staff registration requests
                 awaiting your approval.
             </p>
+
         </div>
 
     {% endif %}

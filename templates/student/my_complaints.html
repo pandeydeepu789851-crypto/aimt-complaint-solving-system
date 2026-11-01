@@ -3,158 +3,268 @@
 {% block content %}
 
 <style>
-    .complaints-page {
+    .tracking-page {
         max-width: 1150px;
-        margin: 25px auto;
-        padding: 24px;
-        color: #ffffff;
+        margin: 30px auto;
+        padding: 20px;
+        color: #fff;
     }
 
-    .complaints-heading {
-        color: #ffffff;
-        font-size: 30px;
+    .tracking-heading {
+        font-size: 32px;
         font-weight: 800;
-        text-shadow: 0 2px 8px #000000;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        text-shadow: 0 3px 12px #000;
     }
 
-    .complaints-intro {
-        color: #f0f4ff;
-        font-size: 16px;
+    .tracking-intro {
+        color: #dceaff;
+        margin-bottom: 25px;
         line-height: 1.7;
     }
 
-    .complaints-card {
-        margin-top: 24px;
-        padding: 20px;
-        background: rgba(7, 18, 40, 0.95);
-        border: 1px solid rgba(180, 205, 255, 0.4);
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        overflow-x: auto;
+    .glass-card {
+        background: rgba(255,255,255,0.10);
+        border: 1px solid rgba(255,255,255,0.25);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: 20px;
+        padding: 22px;
+        margin-bottom: 25px;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+        transition: transform .3s, box-shadow .3s;
     }
 
-    .complaints-table {
-        width: 100%;
-        min-width: 700px;
-        border-collapse: collapse;
-        color: #ffffff;
+    .glass-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.35);
     }
 
-    .complaints-table th {
-        background: #234779;
-        color: #ffffff;
-        padding: 15px 12px;
-        text-align: left;
-        border-bottom: 2px solid #8ebaff;
-        white-space: nowrap;
+    .complaint-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 15px;
     }
 
-    .complaints-table td {
-        padding: 14px 12px;
-        color: #f3f6ff;
-        border-bottom: 1px solid #40516e;
+    .complaint-id {
+        color: #b9d9ff;
+        font-weight: 700;
+    }
+
+    .complaint-title {
+        font-size: 22px;
+        font-weight: 800;
+        margin: 10px 0;
         overflow-wrap: anywhere;
     }
 
-    .complaints-table tbody tr:nth-child(even) {
-        background: rgba(255, 255, 255, 0.06);
+    .complaint-info {
+        color: #e2edff;
+        line-height: 1.8;
+        font-size: 14px;
     }
 
-    .complaints-table tbody tr:hover {
-        background: rgba(83, 145, 235, 0.2);
-    }
-
-    .status {
+    .status-badge {
         display: inline-block;
-        padding: 7px 11px;
-        border-radius: 20px;
+        padding: 8px 14px;
+        border-radius: 30px;
         font-size: 12px;
         font-weight: 800;
-        white-space: nowrap;
+        background: rgba(255,255,255,.18);
+        border: 1px solid rgba(255,255,255,.3);
     }
 
-    .submitted {
-        background: #fff0bd;
-        color: #674800;
+    .status-submitted { color: #ffe49a; }
+    .status-progress { color: #9ed0ff; }
+    .status-forwarded { color: #e0b8ff; }
+    .status-resolved { color: #9bffc1; }
+    .status-rejected { color: #ffaaaa; }
+
+    .timeline-heading {
+        font-size: 19px;
+        font-weight: 800;
+        margin: 25px 0 20px;
     }
 
-    .in-progress {
-        background: #d5e8ff;
-        color: #123e80;
+    .timeline {
+        position: relative;
+        margin: 20px 0 10px 8px;
+        padding-left: 30px;
     }
 
-    .forwarded {
-        background: #ead8ff;
-        color: #542080;
+    .timeline::before {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 10px;
+        bottom: 10px;
+        width: 3px;
+        background: rgba(255,255,255,.2);
+        border-radius: 10px;
     }
 
-    .resolved {
-        background: #d1f5df;
-        color: #145c32;
+    .timeline-item {
+        position: relative;
+        padding: 0 0 27px 15px;
+        animation: slideIn .6s ease both;
     }
 
-    .rejected {
-        background: #ffdddd;
-        color: #921f1f;
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -27px;
+        top: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #718096;
+        border: 3px solid rgba(255,255,255,.7);
+        z-index: 2;
+    }
+
+    .timeline-item.completed::before {
+        background: #36e69a;
+        box-shadow: 0 0 12px rgba(54,230,154,.7);
+    }
+
+    .timeline-item.current::before {
+        background: #48a8ff;
+        box-shadow: 0 0 0 6px rgba(72,168,255,.18);
+        animation: pulse 1.6s infinite;
+    }
+
+    .timeline-title {
+        font-weight: 800;
+        font-size: 15px;
+    }
+
+    .timeline-description {
+        color: #d4e4ff;
+        font-size: 13px;
+        margin-top: 5px;
+        line-height: 1.6;
+    }
+
+    .progress-track {
+        width: 100%;
+        height: 9px;
+        background: rgba(255,255,255,.15);
+        border-radius: 20px;
+        overflow: hidden;
+        margin: 15px 0 8px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #38bdf8, #34e69a);
+        border-radius: 20px;
+        transition: width 1.2s ease;
+    }
+
+    .progress-label {
+        color: #cce3ff;
+        font-size: 12px;
+        text-align: right;
+    }
+
+    .response-box {
+        margin-top: 18px;
+        padding: 15px;
+        background: rgba(0,0,0,.20);
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: 13px;
+    }
+
+    .response-box h4 {
+        margin: 0 0 10px;
+        color: #a9d5ff;
+    }
+
+    .response-item {
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        color: #edf5ff;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+    }
+
+    .response-item:last-child {
+        border-bottom: none;
     }
 
     .empty-message {
-        padding: 35px 15px;
         text-align: center;
-        color: #ffffff;
+        padding: 35px 15px;
     }
 
     .empty-message h3 {
-        color: #ffffff;
-        font-size: 22px;
+        font-size: 23px;
     }
 
     .empty-message p {
-        color: #e1eaff;
-        line-height: 1.7;
+        color: #dceaff;
     }
 
     .new-complaint-button {
         display: inline-block;
-        margin-top: 22px;
         padding: 13px 20px;
-        border-radius: 10px;
-        background: #1764c0;
-        color: #ffffff !important;
-        font-weight: 800;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #1685e8, #1555ad);
+        color: white !important;
         text-decoration: none;
-        border: 1px solid #a8ceff;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s, background 0.2s;
+        font-weight: 800;
+        transition: transform .25s, box-shadow .25s;
+        box-shadow: 0 6px 18px rgba(0,0,0,.3);
     }
 
     .new-complaint-button:hover {
-        background: #0d4b96;
-        transform: translateY(-3px);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,.4);
     }
 
-    .complaint-flash {
-        padding: 12px 15px;
-        margin: 12px 0;
-        background: #123c2a;
-        color: #e0ffeb;
-        border: 1px solid #4ac985;
-        border-radius: 9px;
+    .flash-message {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        background: rgba(20,130,75,.35);
+        border: 1px solid rgba(100,255,170,.5);
     }
 
-    @media (max-width: 600px) {
-        .complaints-page {
-            padding: 14px;
-            margin: 12px auto;
-        }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
 
-        .complaints-heading {
-            font-size: 24px;
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
         }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-        .complaints-card {
+    @media(max-width:600px) {
+        .tracking-page {
             padding: 12px;
+            margin: 15px auto;
+        }
+
+        .tracking-heading {
+            font-size: 25px;
+        }
+
+        .glass-card {
+            padding: 16px;
+        }
+
+        .complaint-title {
+            font-size: 19px;
         }
 
         .new-complaint-button {
@@ -163,79 +273,223 @@
         }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-        .new-complaint-button {
+    @media(prefers-reduced-motion: reduce) {
+        .glass-card,
+        .timeline-item,
+        .timeline-item.current::before,
+        .progress-fill {
+            animation: none;
             transition: none;
         }
     }
 </style>
 
-<div class="complaints-page">
-    <h1 class="complaints-heading">📋 My Complaints</h1>
+<div class="tracking-page">
 
+    <h1 class="tracking-heading">📋 My Complaint Tracking</h1>
 
-<p class="complaints-intro">
-    View the status and submission date of all your complaints here.
-</p>
+    <p class="tracking-intro">
+        Track your complaints and view their latest status,
+        staff responses and HOD updates.
+    </p>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-        <div class="complaint-flash">{{ message }}</div>
-    {% endfor %}
-{% endwith %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
 
-<div class="complaints-card">
     {% if complaints %}
-        <table class="complaints-table">
-            <thead>
-                <tr>
-                    <th>Complaint ID</th>
-                    <th>Title</th>
-                    <th>Department</th>
-                    <th>Status</th>
-                    <th>Submitted On</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                {% for complaint in complaints %}
-                    <tr>
-                        <td>#{{ complaint.id }}</td>
-                        <td>{{ complaint.title }}</td>
-                        <td>{{ complaint.department }}</td>
-                        <td>
-                            {% set status = complaint.status %}
+        {% for complaint in complaints %}
 
-                            {% if status == 'RESOLVED' %}
-                                <span class="status resolved">Resolved</span>
-                            {% elif status == 'REJECTED' %}
-                                <span class="status rejected">Rejected</span>
-                            {% elif status == 'IN_PROGRESS' %}
-                                <span class="status in-progress">In Progress</span>
-                            {% elif status == 'FORWARDED_TO_HOD' %}
-                                <span class="status forwarded">Forwarded to HOD</span>
-                            {% elif status == 'SOLUTION_SENT_TO_STAFF' %}
-                                <span class="status forwarded">Solution Sent to Staff</span>
-                            {% else %}
-                                <span class="status submitted">Submitted</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ complaint.created_at }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% set status = complaint.status %}
+
+            {% if status == 'SUBMITTED' %}
+                {% set stage = 1 %}
+                {% set progress = 10 %}
+                {% set status_class = 'status-submitted' %}
+                {% set status_text = 'Submitted' %}
+
+            {% elif status == 'IN_PROGRESS' %}
+                {% set stage = 2 %}
+                {% set progress = 30 %}
+                {% set status_class = 'status-progress' %}
+                {% set status_text = 'In Progress' %}
+
+            {% elif status == 'FORWARDED_TO_HOD' %}
+                {% set stage = 3 %}
+                {% set progress = 55 %}
+                {% set status_class = 'status-forwarded' %}
+                {% set status_text = 'Forwarded to HOD' %}
+
+            {% elif status == 'SOLUTION_SENT_TO_STAFF' %}
+                {% set stage = 4 %}
+                {% set progress = 80 %}
+                {% set status_class = 'status-forwarded' %}
+                {% set status_text = 'Solution Sent to Staff' %}
+
+            {% elif status == 'RESOLVED' %}
+                {% set stage = 5 %}
+                {% set progress = 100 %}
+                {% set status_class = 'status-resolved' %}
+                {% set status_text = 'Resolved' %}
+
+            {% else %}
+                {% set stage = 0 %}
+                {% set progress = 0 %}
+                {% set status_class = 'status-rejected' %}
+                {% set status_text = 'Rejected' %}
+            {% endif %}
+
+            <div class="glass-card">
+
+                <div class="complaint-top">
+                    <span class="complaint-id">
+                        Complaint #{{ complaint.id }}
+                    </span>
+
+                    <span class="status-badge {{ status_class }}">
+                        {{ status_text }}
+                    </span>
+                </div>
+
+                <h2 class="complaint-title">
+                    {{ complaint.title }}
+                </h2>
+
+                <div class="complaint-info">
+                    Department: {{ complaint.department or 'N/A' }}<br>
+                    Course: {{ complaint.course or 'N/A' }}<br>
+                    Submitted: {{ complaint.created_at }}
+                </div>
+
+                {% if status != 'REJECTED' %}
+
+                    <div class="timeline-heading">
+                        Complaint Journey
+                    </div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill"
+                             style="width: {{ progress }}%;">
+                        </div>
+                    </div>
+
+                    <div class="progress-label">
+                        {{ progress }}% Progress
+                    </div>
+
+                    <div class="timeline">
+
+                        {% set steps = [
+                            ('Complaint Submitted', 'Your complaint has been received.'),
+                            ('Staff Reviewing', 'Staff is reviewing your complaint.'),
+                            ('Forwarded to HOD', 'Your complaint has been forwarded to HOD.'),
+                            ('Solution Sent to Staff', 'HOD response has been sent to staff.'),
+                            ('Complaint Resolved', 'Your complaint has been resolved.')
+                        ] %}
+
+                        {% for title, description in steps %}
+
+                            <div class="timeline-item
+                                {% if loop.index < stage %}completed
+                                {% elif loop.index == stage %}current
+                                {% endif %}">
+
+                                <div class="timeline-title">
+                                    {{ title }}
+                                    {% if loop.index < stage or status == 'RESOLVED' %}
+                                        ✓
+                                    {% endif %}
+                                </div>
+
+                                <div class="timeline-description">
+                                    {{ description }}
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="response-box">
+                        <h4>Complaint Rejected</h4>
+                        <p>
+                            Your complaint has been rejected.
+                            Please contact the concerned staff or HOD
+                            for further information.
+                        </p>
+                    </div>
+
+                {% endif %}
+
+                <div class="complaint-info">
+                    Assigned Staff:
+                    {{ complaint.staff_name or 'Not assigned yet' }}<br>
+
+                    Assigned HOD:
+                    {{ complaint.hod_name or 'Not assigned yet' }}<br>
+
+                    Last Updated:
+                    {{ complaint.updated_at or complaint.created_at }}
+                </div>
+
+                {% set responses = complaint_trackings.get(complaint.id, []) %}
+
+                {% if responses %}
+
+                    <div class="response-box">
+                        <h4>💬 Staff / HOD Responses</h4>
+
+                        {% for response in responses %}
+                            <div class="response-item">
+                                <strong>
+                                    {{ response.author_name or 'College Team' }}
+                                    ({{ response.author_role or 'Staff' }})
+                                </strong>
+
+                                <br>
+
+                                {{ response.solution }}
+
+                                <br>
+
+                                <small>
+                                    {{ response.created_at }}
+                                </small>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
     {% else %}
-        <div class="empty-message">
+
+        <div class="glass-card empty-message">
             <h3>No Complaints Yet</h3>
-            <p>Click the button below to submit a new complaint.</p>
+
+            <p>
+                You have not submitted any complaints.
+                Submit your first complaint to start tracking.
+            </p>
         </div>
+
     {% endif %}
+
+    <a class="new-complaint-button"
+       href="{{ url_for('new_complaint') }}">
+        + Submit New Complaint
+    </a>
+
 </div>
 
-<a class="new-complaint-button" href="{{ url_for('new_complaint') }}">
-    + Submit New Complaint
-</a>
-
-</div>
 {% endblock %}

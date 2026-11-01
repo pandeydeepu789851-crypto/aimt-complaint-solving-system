@@ -20,11 +20,11 @@
 
         body {
             min-height: 100vh;
-            color: #eaf6ff;
+            color: #ffffff;
             background:
                 linear-gradient(
-                    rgba(4, 15, 35, 0.65),
-                    rgba(4, 15, 35, 0.80)
+                    rgba(4, 15, 35, 0.18),
+                    rgba(4, 15, 35, 0.25)
                 ),
                 url("{{ url_for('static', filename='images/aimt-poster.png') }}")
                 center center / cover fixed no-repeat;
@@ -44,10 +44,10 @@
         }
 
         header {
-            background: rgba(5, 20, 39, 0.90);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid rgba(56, 217, 255, 0.4);
+            background: rgba(5, 20, 39, 0.12);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-bottom: 1px solid rgba(56, 217, 255, 0.45);
             padding: 16px 5%;
             display: flex;
             justify-content: space-between;
@@ -70,7 +70,7 @@
             width: 60px;
             height: 60px;
             object-fit: contain;
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 10px;
             padding: 4px;
             flex-shrink: 0;
@@ -83,7 +83,7 @@
         }
 
         .brand-text p {
-            color: #b8ccdd;
+            color: #e0efff;
             margin-top: 4px;
             font-size: 12px;
         }
@@ -120,22 +120,24 @@
         }
 
         .btn-primary {
-            background: #19c9ed;
+            background: rgba(25, 201, 237, 0.75);
             color: #06111d;
+            border-color: rgba(56, 217, 255, 0.8);
         }
 
         .btn-primary:hover {
-            background: #72e8ff;
+            background: rgba(114, 232, 255, 0.9);
         }
 
         .btn-secondary {
-            background: rgba(23, 55, 80, 0.92);
+            background: rgba(23, 55, 80, 0.25);
             color: white;
-            border-color: #37617d;
+            border-color: rgba(56, 217, 255, 0.5);
+            backdrop-filter: blur(3px);
         }
 
         .btn-secondary:hover {
-            background: #245271;
+            background: rgba(36, 82, 113, 0.45);
         }
 
         .hero {
@@ -153,7 +155,8 @@
             padding: 10px 18px;
             border: 1px solid rgba(56, 217, 255, 0.55);
             border-radius: 30px;
-            background: rgba(5, 20, 39, 0.70);
+            background: rgba(5, 20, 39, 0.12);
+            backdrop-filter: blur(3px);
             color: #b9f3ff;
             margin-bottom: 25px;
             font-size: 13px;
@@ -166,7 +169,7 @@
             line-height: 1.2;
             max-width: 1000px;
             margin-bottom: 22px;
-            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+            text-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
             animation: cardAppear 0.7s ease both;
         }
 
@@ -178,7 +181,8 @@
             max-width: 780px;
             font-size: clamp(15px, 2vw, 19px);
             line-height: 1.9;
-            color: #e0efff;
+            color: #ffffff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
             margin-bottom: 30px;
             animation: cardAppear 0.8s ease both;
         }
@@ -217,12 +221,14 @@
             color: #38d9ff;
             font-size: clamp(26px, 4vw, 38px);
             margin-bottom: 13px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
         }
 
         .section-description {
-            color: #e0efff;
+            color: #ffffff;
             line-height: 1.8;
             margin-bottom: 35px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65);
         }
 
         .feature-container {
@@ -236,11 +242,13 @@
         .feature-card {
             padding: 30px 23px;
             border-radius: 15px;
-            background: rgba(5, 20, 39, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(56, 217, 255, 0.30);
-            transition: transform 0.25s, border-color 0.25s;
+            background: rgba(5, 20, 39, 0.12);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(56, 217, 255, 0.45);
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.10);
+            transition: transform 0.25s, border-color 0.25s,
+                        background 0.25s;
             animation: cardAppear 0.7s ease both;
         }
 
@@ -254,6 +262,7 @@
 
         .feature-card:hover {
             transform: translateY(-8px);
+            background: rgba(5, 20, 39, 0.20);
             border-color: #38d9ff;
         }
 
@@ -269,9 +278,10 @@
         }
 
         .feature-card p {
-            color: #d6e6f5;
+            color: #ffffff;
             font-size: 15px;
             line-height: 1.9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         .how-it-works {
@@ -290,9 +300,18 @@
         .step {
             text-align: center;
             padding: 23px 15px;
-            background: rgba(5, 20, 39, 0.82);
-            border: 1px solid rgba(56, 217, 255, 0.25);
+            background: rgba(5, 20, 39, 0.12);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(56, 217, 255, 0.40);
             border-radius: 12px;
+            transition: 0.3s ease;
+        }
+
+        .step:hover {
+            background: rgba(5, 20, 39, 0.22);
+            transform: translateY(-5px);
+            border-color: #38d9ff;
         }
 
         .step-number {
@@ -315,7 +334,7 @@
         }
 
         .step p {
-            color: #d6e6f5;
+            color: #ffffff;
             font-size: 14px;
             line-height: 1.7;
         }
@@ -326,9 +345,12 @@
             width: 90%;
             max-width: 900px;
             padding: 35px 20px;
-            background: rgba(5, 20, 39, 0.88);
-            border: 1px solid rgba(56, 217, 255, 0.35);
+            background: rgba(5, 20, 39, 0.12);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(56, 217, 255, 0.45);
             border-radius: 16px;
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.10);
         }
 
         .bottom-cta h2 {
@@ -338,7 +360,7 @@
         }
 
         .bottom-cta p {
-            color: #d6e6f5;
+            color: #ffffff;
             line-height: 1.8;
             margin-bottom: 22px;
         }
@@ -346,9 +368,11 @@
         footer {
             text-align: center;
             padding: 24px 15px;
-            color: #b0c3d3;
-            background: rgba(5, 20, 39, 0.94);
-            border-top: 1px solid rgba(56, 217, 255, 0.25);
+            color: #ffffff;
+            background: rgba(5, 20, 39, 0.15);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-top: 1px solid rgba(56, 217, 255, 0.35);
             line-height: 1.9;
         }
 
@@ -505,9 +529,7 @@
 
             <article class="feature-card">
                 <div class="feature-icon">🎓</div>
-
                 <h3>Student</h3>
-
                 <p>
                     Create an account, submit complaints, track complaint
                     status and view the final solution when available.
@@ -516,9 +538,7 @@
 
             <article class="feature-card">
                 <div class="feature-icon">👨‍💻</div>
-
                 <h3>Staff</h3>
-
                 <p>
                     Review assigned complaints, manage progress, provide
                     updates and forward complaints to the HOD when required.
@@ -527,9 +547,7 @@
 
             <article class="feature-card">
                 <div class="feature-icon">🏫</div>
-
                 <h3>HOD</h3>
-
                 <p>
                     Review forwarded complaints, monitor their progress
                     and help ensure that student concerns are addressed.

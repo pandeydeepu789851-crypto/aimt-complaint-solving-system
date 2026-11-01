@@ -1,0 +1,338 @@
+
+{% extends "base.html" %}
+
+{% block title %}Student Profile | AIMT{% endblock %}
+
+{% block content %}
+
+<style>
+.profile-page {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+}
+
+.profile-header {
+    background: rgba(18, 60, 105, 0.18) !important;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: white;
+    padding: 25px;
+    border: 1px solid rgba(56, 217, 255, 0.45);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    color: #38d9ff;
+}
+
+.profile-header p {
+    color: #ffffff;
+}
+
+/* Main Profile Card */
+.profile-card,
+.complaint-card {
+    background: rgba(5, 20, 39, 0.08) !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 22px;
+    border: 1px solid rgba(56, 217, 255, 0.40);
+    border-radius: 13px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    color: #ffffff;
+}
+
+.profile-card h2 {
+    color: #38d9ff;
+}
+
+/* Profile Information Grid */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+/* Transparent Information Boxes */
+.info-item {
+    padding: 12px;
+    background: rgba(5, 20, 39, 0.06) !important;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: 1px solid rgba(56, 217, 255, 0.30);
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+    color: #ffffff !important;
+    transition: 0.3s ease;
+}
+
+.info-item:hover {
+    background: rgba(56, 217, 255, 0.10) !important;
+    border-color: rgba(56, 217, 255, 0.70);
+}
+
+.info-item strong {
+    display: block;
+    color: #38d9ff !important;
+    margin-bottom: 5px;
+}
+
+/* Account Status */
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(22, 163, 74, 0.20);
+    color: #86efac;
+    border: 1px solid #22c55e;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status.inactive {
+    background: rgba(220, 38, 38, 0.20);
+    color: #fca5a5;
+    border: 1px solid #ef4444;
+}
+
+/* Complaint Cards */
+.complaint-card h3 {
+    color: #38d9ff;
+}
+
+.complaint-details {
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.complaint-card p {
+    color: #ffffff;
+}
+
+.complaint-card strong {
+    color: #38d9ff;
+}
+
+/* Buttons */
+.back-btn,
+.complaint-btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    background: rgba(37, 99, 235, 0.65);
+    border: 1px solid #38d9ff;
+    color: white !important;
+    font-weight: bold;
+    transition: 0.25s ease;
+}
+
+.back-btn:hover,
+.complaint-btn:hover {
+    background: rgba(56, 217, 255, 0.30);
+    transform: translateY(-2px);
+}
+
+/* Empty Complaint Box */
+.empty-box {
+    text-align: center;
+    padding: 30px;
+    background: rgba(5, 20, 39, 0.06) !important;
+    border: 1px dashed rgba(56, 217, 255, 0.50);
+    border-radius: 12px;
+    color: #ffffff;
+}
+
+.empty-box h3 {
+    color: #38d9ff;
+}
+
+.empty-box p {
+    color: #ffffff;
+}
+
+.profile-page hr {
+    border: none;
+    border-top: 1px solid rgba(56, 217, 255, 0.35);
+    margin: 18px 0;
+}
+
+/* Mobile Responsive */
+@media(max-width: 650px) {
+    .profile-page {
+        padding: 12px;
+    }
+
+    .profile-header {
+        padding: 18px;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card,
+    .complaint-card {
+        padding: 16px;
+    }
+}
+</style>
+
+<div class="profile-page">
+
+    <!-- PROFILE HEADER -->
+
+    <div class="profile-header">
+
+        <h1>Student Profile</h1>
+
+        <p>Student information and complaint history</p>
+
+        <a href="{{ url_for('staff_student_search') }}"
+           class="back-btn">
+            Back to Search
+        </a>
+
+    </div>
+
+
+    <!-- STUDENT INFORMATION -->
+
+    <div class="profile-card">
+
+        <h2>{{ student['full_name'] }}</h2>
+
+        <span class="status {{ 'inactive' if not student['is_active'] else '' }}">
+            {{ 'Active' if student['is_active'] else 'Deactivated' }}
+        </span>
+
+        <hr>
+
+        <div class="profile-grid">
+
+            <div class="info-item">
+                <strong>Email</strong>
+                {{ student['email'] or 'Not Available' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Mobile</strong>
+                {{ student['mobile'] or 'Not Available' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Roll Number</strong>
+                {{ student['roll_number'] or 'Not Updated' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Course</strong>
+                {{ student['course'] or 'Not Available' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Year</strong>
+                {{ student['year'] or 'Not Available' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Department</strong>
+                {{ student['department'] or student['branch'] or 'Not Available' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Section</strong>
+                {{ student['section'] or 'Not Updated' }}
+            </div>
+
+            <div class="info-item">
+                <strong>Approval Status</strong>
+                {{ student['approval_status'] }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT COMPLAINTS -->
+
+    <h2 style="color:#38d9ff;">
+        Student Complaints ({{ complaints|length }})
+    </h2>
+
+    {% if complaints %}
+
+        {% for complaint in complaints %}
+
+            <div class="complaint-card">
+
+                <h3>{{ complaint['title'] }}</h3>
+
+                <p class="complaint-details">
+                    {{ complaint['description'] }}
+                </p>
+
+                <p>
+                    <strong>Complaint ID:</strong>
+                    {{ complaint['id'] }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ complaint['status'] }}
+                </p>
+
+                <p>
+                    <strong>Submitted:</strong>
+                    {{ complaint['created_at'] }}
+                </p>
+
+                <p>
+                    <strong>Assigned Staff:</strong>
+                    {{ complaint['staff_name'] or 'Not Assigned' }}
+                </p>
+
+                <p>
+                    <strong>Assigned HOD:</strong>
+                    {{ complaint['hod_name'] or 'Not Assigned' }}
+                </p>
+
+                {% if complaint['assigned_staff_id'] == user['id'] %}
+
+                    <a
+                        class="complaint-btn"
+                        href="{{ url_for(
+                            'staff_complaint_details',
+                            complaint_id=complaint['id']
+                        ) }}"
+                    >
+                        Open Complaint
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-box">
+
+            <h3>No Complaints Found</h3>
+
+            <p>This student has not submitted any complaints.</p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

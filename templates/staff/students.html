@@ -7,37 +7,51 @@
 
 <style>
     .students-page {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 25px auto;
         padding: 20px;
-        color: #263449;
+        color: #224e6f;
     }
 
     .page-header {
         padding: 28px;
         border-radius: 18px;
         margin-bottom: 25px;
-        background: linear-gradient(135deg, #142850, #27496d);
+        background: rgba(5, 20, 39, 0.78);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 1px solid rgba(56, 217, 255, 0.55);
         color: white;
-        box-shadow: 0 8px 25px rgba(0,0,0,.15);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
     }
 
     .page-header h1 {
         margin: 0 0 10px;
         font-size: 28px;
+        color: #38d9ff;
     }
 
     .page-header p {
         margin: 7px 0;
-        color: #e7eef8;
+        color: #dbeafe;
+        line-height: 1.6;
     }
 
     .section-card {
-        background: white;
+        background: rgba(5, 20, 39, 0.70) !important;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 1px solid rgba(56, 217, 255, 0.65);
         border-radius: 18px;
         padding: 24px;
         margin-bottom: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,.07);
+        box-shadow: 0 5px 22px rgba(0, 0, 0, 0.25);
+        transition: 0.3s ease;
+    }
+
+    .section-card:hover {
+        border-color: #38d9ff;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
     }
 
     .section-heading {
@@ -51,14 +65,15 @@
 
     .section-heading h2 {
         margin: 0;
-        color: #142850;
+        color: #ffffff;
         font-size: 22px;
     }
 
     .count-badge {
-        background: #e8eef6;
-        color: #142850;
-        padding: 8px 14px;
+        background: rgba(56, 217, 255, 0.15);
+        color: #38d9ff;
+        border: 1px solid rgba(56, 217, 255, 0.5);
+        padding: 9px 16px;
         border-radius: 20px;
         font-weight: 700;
         font-size: 13px;
@@ -73,64 +88,89 @@
     .dashboard-button {
         display: inline-block;
         text-decoration: none;
-        border: none;
-        border-radius: 9px;
-        padding: 10px 16px;
+        border: 1px solid rgba(56, 217, 255, 0.3);
+        border-radius: 11px;
+        padding: 12px 18px;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
-        transition: .2s;
+        transition: all 0.3s ease;
     }
 
     .dashboard-button:hover {
-        transform: translateY(-2px);
-        opacity: .9;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(56, 217, 255, 0.2);
     }
 
     .primary-button {
-        background: #27496d;
-        color: white;
+        background: rgba(25, 201, 237, 0.22);
+        color: #ffffff;
+        border-color: #38d9ff;
     }
 
     .secondary-button {
-        background: #e8eef6;
-        color: #142850;
+        background: rgba(35, 75, 110, 0.55);
+        color: #ffffff;
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover {
+        background: rgba(56, 217, 255, 0.25);
+        color: #ffffff;
+        border-color: #38d9ff;
     }
 
     .table-wrapper {
         width: 100%;
         overflow-x: auto;
+        border-radius: 12px;
     }
 
     .students-table {
         width: 100%;
-        min-width: 950px;
+        min-width: 1150px;
         border-collapse: collapse;
+        background: transparent !important;
     }
 
-    .students-table th {
-        background: #142850;
-        color: white;
-        padding: 15px 12px;
+    .students-table thead th {
+        background: rgba(20, 40, 80, 0.90) !important;
+        color: #ffffff !important;
+        padding: 16px 12px;
         text-align: left;
         font-size: 13px;
         white-space: nowrap;
+        border-bottom: 1px solid rgba(56, 217, 255, 0.65);
     }
 
-    .students-table td {
-        padding: 14px 12px;
-        border-bottom: 1px solid #e5eaf1;
-        color: #374151;
+    .students-table tbody tr,
+    .students-table tbody td {
+        background-color: rgba(5, 20, 39, 0.28) !important;
+        color: #ffffff !important;
+        transition: background-color 0.2s ease;
+    }
+
+    .students-table tbody td {
+        padding: 15px 12px;
+        border-bottom: 1px solid rgba(56, 217, 255, 0.22);
         font-size: 14px;
     }
 
-    .students-table tr:hover {
-        background: #f5f8fc;
+    .students-table tbody tr:hover td {
+        background-color: rgba(56, 217, 255, 0.15) !important;
+    }
+
+    .students-table td strong {
+        color: #ffffff !important;
+    }
+
+    .students-table td {
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
     }
 
     .status-badge {
         display: inline-block;
-        padding: 6px 10px;
+        padding: 7px 12px;
         border-radius: 20px;
         font-size: 11px;
         font-weight: 700;
@@ -138,35 +178,77 @@
     }
 
     .status-approved {
-        background: #dcfce7;
-        color: #166534;
+        background: rgba(22, 163, 74, 0.22);
+        color: #86efac;
+        border: 1px solid #22c55e;
     }
 
     .status-pending {
-        background: #fff0d9;
-        color: #945600;
+        background: rgba(245, 158, 11, 0.20);
+        color: #fcd34d;
+        border: 1px solid #f59e0b;
     }
 
     .status-rejected {
-        background: #fee2e2;
-        color: #991b1b;
+        background: rgba(220, 38, 38, 0.20);
+        color: #fca5a5;
+        border: 1px solid #ef4444;
+    }
+
+    .deactivate-btn {
+        background: #dc2626;
+        color: #ffffff;
+    }
+
+    .activate-btn {
+        background: #16a34a;
+        color: #ffffff;
+    }
+
+    .account-action-form {
+        margin: 0;
+    }
+
+    .account-action-btn {
+        border: none;
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.25s ease;
+    }
+
+    .account-action-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
     }
 
     .empty-state {
         padding: 35px 15px;
         text-align: center;
-        color: #657286;
-        border: 1px dashed #cbd5e1;
+        color: #dbeafe;
+        border: 1px dashed rgba(56, 217, 255, 0.55);
         border-radius: 14px;
-        background: #fbfcfe;
+        background: rgba(5, 20, 39, 0.35);
     }
 
     .empty-state h3 {
-        color: #142850;
+        color: #38d9ff;
         margin-bottom: 8px;
     }
 
-    @media (max-width: 600px) {
+    .students-table a,
+    .students-table a:visited,
+    .students-table a:hover,
+    .students-table a:focus,
+    .students-table a:active {
+        color: #38d9ff !important;
+        background: transparent !important;
+    }
+
+    @media (max-width: 768px) {
         .students-page {
             padding: 12px;
             margin: 12px auto;
@@ -183,14 +265,48 @@
         .section-card {
             padding: 16px;
         }
+
+        .section-heading h2 {
+            font-size: 19px;
+        }
+
+        .quick-links {
+            flex-direction: column;
+        }
+
+        .dashboard-button {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .students-table {
+            min-width: 1150px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .page-header h1 {
+            font-size: 21px;
+        }
+
+        .page-header p {
+            font-size: 13px;
+        }
+
+        .section-card {
+            padding: 13px;
+        }
     }
 </style>
 
 <div class="students-page">
 
-    <!-- Page Header -->
+    <!-- PAGE HEADER -->
+
     <section class="page-header">
-        <h1>All Students</h1>
+
+        <h1>Student Account Management</h1>
 
         <p>
             Welcome,
@@ -200,12 +316,15 @@
         <p>AIMT Complaint Solving System</p>
 
         <p>
-            Here you can view students belonging to your department,
-            year and section.
+            View and manage active and deactivated students
+            belonging to your department.
         </p>
+
     </section>
 
-    <!-- Quick Access -->
+
+    <!-- QUICK ACCESS -->
+
     <section class="section-card">
 
         <div class="section-heading">
@@ -238,15 +357,19 @@
 
     </section>
 
-    <!-- Students List -->
+
+    <!-- ACTIVE STUDENTS -->
+
     <section class="section-card">
 
         <div class="section-heading">
-            <h2>Students List</h2>
+
+            <h2>Active Students</h2>
 
             <span class="count-badge">
                 {{ students|length }} Students
             </span>
+
         </div>
 
         {% if students %}
@@ -266,7 +389,8 @@
                         <th>Year</th>
                         <th>Branch</th>
                         <th>Section</th>
-                        <th>Status</th>
+                        <th>Approval Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -277,6 +401,7 @@
                     {% set status = student["approval_status"] or "PENDING" %}
 
                     <tr>
+
                         <td>{{ loop.index }}</td>
 
                         <td>
@@ -285,35 +410,24 @@
                             </strong>
                         </td>
 
-                        <td>
-                            {{ student["roll_number"] or "-" }}
-                        </td>
+                        <td>{{ student["roll_number"] or "-" }}</td>
 
-                        <td>
-                            {{ student["email"] or "-" }}
-                        </td>
+                        <td>{{ student["email"] or "-" }}</td>
 
-                        <td>
-                            {{ student["mobile"] or "-" }}
-                        </td>
+                        <td>{{ student["mobile"] or "-" }}</td>
 
-                        <td>
-                            {{ student["course"] or "-" }}
-                        </td>
+                        <td>{{ student["course"] or "-" }}</td>
 
-                        <td>
-                            {{ student["year"] or "-" }}
-                        </td>
+                        <td>{{ student["year"] or "-" }}</td>
 
                         <td>
                             {{ student["department"] or student["branch"] or "-" }}
                         </td>
 
-                        <td>
-                            {{ student["section"] or "-" }}
-                        </td>
+                        <td>{{ student["section"] or "-" }}</td>
 
                         <td>
+
                             <span class="status-badge
                                 {% if status == 'APPROVED' %}
                                     status-approved
@@ -322,9 +436,37 @@
                                 {% else %}
                                     status-pending
                                 {% endif %}">
+
                                 {{ status }}
+
                             </span>
+
                         </td>
+
+                        <td>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'staff_student_account',
+                                    user_id=student['id'],
+                                    action='deactivate'
+                                ) }}"
+                                class="account-action-form"
+                                onsubmit="return confirm('Are you sure you want to deactivate this student account?');"
+                            >
+
+                                <button type="submit"
+                                        class="account-action-btn deactivate-btn">
+
+                                    Deactivate
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
                     </tr>
 
                     {% endfor %}
@@ -338,12 +480,140 @@
         {% else %}
 
         <div class="empty-state">
-            <h3>No Students Found</h3>
+
+            <h3>No Active Students Found</h3>
 
             <p>
-                No students are currently available
-                for your department, year and section.
+                There are currently no active students available.
             </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- DEACTIVATED STUDENTS -->
+
+    <section class="section-card">
+
+        <div class="section-heading">
+
+            <h2>Deactivated Students</h2>
+
+            <span class="count-badge">
+                {{ deactivated_students|length }} Students
+            </span>
+
+        </div>
+
+        {% if deactivated_students %}
+
+        <div class="table-wrapper">
+
+            <table class="students-table">
+
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Branch</th>
+                        <th>Section</th>
+                        <th>Approval Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for student in deactivated_students %}
+
+                    {% set status = student["approval_status"] or "PENDING" %}
+
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+
+                        <td>
+                            <strong>
+                                {{ student["full_name"] or "Student" }}
+                            </strong>
+                        </td>
+
+                        <td>{{ student["roll_number"] or "-" }}</td>
+
+                        <td>{{ student["email"] or "-" }}</td>
+
+                        <td>{{ student["mobile"] or "-" }}</td>
+
+                        <td>{{ student["course"] or "-" }}</td>
+
+                        <td>{{ student["year"] or "-" }}</td>
+
+                        <td>
+                            {{ student["department"] or student["branch"] or "-" }}
+                        </td>
+
+                        <td>{{ student["section"] or "-" }}</td>
+
+                        <td>
+
+                            <span class="status-badge status-rejected">
+                                DEACTIVATED
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'staff_student_account',
+                                    user_id=student['id'],
+                                    action='activate'
+                                ) }}"
+                                class="account-action-form"
+                                onsubmit="return confirm('Are you sure you want to activate this student account?');"
+                            >
+
+                                <button type="submit"
+                                        class="account-action-btn activate-btn">
+
+                                    Activate
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <h3>No Deactivated Students</h3>
+
+            <p>
+                There are currently no deactivated student accounts.
+            </p>
+
         </div>
 
         {% endif %}

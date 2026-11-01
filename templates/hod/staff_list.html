@@ -1,90 +1,269 @@
+
 {% extends "base.html" %}
 
-{% block content %}
+{% block title %}Staff Management | AIMT{% endblock %}
 
+{% block head %}
 <style>
+.staff-container {
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 20px;
+    color: #eaf6ff;
+    animation: staffAppear .5s ease;
+}
+
+/* STAFF CARD */
+
+.staff-card {
+    background: rgba(5, 20, 30, .22);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    color: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid rgba(56, 217, 255, .5);
+    box-shadow: 0 8px 25px rgba(0,0,0,.2);
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.staff-card h2 {
+    color: #38d9ff;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 22px;
+}
+
+.staff-card p {
+    color: #dbeafe;
+    line-height: 1.6;
+}
+
+/* COUNT BADGE */
+
+.list-count {
+    display: inline-block;
+    background: rgba(56, 217, 255, .14);
+    color: #38d9ff;
+    border: 1px solid rgba(56,217,255,.65);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* TABLE */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 18px;
+    border-radius: 9px;
+}
+
+.staff-table {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+}
+
+.staff-table th,
+.staff-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid rgba(56, 217, 255, .22);
+    text-align: left;
+    color: #ffffff;
+    font-size: 13px;
+}
+
+.staff-table th {
+    background: rgba(5, 20, 39, .55);
+    color: #38d9ff;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.staff-table tbody td {
+    background: rgba(5, 20, 30, .18);
+}
+
+.staff-table tbody tr {
+    transition: .2s;
+}
+
+.staff-table tbody tr:hover td {
+    background: rgba(56, 217, 255, .12);
+}
+
+/* STATUS BADGES */
+
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.approved {
+    background: rgba(22, 163, 74, .18);
+    color: #86efac;
+    border: 1px solid #22c55e;
+}
+
+.pending {
+    background: rgba(245, 158, 11, .17);
+    color: #fcd34d;
+    border: 1px solid #f59e0b;
+}
+
+.rejected {
+    background: rgba(220, 38, 38, .18);
+    color: #fca5a5;
+    border: 1px solid #ef4444;
+}
+
+.active-account {
+    background: rgba(22, 163, 74, .18);
+    color: #86efac;
+    border: 1px solid #22c55e;
+}
+
+.inactive-account {
+    background: rgba(220, 38, 38, .18);
+    color: #fca5a5;
+    border: 1px solid #ef4444;
+}
+
+/* ACCOUNT ACTIONS */
+
+.account-action-form {
+    margin: 0;
+}
+
+.account-btn {
+    border: 1px solid transparent;
+    border-radius: 7px;
+    padding: 9px 13px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    white-space: nowrap;
+    transition: .25s ease;
+}
+
+.account-btn:hover {
+    transform: translateY(-2px);
+    opacity: .9;
+}
+
+.deactivate-btn {
+    background: rgba(220,38,38,.85);
+    border-color: #f87171;
+}
+
+.activate-btn {
+    background: rgba(22,163,74,.85);
+    border-color: #4ade80;
+}
+
+/* BACK BUTTON */
+
+.back-btn {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 11px 19px;
+    background: rgba(5,20,30,.3);
+    color: #38d9ff;
+    text-decoration: none;
+    border: 1px solid rgba(56,217,255,.55);
+    border-radius: 8px;
+    font-weight: bold;
+    transition: .25s ease;
+}
+
+.back-btn:hover {
+    background: rgba(56,217,255,.15);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* EMPTY ROW */
+
+.empty-row {
+    text-align: center !important;
+    padding: 28px !important;
+    color: #dbeafe !important;
+}
+
+/* ANIMATION */
+
+@keyframes staffAppear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MOBILE RESPONSIVE */
+
+@media(max-width: 700px) {
     .staff-container {
-        max-width: 1100px;
-        margin: 30px auto;
-        padding: 20px;
+        padding: 12px;
+        margin: 12px auto;
     }
 
     .staff-card {
-        background: white;
-        padding: 25px;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        padding: 17px;
+    }
+
+    .staff-card h2 {
+        font-size: 19px;
+        line-height: 1.5;
     }
 
     .staff-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .staff-table th,
-    .staff-table td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-
-    .staff-table th {
-        background: #173b68;
-        color: white;
-    }
-
-    .status {
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .approved {
-        background: #d1fae5;
-        color: #065f46;
-    }
-
-    .pending {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .rejected {
-        background: #fee2e2;
-        color: #991b1b;
+        min-width: 1000px;
     }
 
     .back-btn {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 18px;
-        background: #173b68;
-        color: white;
-        text-decoration: none;
-        border-radius: 7px;
+        display: block;
+        text-align: center;
     }
-
-    @media(max-width: 700px) {
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        .staff-table {
-            min-width: 750px;
-        }
-    }
+}
 </style>
+{% endblock %}
+
+
+{% block content %}
 
 <div class="staff-container">
+
+    <!-- ACTIVE STAFF LIST -->
+
     <div class="staff-card">
 
-        <h2>All Staff Members</h2>
-        <p>View staff members in your department.</p>
+        <h2>
+            Active Staff Members
+            <span class="list-count">{{ staff_members|length }}</span>
+        </h2>
+
+        <p>
+            View and manage active staff members in your department.
+        </p>
 
         <div class="table-wrapper">
+
             <table class="staff-table">
+
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -93,23 +272,34 @@
                         <th>Mobile</th>
                         <th>Department</th>
                         <th>Year</th>
-                        <th>Status</th>
+                        <th>Approval Status</th>
+                        <th>Account Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
+
                     {% for staff in staff_members %}
+
+                    {% set status = (staff.approval_status or '')|upper %}
+
                     <tr>
                         <td>{{ staff.id }}</td>
+
                         <td>{{ staff.full_name }}</td>
+
                         <td>{{ staff.email }}</td>
+
                         <td>{{ staff.mobile or '-' }}</td>
-                        <td>{{ staff.department or staff.branch or '-' }}</td>
+
+                        <td>
+                            {{ staff.department or staff.branch or '-' }}
+                        </td>
+
                         <td>{{ staff.year or '-' }}</td>
 
                         <td>
-                            {% set status = (staff.approval_status or '')|upper %}
-
                             {% if status == 'APPROVED' %}
                                 <span class="status approved">Approved</span>
                             {% elif status == 'REJECTED' %}
@@ -118,22 +308,153 @@
                                 <span class="status pending">Pending</span>
                             {% endif %}
                         </td>
+
+                        <td>
+                            <span class="status active-account">
+                                ACTIVE
+                            </span>
+                        </td>
+
+                        <td>
+                            <form
+                                method="POST"
+                                action="{{ url_for('hod_staff_account', user_id=staff.id, action='deactivate') }}"
+                                class="account-action-form"
+                                onsubmit="return confirm('Are you sure you want to deactivate this staff account?');"
+                            >
+                                <button type="submit"
+                                        class="account-btn deactivate-btn">
+                                    Deactivate
+                                </button>
+                            </form>
+                        </td>
                     </tr>
 
                     {% else %}
+
                     <tr>
-                        <td colspan="7">No staff members found.</td>
+                        <td colspan="9" class="empty-row">
+                            No active staff members found.
+                        </td>
                     </tr>
+
                     {% endfor %}
+
                 </tbody>
+
             </table>
+
         </div>
 
-        <a href="{{ url_for('hod_dashboard') }}" class="back-btn">
-            Back to Dashboard
-        </a>
+    </div>
+
+
+    <!-- DEACTIVATED STAFF LIST -->
+
+    <div class="staff-card">
+
+        <h2>
+            Deactivated Staff Members
+            <span class="list-count">{{ deactivated_staff|length }}</span>
+        </h2>
+
+        <p>
+            View deactivated staff members and activate their accounts again.
+        </p>
+
+        <div class="table-wrapper">
+
+            <table class="staff-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Approval Status</th>
+                        <th>Account Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for staff in deactivated_staff %}
+
+                    {% set status = (staff.approval_status or '')|upper %}
+
+                    <tr>
+                        <td>{{ staff.id }}</td>
+
+                        <td>{{ staff.full_name }}</td>
+
+                        <td>{{ staff.email }}</td>
+
+                        <td>{{ staff.mobile or '-' }}</td>
+
+                        <td>
+                            {{ staff.department or staff.branch or '-' }}
+                        </td>
+
+                        <td>{{ staff.year or '-' }}</td>
+
+                        <td>
+                            {% if status == 'APPROVED' %}
+                                <span class="status approved">Approved</span>
+                            {% elif status == 'REJECTED' %}
+                                <span class="status rejected">Rejected</span>
+                            {% else %}
+                                <span class="status pending">Pending</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="status inactive-account">
+                                DEACTIVATED
+                            </span>
+                        </td>
+
+                        <td>
+                            <form
+                                method="POST"
+                                action="{{ url_for('hod_staff_account', user_id=staff.id, action='activate') }}"
+                                class="account-action-form"
+                                onsubmit="return confirm('Are you sure you want to activate this staff account?');"
+                            >
+                                <button type="submit"
+                                        class="account-btn activate-btn">
+                                    Activate Staff
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="9" class="empty-row">
+                            No deactivated staff members found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
+
+
+    <a href="{{ url_for('hod_dashboard') }}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
 </div>
 
 {% endblock %}
