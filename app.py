@@ -1,6 +1,6 @@
 import os
-import sqlite3
 import secrets
+import psycopg
 
 from pathlib import Path
 from functools import wraps
@@ -644,18 +644,19 @@ def get_dashboard_analytics(scope_sql, params=()):
 
     # Monthly complaint count - last 6 months
     monthly_rows = query_db(
-        f"""
-        SELECT
-            strftime('%Y-%m', created_at) AS month,
-            COUNT(*) AS total
-        FROM complaints
-        WHERE {scope_sql}
-          AND created_at >= date('now', '-5 months', 'start of month')
-        GROUP BY strftime('%Y-%m', created_at)
-        ORDER BY month
-        """,
-        params
-    )
+    f"""
+    SELECT
+        TO_CHAR(created_at, 'YYYY-MM') AS month,
+        COUNT(*) AS total
+    FROM complaints
+    WHERE {scope_sql}
+      AND created_at >=
+          DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '5 months'
+    GROUP BY TO_CHAR(created_at, 'YYYY-MM')
+    ORDER BY month
+    """,
+    params
+)
 
     return {
         "total": total,
@@ -933,12 +934,11 @@ def register():
 
         except ValueError as exc:
             flash(str(exc), "danger")
-
-        except sqlite3.IntegrityError:
-            flash(
+        except psycopg.IntegrityError:
+             flash(
                 "This email or another unique field is already registered.",
                 "danger",
-            )
+          )
 
     return render_template("auth/register.html")
 
