@@ -411,10 +411,11 @@ def create_user(
     # HOD accounts are automatically approved.
 # Student and Staff accounts require approval.
 
+        # Set approval status for every valid role
+        approval_status = "PENDING"
+
         if role == "hod":
-           approval_status = "APPROVED"
-        else:
-         approval_status = "PENDING"
+         approval_status = "APPROVED"
 
     password_hash = generate_password_hash(password)
 
