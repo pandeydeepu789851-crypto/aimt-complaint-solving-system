@@ -1,6 +1,6 @@
 import os
 import secrets
-import psycopg
+import sqlite3
 
 from pathlib import Path
 from functools import wraps
@@ -229,24 +229,20 @@ def role_required(*roles):
             # Check whether account is active
             if not user["is_active"]:
                 session.clear()
-
                 flash(
                     "Your account has been deactivated. "
                     "Please contact your department authority.",
                     "danger"
                 )
-
                 return redirect(url_for("login"))
 
             # Check account approval
             if user["approval_status"] != "APPROVED":
                 session.clear()
-
                 flash(
                     "Your account is not approved yet.",
                     "warning"
                 )
-
                 return redirect(url_for("login"))
 
             # Check user role
@@ -641,22 +637,24 @@ def get_dashboard_analytics(scope_sql, params=()):
         """,
         params
     )
-
-    # Monthly complaint count - last 6 months
+ 
+    # Monthly complaint count - last 6 months (SQLite)
     monthly_rows = query_db(
-    f"""
-    SELECT
-        TO_CHAR(created_at, 'YYYY-MM') AS month,
-        COUNT(*) AS total
-    FROM complaints
-    WHERE {scope_sql}
-      AND created_at >=
-          DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '5 months'
-    GROUP BY TO_CHAR(created_at, 'YYYY-MM')
-    ORDER BY month
-    """,
-    params
-)
+        f"""
+        SELECT
+            strftime('%Y-%m', created_at) AS month,
+            COUNT(*) AS total
+        FROM complaints
+        WHERE {scope_sql}
+          AND date(created_at) >=
+              date('now', 'start of month', '-5 months')
+        GROUP BY strftime('%Y-%m', created_at)
+        ORDER BY month
+        """,
+        params
+    )
+
+   
 
     return {
         "total": total,
@@ -786,7 +784,6 @@ def home():
 # =========================================================
 # REGISTRATION
 # =========================================================
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -802,40 +799,21 @@ def register():
         role = request.form.get("role", "").strip().lower()
         course = request.form.get("course", "").strip()
 
-        year = normalize_year(
-            request.form.get("year", "")
-        )
+        year = normalize_year(request.form.get("year", ""))
 
-        section = request.form.get(
-            "section", ""
-        ).strip().upper()
+        section = request.form.get("section", "").strip().upper()
+        roll_number = request.form.get("roll_number", "").strip()
 
-        roll_number = request.form.get(
-            "roll_number", ""
-        ).strip()
-
-        branch = normalize_department(
-            request.form.get("branch", "")
-        )
-
-        department = normalize_department(
-            request.form.get("department", "")
-        )
+        branch = normalize_department(request.form.get("branch", ""))
+        department = normalize_department(request.form.get("department", ""))
 
         try:
 
             if not all([
-                full_name,
-                email,
-                mobile,
-                password,
-                confirm_password,
-                role,
-                course,
+                full_name, email, mobile, password,
+                confirm_password, role, course
             ]):
-                raise ValueError(
-                    "Please fill in all required fields."
-                )
+                raise ValueError("Please fill in all required fields.")
 
             if role not in VALID_ROLES:
                 raise ValueError("Please select a valid role.")
@@ -847,58 +825,41 @@ def register():
                 raise ValueError("Passwords do not match.")
 
             if len(password) < 8:
-                raise ValueError(
-                    "Password must contain at least 8 characters."
-                )
+                raise ValueError("Password must contain at least 8 characters.")
 
             if not mobile.isdigit() or len(mobile) != 10:
-                raise ValueError(
-                    "Enter a valid 10-digit mobile number."
-                )
+                raise ValueError("Enter a valid 10-digit mobile number.")
 
             if year not in VALID_YEARS:
                 raise ValueError("Please select a valid year.")
 
             if role in ("student", "staff"):
-
                 if section not in VALID_SECTIONS:
-                    raise ValueError(
-                        "Please select a section from A to F."
-                    )
-
+                    raise ValueError("Please select a section from A to F.")
             else:
-                # HOD supervises all sections.
                 section = None
 
             if role == "student":
 
                 if not roll_number:
-                    raise ValueError(
-                        "Student roll number is required."
-                    )
+                    raise ValueError("Student roll number is required.")
 
                 if branch not in VALID_BRANCHES:
-                    raise ValueError(
-                        "Please select a valid branch."
-                    )
+                    raise ValueError("Please select a valid branch.")
 
                 department = branch
 
             elif role == "staff":
 
                 if not department:
-                    raise ValueError(
-                        "Please select the staff department."
-                    )
+                    raise ValueError("Please select the staff department.")
 
                 branch = department
 
             elif role == "hod":
 
                 if not department:
-                    raise ValueError(
-                        "Please select the HOD department."
-                    )
+                    raise ValueError("Please select the HOD department.")
 
                 branch = department
 
@@ -916,32 +877,23 @@ def register():
                 section=section,
             )
 
-            if role == "student":
-
-                flash(
-                    "Registration successful. You can now login.",
-                    "success",
-                )
-
-            else:
-
-                flash(
-                    "Registration submitted. Your account requires approval.",
-                    "info",
-                )
+            flash(
+                "Registration successful. Your account is awaiting approval.",
+                "info"
+            )
 
             return redirect(url_for("login"))
 
         except ValueError as exc:
             flash(str(exc), "danger")
-        except psycopg.IntegrityError:
-             flash(
+
+        except sqlite3.IntegrityError:
+            flash(
                 "This email or another unique field is already registered.",
-                "danger",
-          )
+                "danger"
+            )
 
     return render_template("auth/register.html")
-
 
 # =========================================================
 # LOGIN
@@ -968,22 +920,28 @@ def login():
             user["password_hash"],
             password,
         ):
-
             flash("Invalid email or password.", "danger")
-
             return render_template("auth/login.html")
 
+        # Check account active status
+        if not user["is_active"]:
+            flash(
+                "Your account has been deactivated. "
+                "Please contact your department authority.",
+                "danger"
+            )
+            return render_template("auth/login.html")
+
+        # Check approval status
         if user["approval_status"] != "APPROVED":
 
             if user["approval_status"] == "REJECTED":
-
                 flash(
-                    "Your account registration was rejected. Contact the authorized college administrator.",
+                    "Your account registration was rejected. "
+                    "Contact the authorized college administrator.",
                     "danger",
                 )
-
             else:
-
                 flash(
                     "Your account is awaiting approval.",
                     "warning",
@@ -1011,7 +969,6 @@ def login():
             return redirect(url_for("hod_dashboard"))
 
     return render_template("auth/login.html")
-
 
 # =========================================================
 # LOGOUT

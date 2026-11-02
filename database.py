@@ -1,8 +1,6 @@
-import os
-import re
-import psycopg
 
-from psycopg.rows import dict_row
+import sqlite3
+from pathlib import Path
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -10,86 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # DATABASE CONFIGURATION
 # ==================================================
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+BASE_DIR = Path(__file__).resolve().parent
+DATABASE_PATH = BASE_DIR / "aimt_complaint.db"
 
 VALID_COURSES = ("BTech", "MBA", "MTech", "BCA")
 VALID_ROLES = ("student", "staff", "hod")
 VALID_SECTIONS = ("A", "B", "C", "D", "E", "F")
-
-
-# ==================================================
-# SQLITE COMPATIBILITY CURSOR
-# ==================================================
-
-class CursorWrapper:
-
-    def __init__(self, cursor, lastrowid=None):
-        self.cursor = cursor
-        self.lastrowid = lastrowid
-
-    @property
-    def rowcount(self):
-        return self.cursor.rowcount
-
-    def fetchone(self):
-        return self.cursor.fetchone()
-
-    def fetchall(self):
-        return self.cursor.fetchall()
-
-    def close(self):
-        self.cursor.close()
-
-
-# ==================================================
-# SQLITE COMPATIBILITY CONNECTION
-# ==================================================
-
-class ConnectionWrapper:
-
-    def __init__(self, connection):
-        self.connection = connection
-
-    @staticmethod
-    def convert_query(query):
-        return re.sub(r"\?", "%s", query)
-
-    def execute(self, query, params=()):
-
-        query = self.convert_query(query)
-        params = tuple(params or ())
-
-        is_insert = bool(
-            re.match(r"^\s*INSERT\b", query, re.IGNORECASE)
-        )
-
-        has_returning = bool(
-            re.search(r"\bRETURNING\b", query, re.IGNORECASE)
-        )
-
-        if is_insert and not has_returning:
-            query = query.rstrip().rstrip(";") + " RETURNING id"
-
-        cursor = self.connection.execute(query, params)
-
-        lastrowid = None
-
-        if is_insert and not has_returning:
-            row = cursor.fetchone()
-
-            if row:
-                lastrowid = row["id"]
-
-        return CursorWrapper(cursor, lastrowid)
-
-    def commit(self):
-        self.connection.commit()
-
-    def rollback(self):
-        self.connection.rollback()
-
-    def close(self):
-        self.connection.close()
 
 
 # ==================================================
@@ -98,18 +22,84 @@ class ConnectionWrapper:
 
 def get_db():
 
-    if not DATABASE_URL:
-        raise RuntimeError(
-            "DATABASE_URL environment variable is missing."
-        )
-
-    connection = psycopg.connect(
-        DATABASE_URL,
-        row_factory=dict_row,
-        connect_timeout=15
+    conn = sqlite3.connect(
+        str(DATABASE_PATH),
+        timeout=30
     )
 
-    return ConnectionWrapper(connection)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    conn.execute("PRAGMA busy_timeout = 30000")
+
+    return conn
+
+
+# ==================================================
+# ADD MISSING COLUMN
+# ==================================================
+
+def add_column_if_missing(conn, table, column, definition):
+
+    allowed_tables = {"users", "complaints"}
+
+    if table not in allowed_tables:
+        raise ValueError("Invalid database table.")
+
+    columns = {
+        row["name"]
+        for row in conn.execute(
+            f"PRAGMA table_info({table})"
+        ).fetchall()
+    }
+
+    if column not in columns:
+
+        conn.execute(
+            f"ALTER TABLE {table} ADD COLUMN {column} {definition}"
+        )
+
+
+# ==================================================
+# DATABASE MIGRATIONS
+# ==================================================
+
+def run_migrations(conn):
+
+    user_columns = {
+        "is_active": "INTEGER NOT NULL DEFAULT 1",
+        "section": "TEXT",
+        "roll_number": "TEXT",
+        "profile_photo": "TEXT",
+        "year": "TEXT",
+        "branch": "TEXT",
+        "department": "TEXT",
+    }
+
+    complaint_columns = {
+        "section": "TEXT",
+        "attachment": "TEXT",
+        "assigned_staff_id": "INTEGER",
+        "assigned_hod_id": "INTEGER",
+        "updated_at": "TEXT",
+    }
+
+    for column, definition in user_columns.items():
+
+        add_column_if_missing(
+            conn,
+            "users",
+            column,
+            definition
+        )
+
+    for column, definition in complaint_columns.items():
+
+        add_column_if_missing(
+            conn,
+            "complaints",
+            column,
+            definition
+        )
 
 
 # ==================================================
@@ -122,22 +112,29 @@ def init_db():
 
     try:
 
-        # USERS TABLE
-        conn.execute("""
+        conn.executescript("""
+
             CREATE TABLE IF NOT EXISTS users (
 
-                id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
 
                 full_name TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE,
+
+                email TEXT NOT NULL COLLATE NOCASE UNIQUE,
+
                 mobile TEXT NOT NULL,
+
                 password_hash TEXT NOT NULL,
 
                 role TEXT NOT NULL
-                    CHECK (role IN ('student', 'staff', 'hod')),
+                    CHECK (
+                        role IN ('student', 'staff', 'hod')
+                    ),
 
                 course TEXT NOT NULL
-                    CHECK (course IN ('BTech', 'MBA', 'MTech', 'BCA')),
+                    CHECK (
+                        course IN ('BTech', 'MBA', 'MTech', 'BCA')
+                    ),
 
                 year TEXT,
                 branch TEXT,
@@ -154,31 +151,37 @@ def init_db():
                         )
                     ),
 
-                profile_photo TEXT,
-
                 is_active INTEGER NOT NULL DEFAULT 1,
 
-                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
+                profile_photo TEXT,
 
-        # COMPLAINTS TABLE
-        conn.execute("""
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+
+            );
+
+
             CREATE TABLE IF NOT EXISTS complaints (
 
-                id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-                student_id BIGINT NOT NULL,
-                assigned_staff_id BIGINT,
-                assigned_hod_id BIGINT,
+                student_id INTEGER NOT NULL,
+
+                assigned_staff_id INTEGER,
+
+                assigned_hod_id INTEGER,
 
                 title TEXT NOT NULL,
+
                 description TEXT NOT NULL,
 
                 course TEXT NOT NULL,
+
                 year TEXT NOT NULL,
+
                 branch TEXT NOT NULL,
+
                 department TEXT NOT NULL,
+
                 section TEXT,
 
                 attachment TEXT,
@@ -195,8 +198,9 @@ def init_db():
                         )
                     ),
 
-                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
                 FOREIGN KEY (student_id)
                     REFERENCES users(id),
@@ -206,158 +210,127 @@ def init_db():
 
                 FOREIGN KEY (assigned_hod_id)
                     REFERENCES users(id)
-            )
-        """)
 
-        # COMPLAINT SOLUTIONS TABLE
-        conn.execute("""
+            );
+
+
             CREATE TABLE IF NOT EXISTS complaint_solutions (
 
-                id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-                complaint_id BIGINT NOT NULL,
-                author_id BIGINT NOT NULL,
+                complaint_id INTEGER NOT NULL,
+
+                author_id INTEGER NOT NULL,
 
                 solution TEXT NOT NULL,
 
-                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
                 FOREIGN KEY (complaint_id)
                     REFERENCES complaints(id) ON DELETE CASCADE,
 
                 FOREIGN KEY (author_id)
                     REFERENCES users(id)
-            )
-        """)
 
-        # NOTIFICATIONS TABLE
-        conn.execute("""
+            );
+
+
             CREATE TABLE IF NOT EXISTS notifications (
 
-                id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-                user_id BIGINT NOT NULL,
-                complaint_id BIGINT,
+                user_id INTEGER NOT NULL,
+
+                complaint_id INTEGER,
 
                 message TEXT NOT NULL,
 
                 is_read INTEGER NOT NULL DEFAULT 0,
 
-                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id),
 
                 FOREIGN KEY (complaint_id)
                     REFERENCES complaints(id) ON DELETE CASCADE
-            )
-        """)
 
-        # COMPLAINT STATUS HISTORY TABLE
-        conn.execute("""
+            );
+
+
             CREATE TABLE IF NOT EXISTS complaint_status_history (
 
-                id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-                complaint_id BIGINT NOT NULL,
+                complaint_id INTEGER NOT NULL,
 
                 status TEXT NOT NULL,
+
                 remarks TEXT,
 
-                updated_by BIGINT,
+                updated_by INTEGER,
 
-                created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
 
                 FOREIGN KEY (complaint_id)
                     REFERENCES complaints(id) ON DELETE CASCADE,
 
                 FOREIGN KEY (updated_by)
                     REFERENCES users(id)
-            )
+
+            );
+
         """)
 
-        # ==================================================
         # DATABASE MIGRATIONS
-        # ==================================================
+        run_migrations(conn)
 
-        conn.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS is_active INTEGER NOT NULL DEFAULT 1
-        """)
-
-        conn.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS section TEXT
-        """)
-
-        conn.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS roll_number TEXT
-        """)
-
-        conn.execute("""
-            ALTER TABLE users
-            ADD COLUMN IF NOT EXISTS profile_photo TEXT
-        """)
-
-        conn.execute("""
-            ALTER TABLE complaints
-            ADD COLUMN IF NOT EXISTS section TEXT
-        """)
-
-        # ==================================================
         # DATABASE INDEXES
-        # ==================================================
+        conn.executescript("""
 
-        conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_users_course_department
-            ON users(course, year, department, role)
-        """)
+            ON users(course, year, department, role);
 
-        conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_users_course_year_section
-            ON users(course, year, section, role, approval_status)
-        """)
+            ON users(course, year, section, role, approval_status);
 
-        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_users_active
+            ON users(is_active, role, approval_status);
+
             CREATE INDEX IF NOT EXISTS idx_complaints_student
-            ON complaints(student_id)
-        """)
+            ON complaints(student_id);
 
-        conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_complaints_status
-            ON complaints(status)
-        """)
+            ON complaints(status);
 
-        conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_complaints_section
-            ON complaints(course, year, section, status)
-        """)
+            ON complaints(course, year, section, status);
 
-        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_complaints_staff
+            ON complaints(assigned_staff_id);
+
+            CREATE INDEX IF NOT EXISTS idx_complaints_hod
+            ON complaints(assigned_hod_id);
+
             CREATE INDEX IF NOT EXISTS idx_notifications_user
-            ON notifications(user_id, is_read)
-        """)
+            ON notifications(user_id, is_read);
 
-        conn.execute("""
             CREATE INDEX IF NOT EXISTS idx_complaint_history
-            ON complaint_status_history(complaint_id, created_at)
-        """)
+            ON complaint_status_history(complaint_id, created_at);
 
-        conn.execute("""
-            CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_lower
-            ON users(LOWER(email))
         """)
 
         conn.commit()
 
-        print("Supabase PostgreSQL database initialized successfully!")
+        print("Database initialized successfully!")
 
     except Exception:
+
         conn.rollback()
         raise
 
     finally:
+
         conn.close()
 
 
@@ -386,10 +359,10 @@ def create_user(
     course = (course or "").strip()
 
     year = (year or "").strip() or None
-    section = (section or "").strip().upper() or None
     branch = (branch or "").strip() or None
     department = (department or "").strip() or None
     roll_number = (roll_number or "").strip() or None
+    section = (section or "").strip().upper() or None
 
     if not full_name:
         raise ValueError("Please enter your full name.")
@@ -404,7 +377,9 @@ def create_user(
         raise ValueError("Please enter your password.")
 
     if len(password) < 8:
-        raise ValueError("Password must contain at least 8 characters.")
+        raise ValueError(
+            "Password must contain at least 8 characters."
+        )
 
     if role not in VALID_ROLES:
         raise ValueError("Invalid account role.")
@@ -413,7 +388,9 @@ def create_user(
         raise ValueError("Please select a valid course.")
 
     if not mobile.isdigit() or len(mobile) != 10:
-        raise ValueError("Enter a valid 10-digit mobile number.")
+        raise ValueError(
+            "Enter a valid 10-digit mobile number."
+        )
 
     if role in ("student", "staff") and not year:
         raise ValueError("Please select your year.")
@@ -421,15 +398,23 @@ def create_user(
     if role == "hod":
         section = None
 
-    elif role in ("student", "staff"):
-
-        if section not in VALID_SECTIONS:
-            raise ValueError("Please select a valid section (A-F).")
+    elif section not in VALID_SECTIONS:
+        raise ValueError(
+            "Please select a valid section (A-F)."
+        )
 
     if role == "student" and not roll_number:
-        raise ValueError("Student roll number is required.")
+        raise ValueError(
+            "Student roll number is required."
+        )
 
-    approval_status = "APPROVED" if role == "hod" else "PENDING"
+    # HOD accounts are automatically approved.
+# Student and Staff accounts require approval.
+
+        if role == "hod":
+           approval_status = "APPROVED"
+        else:
+         approval_status = "PENDING"
 
     password_hash = generate_password_hash(password)
 
@@ -438,7 +423,9 @@ def create_user(
     try:
 
         cursor = conn.execute("""
+
             INSERT INTO users (
+
                 full_name,
                 email,
                 mobile,
@@ -451,12 +438,13 @@ def create_user(
                 section,
                 roll_number,
                 approval_status
+
             )
-            VALUES (
-                %s, %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s, %s
-            )
+
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
         """, (
+
             full_name,
             email,
             mobile,
@@ -469,15 +457,16 @@ def create_user(
             section,
             roll_number,
             approval_status
+
         ))
+
+        user_id = cursor.lastrowid
 
         conn.commit()
 
-        return cursor.lastrowid
+        return user_id
 
-    except psycopg.IntegrityError as exc:
-
-        conn.rollback()
+    except sqlite3.IntegrityError as exc:
 
         if "email" in str(exc).lower():
             raise ValueError(
@@ -487,6 +476,7 @@ def create_user(
         raise
 
     finally:
+
         conn.close()
 
 
@@ -499,7 +489,10 @@ def verify_password(stored_hash, password):
     if not stored_hash or not password:
         return False
 
-    return check_password_hash(stored_hash, password)
+    return check_password_hash(
+        stored_hash,
+        password
+    )
 
 
 # ==================================================
@@ -508,14 +501,22 @@ def verify_password(stored_hash, password):
 
 def create_notification(db, uid, message, cid=None):
 
+    if not uid or not message:
+        return False
+
     db.execute("""
+
         INSERT INTO notifications (
             user_id,
             complaint_id,
             message
         )
+
         VALUES (?, ?, ?)
+
     """, (uid, cid, message))
+
+    return True
 
 
 # ==================================================
@@ -530,20 +531,32 @@ def add_complaint_status_history(
     remarks=None
 ):
 
+    if not complaint_id or not status:
+        return False
+
     conn.execute("""
+
         INSERT INTO complaint_status_history (
+
             complaint_id,
             status,
             updated_by,
             remarks
+
         )
+
         VALUES (?, ?, ?, ?)
+
     """, (
+
         complaint_id,
         status,
         updated_by,
         remarks
+
     ))
+
+    return True
 
 
 # ==================================================
@@ -557,6 +570,7 @@ def get_complaint_status_history(complaint_id):
     try:
 
         history = conn.execute("""
+
             SELECT
                 h.id,
                 h.complaint_id,
@@ -581,6 +595,7 @@ def get_complaint_status_history(complaint_id):
         return history
 
     finally:
+
         conn.close()
 
 
@@ -597,12 +612,15 @@ def get_user_by_email(email):
     try:
 
         return conn.execute("""
+
             SELECT *
             FROM users
-            WHERE LOWER(email) = LOWER(?)
+            WHERE email = ?
+
         """, (email,)).fetchone()
 
     finally:
+
         conn.close()
 
 
@@ -617,12 +635,15 @@ def get_user_by_id(user_id):
     try:
 
         return conn.execute("""
+
             SELECT *
             FROM users
             WHERE id = ?
+
         """, (user_id,)).fetchone()
 
     finally:
+
         conn.close()
 
 
@@ -637,15 +658,20 @@ def show_all_users():
     try:
 
         users = conn.execute("""
+
             SELECT
                 id,
                 full_name,
                 email,
                 role,
                 course,
-                department
+                department,
+                approval_status,
+                is_active
+
             FROM users
             ORDER BY id
+
         """).fetchall()
 
         print("\n========== REGISTERED USERS ==========")
@@ -661,10 +687,13 @@ def show_all_users():
                 f"Email: {user['email']} | "
                 f"Role: {user['role']} | "
                 f"Course: {user['course']} | "
-                f"Department: {user['department']}"
+                f"Department: {user['department']} | "
+                f"Approval: {user['approval_status']} | "
+                f"Active: {user['is_active']}"
             )
 
     finally:
+
         conn.close()
 
 
@@ -685,13 +714,17 @@ def fix_old_hod_account(email):
     try:
 
         user = conn.execute("""
+
             SELECT id, full_name, email, role
+
             FROM users
-            WHERE LOWER(email) = LOWER(?)
+            WHERE email = ?
+
         """, (email,)).fetchone()
 
         if user is None:
-            print("HOD email not found. No account was changed.")
+
+            print("Email not found. No account was changed.")
             return
 
         print("\nSelected Account:")
@@ -705,14 +738,20 @@ def fix_old_hod_account(email):
         ).strip()
 
         if confirm != "YES":
+
             print("Update cancelled.")
             return
 
         conn.execute("""
+
             UPDATE users
+
             SET role = 'hod',
-                approval_status = 'APPROVED'
+                approval_status = 'APPROVED',
+                is_active = 1
+
             WHERE id = ?
+
         """, (user["id"],))
 
         conn.commit()
@@ -720,6 +759,7 @@ def fix_old_hod_account(email):
         print("\nHOD account updated successfully!")
 
     finally:
+
         conn.close()
 
 
@@ -734,9 +774,11 @@ def deactivate_user(user_id):
     try:
 
         cursor = conn.execute("""
+
             UPDATE users
             SET is_active = 0
             WHERE id = ?
+
         """, (user_id,))
 
         conn.commit()
@@ -744,6 +786,7 @@ def deactivate_user(user_id):
         return cursor.rowcount > 0
 
     finally:
+
         conn.close()
 
 
@@ -754,9 +797,11 @@ def activate_user(user_id):
     try:
 
         cursor = conn.execute("""
+
             UPDATE users
             SET is_active = 1
             WHERE id = ?
+
         """, (user_id,))
 
         conn.commit()
@@ -764,6 +809,7 @@ def activate_user(user_id):
         return cursor.rowcount > 0
 
     finally:
+
         conn.close()
 
 
@@ -775,6 +821,16 @@ if __name__ == "__main__":
 
     init_db()
 
-    print("\nAIMT PostgreSQL database initialized successfully!")
+    print("\nAIMT database initialized successfully!")
+    print(f"Database location: {DATABASE_PATH}")
 
     show_all_users()
+
+    print("\nEnter the exact registered HOD email.")
+
+    hod_email = input(
+        "HOD Email (press Enter to skip): "
+    ).strip()
+
+    if hod_email:
+        fix_old_hod_account(hod_email)
